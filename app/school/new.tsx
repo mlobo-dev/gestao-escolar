@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter, Stack } from "expo-router";
 import { useSchoolStore } from "../../src/store/useSchoolStore";
 import { Text } from "@gluestack-ui/nativewind";
-import { ArrowLeft, Save } from "lucide-react-native";
+import { ChevronLeft, Save } from "lucide-react-native";
 
 export default function NewSchoolScreen() {
   const router = useRouter();

@@ -54,6 +54,7 @@ export default function SchoolListScreen() {
             </Text>
           </View>
           <TouchableOpacity
+            testID="add-school-button"
             className="bg-white p-3 rounded-2xl shadow-sm"
             onPress={() => router.push("/school/new")}
           >
