@@ -3,7 +3,7 @@ const { withNativeWind } = require("nativewind/metro");
 
 const config = getDefaultConfig(__dirname);
 
-// Prioritize CJS to avoid import.meta issues in some libraries like Zustand
-config.resolver.resolverMainFields = ["main", "module", "browser"];
+// Prioritize browser fields for web compatibility
+config.resolver.resolverMainFields = ["browser", "module", "main"];
 
 module.exports = withNativeWind(config, { input: "./global.css" });

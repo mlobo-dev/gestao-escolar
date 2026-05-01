@@ -15,6 +15,14 @@ module.exports = function (api) {
       ],
       "transform-import-meta",
       "@babel/plugin-transform-class-static-block",
+      [
+        "module-resolver",
+        {
+          alias: {
+            "react-native-worklets": "./packages/react-native-worklets-stub",
+          },
+        },
+      ],
     ],
   };
 };

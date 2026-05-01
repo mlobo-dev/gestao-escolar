@@ -35,9 +35,7 @@
     ],
     "extra": {
       "router": {},
-      "eas": {
-        "projectId": "fda21c41-e287-4512-a05e-b096714231f4"
-      }
+      "eas": {}
     }
   }
 }
