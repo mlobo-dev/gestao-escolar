@@ -1,1 +1,1 @@
-module.exports = function() { return { plugins: [] }; };
+module.exports = function() { return { name: "react-native-worklets-stub", visitor: {} }; };

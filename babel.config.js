@@ -1,22 +1,25 @@
 module.exports = function (api) {
   api.cache(true);
+  const isTest = process.env.NODE_ENV === "test";
+
   return {
     presets: [
       ["babel-preset-expo", { jsxImportSource: "nativewind" }],
-      "nativewind/babel",
+      // Only include nativewind/babel if not in test mode to avoid Jest compatibility issues
+      ...(isTest ? [] : ["nativewind/babel"]),
     ],
     plugins: [
       [
-        "transform-define",
+        "babel-plugin-transform-define",
         {
           "import.meta.env": "process.env",
           "import.meta.url": "undefined",
         },
       ],
-      "transform-import-meta",
+      "babel-plugin-transform-import-meta",
       "@babel/plugin-transform-class-static-block",
       [
-        "module-resolver",
+        "babel-plugin-module-resolver",
         {
           alias: {
             "react-native-worklets": "./packages/react-native-worklets-stub",

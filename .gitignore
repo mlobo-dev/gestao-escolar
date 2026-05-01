@@ -9,6 +9,13 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Logs and Coverage
+coverage/
+*.log
+gestao-escolar-backup.zip
+.metro-cache/
+tlin/
+
 # Native
 .kotlin/
 *.orig.*
