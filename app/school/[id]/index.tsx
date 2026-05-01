@@ -1,0 +1,209 @@
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useRouter, useLocalSearchParams, Stack } from "expo-router";
+import { useSchoolStore } from "../../../src/store/useSchoolStore";
+import {
+  Plus,
+  School as SchoolIcon,
+  MapPin,
+  Pencil,
+  Trash2,
+  Users,
+  ChevronLeft,
+} from "lucide-react-native";
+import { Text } from "@gluestack-ui/nativewind";
+import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
+
+export default function SchoolDetailsScreen() {
+  const router = useRouter();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const {
+    schools,
+    classes,
+    fetchClasses,
+    deleteSchool,
+    deleteClass,
+    isLoading,
+  } = useSchoolStore();
+
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
+
+  const school = schools.find((s) => s.id === id);
+
+  useEffect(() => {
+    if (id) fetchClasses(id);
+  }, [id]);
+
+  const handleDeleteSchool = () => {
+    setModalConfig({
+      isOpen: true,
+      title: "Delete School",
+      message: `Are you sure you want to delete "${school?.name}"? This will also remove all its classes.`,
+      onConfirm: async () => {
+        await deleteSchool(id!);
+        router.replace("/");
+      },
+    });
+  };
+
+  const handleDeleteClass = (classId: string, className: string) => {
+    setModalConfig({
+      isOpen: true,
+      title: "Delete Class",
+      message: `Are you sure you want to delete "${className}"?`,
+      onConfirm: async () => {
+        await deleteClass(classId);
+      },
+    });
+  };
+
+  if (!school) return null;
+
+  return (
+    <View className="flex-1 bg-slate-50">
+      <Stack.Screen
+        options={{
+          headerTitle: "School Details",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() =>
+                router.canGoBack() ? router.back() : router.replace("/")
+              }
+              className="mr-4"
+            >
+              <ChevronLeft size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <View className="flex-row">
+              <TouchableOpacity
+                onPress={() => router.push(`/school/${id}/edit`)}
+                className="mr-3"
+              >
+                <Pencil size={20} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDeleteSchool}>
+                <Trash2 size={20} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerStyle: { backgroundColor: "#1d4ed8" },
+          headerTintColor: "#fff",
+        }}
+      />
+
+      {/* School Info Header */}
+      <View className="bg-blue-700 items-center rounded-b-[40px] shadow-md">
+        <View className="w-full max-w-4xl px-6 pt-4 pb-10">
+          <View className="flex-row items-center">
+            <View className="w-16 h-16 bg-white/20 rounded-3xl items-center justify-center border border-white/30">
+              <SchoolIcon size={32} color="#fff" />
+            </View>
+            <View className="ml-4 flex-1">
+              <Text className="text-white text-2xl font-bold">{school.name}</Text>
+              <View className="flex-row items-center mt-1">
+                <MapPin size={14} color="#fff" opacity={0.7} />
+                <Text
+                  className="text-blue-100 text-sm ml-1 opacity-80"
+                  numberOfLines={1}
+                >
+                  {school.address}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {/* Classes Section */}
+      <View className="flex-1 items-center px-4 -mt-6">
+        <View className="w-full max-w-4xl flex-1">
+          <View className="flex-row justify-between items-center mb-4 px-2">
+            <Text className="text-slate-800 text-lg font-bold">Classes</Text>
+            <TouchableOpacity
+              className="bg-blue-600 px-4 py-2 rounded-2xl flex-row items-center shadow-sm"
+              onPress={() => router.push(`/school/${id}/class/new`)}
+            >
+              <Plus size={16} color="#fff" strokeWidth={3} />
+              <Text className="text-white font-bold text-xs ml-1">
+                New Class
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#1a56db" className="mt-10" />
+          ) : (
+            <FlatList
+              data={classes}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{ paddingBottom: 40 }}
+              ListEmptyComponent={
+                <View className="items-center justify-center pt-16">
+                  <Users size={48} color="#cbd5e1" />
+                  <Text className="text-slate-400 mt-4 text-center font-medium">
+                    No classes registered for this school yet.
+                  </Text>
+                </View>
+              }
+              renderItem={({ item }) => (
+                <View className="bg-white mb-3 rounded-3xl p-4 flex-row items-center shadow-sm border border-slate-100">
+                  <View className="w-12 h-12 bg-slate-50 rounded-2xl items-center justify-center">
+                    <Users size={24} color="#64748b" />
+                  </View>
+                  <View className="flex-1 ml-4">
+                    <Text className="text-slate-900 font-bold text-base">
+                      {item.name}
+                    </Text>
+                    <Text className="text-slate-500 text-xs mt-0.5">
+                      {item.shift} • Year {item.academicYear}
+                    </Text>
+                  </View>
+                  <View className="flex-row">
+                    <TouchableOpacity
+                      className="p-2 bg-slate-50 rounded-xl mr-2"
+                      onPress={() =>
+                        router.push(`/school/${id}/class/${item.id}/edit`)
+                      }
+                    >
+                      <Pencil size={16} color="#64748b" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="p-2 bg-red-50 rounded-xl"
+                      onPress={() => handleDeleteClass(item.id, item.name)}
+                    >
+                      <Trash2 size={16} color="#ef4444" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            />
+          )}
+        </View>
+      </View>
+
+      <ConfirmationModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
+      />
+    </View>
+  );
+}
