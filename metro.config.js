@@ -3,7 +3,9 @@ const { withNativeWind } = require("nativewind/metro");
 
 const config = getDefaultConfig(__dirname);
 
-// Prioritize browser fields for web compatibility
-config.resolver.resolverMainFields = ["browser", "module", "main"];
+// For web, we need to prioritize the browser field
+if (process.env.EXPO_PUBLIC_PLATFORM === "web") {
+  config.resolver.resolverMainFields = ["browser", "module", "main"];
+}
 
 module.exports = withNativeWind(config, { input: "./global.css" });

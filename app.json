@@ -4,6 +4,7 @@
     "slug": "gestao-escolar",
     "version": "1.0.0",
     "sdkVersion": "52.0.0",
+    "newArchEnabled": false,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -34,8 +35,12 @@
       "expo-font"
     ],
     "extra": {
-      "router": {},
-      "eas": {}
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "83cf70fd-652e-424f-a9f2-35a9a15ccb9e"
+      }
     }
   }
 }

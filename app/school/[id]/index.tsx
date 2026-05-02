@@ -108,18 +108,20 @@ export default function SchoolDetailsScreen() {
       />
 
       {/* School Info Header */}
-      <View className="bg-blue-700 items-center rounded-b-[40px] shadow-md">
-        <View className="w-full max-w-4xl px-6 pt-4 pb-10">
+      <View className="bg-blue-700 shadow-lg">
+        <View className="w-full max-w-4xl px-6 pt-6 pb-12">
           <View className="flex-row items-center">
-            <View className="w-16 h-16 bg-white/20 rounded-3xl items-center justify-center border border-white/30">
-              <SchoolIcon size={32} color="#fff" />
+            <View className="w-20 h-20 bg-white/10 rounded-[28px] items-center justify-center border border-white/20">
+              <SchoolIcon size={40} color="#fff" />
             </View>
-            <View className="ml-4 flex-1">
-              <Text className="text-white text-2xl font-bold">{school.name}</Text>
-              <View className="flex-row items-center mt-1">
-                <MapPin size={14} color="#fff" opacity={0.7} />
+            <View className="ml-5 flex-1">
+              <Text className="text-white text-3xl font-extrabold tracking-tight">
+                {school.name}
+              </Text>
+              <View className="flex-row items-center mt-2 bg-white/10 self-start px-2 py-1 rounded-lg">
+                <MapPin size={14} color="#fff" />
                 <Text
-                  className="text-blue-100 text-sm ml-1 opacity-80"
+                  className="text-blue-50 text-xs ml-1 font-medium"
                   numberOfLines={1}
                 >
                   {school.address}
@@ -128,19 +130,25 @@ export default function SchoolDetailsScreen() {
             </View>
           </View>
         </View>
+        <View className="h-8 bg-slate-50 rounded-t-[40px] -mt-8" />
       </View>
 
       {/* Classes Section */}
-      <View className="flex-1 items-center px-4 -mt-6">
+      <View className="flex-1 items-center px-4 mt-4">
         <View className="w-full max-w-4xl flex-1">
-          <View className="flex-row justify-between items-center mb-4 px-2">
-            <Text className="text-slate-800 text-lg font-bold">Classes</Text>
+          <View className="flex-row justify-between items-center mb-6 px-2">
+            <View>
+              <Text className="text-slate-900 text-xl font-bold">Classes</Text>
+              <Text className="text-slate-500 text-xs font-medium">
+                {classes.length} {classes.length === 1 ? "class" : "classes"} total
+              </Text>
+            </View>
             <TouchableOpacity
-              className="bg-blue-600 px-4 py-2 rounded-2xl flex-row items-center shadow-sm"
+              className="bg-blue-600 px-5 py-2.5 rounded-2xl flex-row items-center shadow-md active:opacity-80"
               onPress={() => router.push(`/school/${id}/class/new`)}
             >
-              <Plus size={16} color="#fff" strokeWidth={3} />
-              <Text className="text-white font-bold text-xs ml-1">
+              <Plus size={18} color="#fff" strokeWidth={3} />
+              <Text className="text-white font-bold text-sm ml-1.5">
                 New Class
               </Text>
             </TouchableOpacity>
