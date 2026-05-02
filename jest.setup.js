@@ -1,4 +1,29 @@
 import "@testing-library/jest-native/extend-expect";
+import { NativeModules } from "react-native";
+
+// Mock NativeModules
+NativeModules.StatusBarManager = {
+  getConstants: jest.fn(() => ({ HEIGHT: 20 })),
+};
+NativeModules.RNGestureHandlerModule = {
+  attachGestureHandler: jest.fn(),
+  createGestureHandler: jest.fn(),
+  dropGestureHandler: jest.fn(),
+  updateGestureHandler: jest.fn(),
+  State: {},
+  Directions: {},
+};
+NativeModules.RNWorkletsCore = {
+  install: jest.fn(),
+};
+NativeModules.UIManager = {
+  getViewManagerConfig: jest.fn(),
+  getConstants: jest.fn(() => ({})),
+  directEventTypes: {},
+};
+
+jest.mock("react-native/Libraries/Text/Text", () => "Text");
+jest.mock("react-native/Libraries/Components/View/View", () => "View");
 
 // Mock expo-router
 jest.mock("expo-router", () => ({
