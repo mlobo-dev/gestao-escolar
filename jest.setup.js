@@ -29,11 +29,9 @@ jest.mock("lucide-react-native", () => {
 
 // Mock @gluestack-ui/nativewind
 jest.mock("@gluestack-ui/nativewind", () => {
-  const { Text } = require("react-native");
+  const React = require("react");
   return {
-    Text: ({ children, className, ...props }) => (
-      <Text {...props}>{children}</Text>
-    ),
+    Text: ({ children, ...props }) => React.createElement("Text", props, children),
   };
 });
 

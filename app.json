@@ -3,7 +3,7 @@
     "name": "Gestão Escolar",
     "slug": "gestao-escolar",
     "version": "1.0.0",
-    "sdkVersion": "52.0.0",
+    "sdkVersion": "55.0.0",
     "newArchEnabled": false,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
