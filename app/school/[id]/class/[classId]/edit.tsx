@@ -34,10 +34,10 @@ export default function EditClassScreen() {
   if (!schoolClass) return null;
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          title: "Edit Class",
+          title: "Editar Turma",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
@@ -46,40 +46,44 @@ export default function EditClassScreen() {
               <ChevronLeft size={24} color="#fff" />
             </TouchableOpacity>
           ),
+          headerStyle: { backgroundColor: "#0f172a" },
+          headerTintColor: "#fff",
+          headerShadowVisible: false,
         }}
       />
       <ScrollView className="flex-1">
-        <View className="items-center p-6">
+        <View className="items-center p-8">
           <View className="w-full max-w-2xl">
-            <View className="mb-6">
-              <Text className="text-slate-500 text-sm font-bold uppercase mb-2">
-                Class Name
+            <View className="mb-8">
+              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
+                Nome da Turma
               </Text>
               <TextInput
-                className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-base text-slate-900"
+                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
+                placeholderTextColor="rgba(255,255,255,0.2)"
                 value={name}
                 onChangeText={setName}
               />
               {!name && (
-                <Text className="text-red-500 text-xs mt-1 ml-1">
-                  Class name is required
+                <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
+                  O nome é obrigatório
                 </Text>
               )}
             </View>
 
-            <View className="mb-6">
-              <Text className="text-slate-500 text-sm font-bold uppercase mb-2">
-                Shift
+            <View className="mb-8">
+              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-4 ml-1">
+                Turno
               </Text>
               <View className="flex-row flex-wrap">
                 {SHIFTS.map((s) => (
                   <TouchableOpacity
                     key={s}
                     onPress={() => setShift(s)}
-                    className={`mr-2 mb-2 px-4 py-2 rounded-xl border ${
+                    className={`mr-3 mb-3 px-5 py-3 rounded-2xl border ${
                       shift === s
-                        ? "bg-blue-700 border-blue-700"
-                        : "bg-white border-slate-200"
+                        ? "bg-primary border-primary"
+                        : "bg-white/5 border-white/10"
                     }`}
                   >
                     <Text

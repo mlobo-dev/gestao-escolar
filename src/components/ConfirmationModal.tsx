@@ -29,48 +29,48 @@ export const ConfirmationModal = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/60 p-4">
-        {/* Container with fixed max-width on web and padding on mobile */}
+      <View className="flex-1 justify-center items-center bg-black/80 p-6">
+        {/* Container */}
         <View 
-          className="bg-white w-full rounded-[32px] overflow-hidden shadow-2xl"
+          className="bg-background w-full rounded-[40px] overflow-hidden border border-white/10"
           style={Platform.OS === 'web' ? { maxWidth: 400 } : { maxWidth: '90%' }}
         >
           {/* Header */}
-          <View className="bg-red-50 p-8 items-center">
-            <View className="w-16 h-16 bg-red-100 rounded-full items-center justify-center mb-4">
-              <Trash2 size={32} color="#ef4444" />
+          <View className="bg-destructive/10 p-8 items-center border-b border-white/5">
+            <View className="w-20 h-20 bg-destructive/20 rounded-3xl items-center justify-center mb-6 border border-destructive/30">
+              <Trash2 size={36} color="hsl(var(--destructive))" />
             </View>
-            <Text className="text-slate-900 text-xl font-bold text-center">
+            <Text className="text-white text-2xl font-bold text-center tracking-tight">
               {title}
             </Text>
           </View>
 
           {/* Body */}
           <View className="p-8">
-            <Text className="text-slate-500 text-center text-base leading-6">
+            <Text className="text-white/60 text-center text-lg leading-6 font-medium">
               {message}
             </Text>
           </View>
 
           {/* Footer */}
-          <View className="flex-row p-6 pt-0 gap-3">
+          <View className="flex-row p-8 pt-0 gap-4">
             <TouchableOpacity
               onPress={onClose}
-              className="flex-1 bg-slate-100 h-14 rounded-2xl items-center justify-center"
+              className="flex-1 bg-white/5 h-16 rounded-2xl items-center justify-center border border-white/10"
             >
-              <Text className="text-slate-600 font-bold">{cancelText}</Text>
+              <Text className="text-white/70 font-bold text-lg">{cancelText}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 onConfirm();
                 onClose();
               }}
-              className="flex-1 h-14 rounded-2xl items-center justify-center shadow-sm"
-              style={{ backgroundColor: "#ef4444" }}
+              className="flex-1 bg-destructive h-16 rounded-2xl items-center justify-center shadow-lg shadow-destructive/20"
             >
-              <Text className="text-white font-bold">{confirmText}</Text>
+              <Text className="text-white font-bold text-lg">{confirmText}</Text>
             </TouchableOpacity>
           </View>
+
 
           {/* Close button top right */}
           <TouchableOpacity

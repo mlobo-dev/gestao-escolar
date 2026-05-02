@@ -109,3 +109,47 @@ jest.mock("./src/mocks/server", () => ({
 }));
 
 
+// Mock react-i18next
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key) => key,
+    i18n: {
+      changeLanguage: () => Promise.resolve(),
+    },
+  }),
+  initReactI18next: {
+    type: "3rdParty",
+    init: jest.fn(),
+  },
+}));
+
+// Mock AuthContext
+jest.mock("./src/context/AuthContext", () => ({
+  useAuth: () => ({
+    user: { name: "Test User", email: "test@example.com" },
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+    isLoading: false,
+  }),
+  AuthProvider: ({ children }) => children,
+}));
+
+// Mock expo-font
+jest.mock("expo-font", () => ({
+  useFonts: () => [true, null],
+  loadAsync: jest.fn(),
+}));
+
+// Mock expo-splash-screen
+jest.mock("expo-splash-screen", () => ({
+  preventAutoHideAsync: jest.fn(),
+  hideAsync: jest.fn(),
+}));
+
+// Mock @expo-google-fonts/outfit
+jest.mock("@expo-google-fonts/outfit", () => ({
+  useFonts: () => [true, null],
+  Outfit_400Regular: "Outfit_400Regular",
+  Outfit_600SemiBold: "Outfit_600SemiBold",
+  Outfit_700Bold: "Outfit_700Bold",
+}));

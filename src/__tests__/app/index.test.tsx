@@ -10,7 +10,11 @@ const mockStore = {
   ],
   fetchSchools: jest.fn(),
   isLoading: false,
+  isLoadingMore: false,
+  hasMoreSchools: false,
+  schoolPage: 1,
 };
+
 
 jest.mock("../../store/useSchoolStore", () => ({
   useSchoolStore: jest.fn((selector) => (selector ? selector(mockStore) : mockStore)),

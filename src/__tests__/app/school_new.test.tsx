@@ -42,24 +42,24 @@ describe("NewSchoolScreen", () => {
   it("renders correctly and validates inputs", async () => {
     const { getByPlaceholderText, getByText } = render(<NewSchoolScreen />);
 
-    const saveButton = getByText("Save School");
+    const saveButton = getByText("Salvar Escola");
     fireEvent.press(saveButton);
 
     // Should show validation messages
-    expect(getByText("School name is required")).toBeTruthy();
-    expect(getByText("Address is required")).toBeTruthy();
+    expect(getByText("O nome é obrigatório")).toBeTruthy();
+    expect(getByText("O endereço é obrigatório")).toBeTruthy();
   });
 
   it("calls addSchool and navigates back on success", async () => {
     const { getByPlaceholderText, getByText } = render(<NewSchoolScreen />);
 
-    const nameInput = getByPlaceholderText("e.g. Central High School");
-    const addressInput = getByPlaceholderText("e.g. 123 Education St, City");
+    const nameInput = getByPlaceholderText("Ex: Escola Municipal Central");
+    const addressInput = getByPlaceholderText("Rua, Número, Bairro...");
 
     fireEvent.changeText(nameInput, "New Test School");
     fireEvent.changeText(addressInput, "Test Address 123");
 
-    const saveButton = getByText("Save School");
+    const saveButton = getByText("Salvar Escola");
     fireEvent.press(saveButton);
 
     await waitFor(() => {
@@ -71,4 +71,5 @@ describe("NewSchoolScreen", () => {
     });
 
   });
+
 });

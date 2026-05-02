@@ -17,6 +17,7 @@ import {
 } from "lucide-react-native";
 import { Text } from "@gluestack-ui/nativewind";
 import { makeServer } from "../src/mocks/server";
+import { useTranslation } from "react-i18next";
 
 // Start MirageJS if in development
 // Start MirageJS mock server
@@ -26,9 +27,10 @@ if (!(window as any).server) {
 
 
 export default function SchoolListScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const { schools, isLoading, fetchSchools } = useSchools(searchQuery);
+  const { schools, isLoading, isLoadingMore, hasMoreSchools, fetchSchools } = useSchools(searchQuery);
 
   useEffect(() => {
     fetchSchools();
@@ -37,35 +39,38 @@ export default function SchoolListScreen() {
   const filteredSchools = schools;
 
   return (
-    <View className="flex-1 bg-slate-50">
-      {/* Header with Search */}
-      <View className="bg-blue-700 px-4 pt-4 pb-8 rounded-b-[32px] shadow-lg">
-        <View className="flex-row items-center bg-white/20 rounded-2xl px-4 py-2 border border-white/30">
-          <Search size={20} color="#fff" opacity={0.7} />
+    <View className="flex-1 bg-background">
+      {/* Header */}
+      <View className="bg-primary/20 pb-10 pt-14 px-6 rounded-b-[40px]">
+        <View className="bg-white/10 flex-row items-center px-4 py-3 rounded-2xl border border-white/10">
+          <Search size={20} color="rgba(255,255,255,0.6)" />
           <TextInput
-            className="flex-1 ml-2 text-white text-base"
-            placeholder="Search schools..."
-            placeholderTextColor="rgba(255,255,255,0.5)"
+            className="flex-1 ml-3 text-white text-base"
+            placeholder={t("search")}
+
+            placeholderTextColor="rgba(255,255,255,0.4)"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
         <View className="flex-row justify-between items-center mt-6">
           <View>
-            <Text className="text-white text-2xl font-bold">Public Schools</Text>
-            <Text className="text-blue-100 text-sm opacity-80">
-              {filteredSchools.length} schools found
+            <Text className="text-white text-3xl font-bold tracking-tight">{t("schools")}</Text>
+            <Text className="text-white/60 text-sm font-medium">
+              {t("units_found", { count: filteredSchools.length })}
             </Text>
+
           </View>
           <TouchableOpacity
             testID="add-school-button"
-            className="bg-white p-3 rounded-2xl shadow-sm"
+            className="bg-primary p-4 rounded-2xl shadow-lg shadow-primary/20"
             onPress={() => router.push("/school/new")}
           >
-            <Plus size={24} color="#1a56db" />
+            <Plus size={24} color="#0f172a" />
           </TouchableOpacity>
         </View>
       </View>
+
 
       {/* List */}
       <View className="flex-1 items-center">
@@ -89,32 +94,46 @@ export default function SchoolListScreen() {
               }
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  className="bg-white mb-4 rounded-3xl p-4 flex-row items-center shadow-sm border border-slate-100"
+                  className="glass mb-5 rounded-[32px] p-5 flex-row items-center border border-white/5"
                   onPress={() => router.push(`/school/${item.id}`)}
                 >
-                  <View className="w-14 h-14 bg-blue-50 rounded-2xl items-center justify-center">
-                    <SchoolIcon size={28} color="#1a56db" />
+                  <View className="w-16 h-16 bg-primary/10 rounded-2xl items-center justify-center border border-primary/20">
+                    <SchoolIcon size={30} color="hsl(var(--primary))" />
                   </View>
                   <View className="flex-1 ml-4">
-                    <Text className="text-slate-900 font-bold text-lg">
+                    <Text className="text-white font-bold text-xl tracking-tight">
                       {item.name}
                     </Text>
-                    <View className="flex-row items-center mt-1">
-                      <MapPin size={14} color="#64748b" />
-                      <Text className="text-slate-500 text-sm ml-1" numberOfLines={1}>
+                    <View className="flex-row items-center mt-1.5">
+                      <MapPin size={14} color="rgba(255,255,255,0.5)" />
+                      <Text className="text-white/50 text-sm ml-1 flex-1" numberOfLines={1}>
                         {item.address}
                       </Text>
                     </View>
-                    <View className="bg-slate-100 self-start px-2 py-0.5 rounded-lg mt-2">
-                      <Text className="text-slate-600 text-xs font-bold uppercase tracking-wider">
-                        {item.countClasses} {item.countClasses === 1 ? "Class" : "Classes"}
+                    <View className="bg-primary/10 self-start px-3 py-1 rounded-full mt-3 border border-primary/20">
+                      <Text className="text-primary text-xs font-bold uppercase tracking-wider">
+                        {item.countClasses || 0} Turmas
                       </Text>
                     </View>
                   </View>
-                  <ChevronRight size={20} color="#cbd5e1" />
+                  <ChevronRight size={20} color="rgba(255,255,255,0.3)" />
                 </TouchableOpacity>
               )}
+              onEndReached={() => {
+                if (hasMoreSchools && !isLoadingMore) {
+                  fetchSchools();
+                }
+              }}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={
+                isLoadingMore ? (
+                  <View className="py-6">
+                    <ActivityIndicator color="hsl(var(--primary))" />
+                  </View>
+                ) : null
+              }
             />
+
           )}
         </View>
       </View>

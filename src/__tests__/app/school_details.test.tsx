@@ -10,6 +10,9 @@ const mockStore = {
   deleteSchool: jest.fn(),
   deleteClass: jest.fn(),
   isLoading: false,
+  isLoadingMore: false,
+  hasMoreClasses: false,
+  classPage: 1,
 };
 
 jest.mock("../../store/useSchoolStore", () => ({
@@ -45,8 +48,9 @@ describe("SchoolDetailsScreen", () => {
   });
 
   it("navigates to new class screen", () => {
-    const { getByText } = render(<SchoolDetailsScreen />);
-    fireEvent.press(getByText("New Class"));
+    const { getByTestId } = render(<SchoolDetailsScreen />);
+    fireEvent.press(getByTestId("add-class-button"));
     expect(mockPush).toHaveBeenCalledWith("/school/1/class/new");
   });
 });
+

@@ -4,6 +4,8 @@ import { useMemo } from 'react';
 export const useSchools = (searchQuery: string = '') => {
   const schools = useSchoolStore((state) => state.schools);
   const isLoading = useSchoolStore((state) => state.isLoading);
+  const isLoadingMore = useSchoolStore((state) => state.isLoadingMore);
+  const hasMoreSchools = useSchoolStore((state) => state.hasMoreSchools);
   const addSchool = useSchoolStore((state) => state.addSchool);
   const updateSchool = useSchoolStore((state) => state.updateSchool);
   const deleteSchool = useSchoolStore((state) => state.deleteSchool);
@@ -21,9 +23,12 @@ export const useSchools = (searchQuery: string = '') => {
     schools: filteredSchools,
     allSchools: schools,
     isLoading,
+    isLoadingMore,
+    hasMoreSchools,
     addSchool,
     updateSchool,
     deleteSchool,
     fetchSchools,
   };
+
 };

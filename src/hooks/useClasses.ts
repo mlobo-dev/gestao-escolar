@@ -9,6 +9,8 @@ export const useClasses = (schoolId: string, searchQuery: string = '') => {
 
 
   const isLoading = useSchoolStore((state) => state.isLoading);
+  const isLoadingMore = useSchoolStore((state) => state.isLoadingMore);
+  const hasMoreClasses = useSchoolStore((state) => state.hasMoreClasses);
   const addClass = useSchoolStore((state) => state.addClass);
   const updateClass = useSchoolStore((state) => state.updateClass);
   const deleteClass = useSchoolStore((state) => state.deleteClass);
@@ -26,6 +28,8 @@ export const useClasses = (schoolId: string, searchQuery: string = '') => {
     classes: filteredClasses,
     allClasses: classes,
     isLoading,
+    isLoadingMore,
+    hasMoreClasses,
     addClass,
     updateClass,
     deleteClass,

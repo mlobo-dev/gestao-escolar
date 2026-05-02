@@ -20,10 +20,22 @@ import {
 import { Text } from "@gluestack-ui/nativewind";
 import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
 
+import { useTranslation } from "react-i18next";
+
 export default function SchoolDetailsScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
+
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { classes, fetchClasses, deleteClass, isLoading } = useClasses(id!);
+  const { 
+    classes, 
+    fetchClasses, 
+    deleteClass, 
+    isLoading, 
+    isLoadingMore, 
+    hasMoreClasses 
+  } = useClasses(id!);
+
   const { allSchools, deleteSchool } = useSchools();
 
   const [modalConfig, setModalConfig] = useState<{
@@ -70,10 +82,10 @@ export default function SchoolDetailsScreen() {
   if (!school) return null;
 
   return (
-    <View className="flex-1 bg-slate-50">
+    <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          headerTitle: "School Details",
+          headerTitle: "Unidade Escolar",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() =>
@@ -88,67 +100,64 @@ export default function SchoolDetailsScreen() {
             <View className="flex-row">
               <TouchableOpacity
                 onPress={() => router.push(`/school/${id}/edit`)}
-                className="mr-3"
+                className="mr-4 w-10 h-10 bg-white/10 rounded-full items-center justify-center border border-white/10"
               >
-                <Pencil size={20} color="#fff" />
+                <Pencil size={18} color="#fff" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDeleteSchool}>
-                <Trash2 size={20} color="#fff" />
+              <TouchableOpacity 
+                onPress={handleDeleteSchool}
+                className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
+              >
+                <Trash2 size={18} color="hsl(var(--destructive))" />
               </TouchableOpacity>
             </View>
           ),
-          headerStyle: { backgroundColor: "#1d4ed8" },
+          headerStyle: { backgroundColor: "#0f172a" },
           headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "bold" },
+          headerShadowVisible: false,
         }}
       />
 
       {/* School Info Header */}
-      <View className="bg-blue-700 shadow-lg">
-        <View className="w-full max-w-4xl px-6 pt-6 pb-12">
-          <View className="flex-row items-center">
-            <View className="w-20 h-20 bg-white/10 rounded-[28px] items-center justify-center border border-white/20">
-              <SchoolIcon size={40} color="#fff" />
-            </View>
-            <View className="ml-5 flex-1">
-              <Text className="text-white text-3xl font-extrabold tracking-tight">
-                {school.name}
+      <View className="bg-primary/20 pb-8 pt-6 px-6 rounded-b-[40px]">
+        <View className="flex-row items-center">
+          <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-lg shadow-primary/30">
+            <SchoolIcon size={40} color="#0f172a" />
+          </View>
+          <View className="flex-1 ml-5">
+            <Text className="text-white text-3xl font-bold tracking-tight">
+              {school.name}
+            </Text>
+            <View className="flex-row items-center mt-2">
+              <MapPin size={16} color="rgba(255,255,255,0.6)" />
+              <Text className="text-white/60 text-sm ml-1.5 flex-1" numberOfLines={1}>
+                {school.address}
               </Text>
-              <View className="flex-row items-center mt-2 bg-white/10 self-start px-2 py-1 rounded-lg">
-                <MapPin size={14} color="#fff" />
-                <Text
-                  className="text-blue-50 text-xs ml-1 font-medium"
-                  numberOfLines={1}
-                >
-                  {school.address}
-                </Text>
-              </View>
             </View>
           </View>
         </View>
-        <View className="h-8 bg-slate-50 rounded-t-[40px] -mt-8" />
+
+        <View className="flex-row justify-between items-center mt-8">
+          <View>
+            <Text className="text-white text-2xl font-bold">{t("classes")}</Text>
+            <Text className="text-primary/80 text-sm font-medium">
+              {t("units_found", { count: classes.length })}
+            </Text>
+          </View>
+          <TouchableOpacity
+            testID="add-class-button"
+            className="bg-primary w-14 h-14 rounded-2xl items-center justify-center shadow-xl shadow-primary/20"
+            onPress={() => router.push(`/school/${id}/class/new`)}
+          >
+            <Plus size={28} color="#0f172a" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Classes Section */}
       <View className="flex-1 items-center px-4 mt-4">
         <View className="w-full max-w-4xl flex-1">
-          <View className="flex-row justify-between items-center mb-6 px-2">
-            <View>
-              <Text className="text-slate-900 text-xl font-bold">Classes</Text>
-              <Text className="text-slate-500 text-xs font-medium">
-                {classes.length} {classes.length === 1 ? "class" : "classes"} total
-              </Text>
-            </View>
-            <TouchableOpacity
-              className="bg-blue-600 px-5 py-2.5 rounded-2xl flex-row items-center shadow-md active:opacity-80"
-              onPress={() => router.push(`/school/${id}/class/new`)}
-            >
-              <Plus size={18} color="#fff" strokeWidth={3} />
-              <Text className="text-white font-bold text-sm ml-1.5">
-                New Class
-              </Text>
-            </TouchableOpacity>
-          </View>
-
           {isLoading ? (
             <ActivityIndicator size="large" color="#1a56db" className="mt-10" />
           ) : (
@@ -165,37 +174,59 @@ export default function SchoolDetailsScreen() {
                 </View>
               }
               renderItem={({ item }) => (
-                <View className="bg-white mb-3 rounded-3xl p-4 flex-row items-center shadow-sm border border-slate-100">
-                  <View className="w-12 h-12 bg-slate-50 rounded-2xl items-center justify-center">
-                    <Users size={24} color="#64748b" />
+                <View className="glass mb-4 rounded-[28px] p-5 flex-row items-center border border-white/5">
+                  <View className="w-14 h-14 bg-white/5 rounded-2xl items-center justify-center border border-white/10">
+                    <Users size={26} color="rgba(255,255,255,0.7)" />
                   </View>
                   <View className="flex-1 ml-4">
-                    <Text className="text-slate-900 font-bold text-base">
+                    <Text className="text-white font-bold text-lg tracking-tight">
                       {item.name}
                     </Text>
-                    <Text className="text-slate-500 text-xs mt-0.5">
-                      {item.shift} • Year {item.academicYear}
-                    </Text>
+                    <View className="flex-row items-center mt-1">
+                      <View className="bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20 mr-2">
+                        <Text className="text-primary text-[10px] font-bold uppercase tracking-wider">
+                          {item.shift}
+                        </Text>
+                      </View>
+                      <Text className="text-white/40 text-xs font-medium">
+                        Ano Letivo: {item.academicYear}
+                      </Text>
+                    </View>
                   </View>
                   <View className="flex-row">
                     <TouchableOpacity
-                      className="p-2 bg-slate-50 rounded-xl mr-2"
+                      className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/10 mr-2"
                       onPress={() =>
                         router.push(`/school/${id}/class/${item.id}/edit`)
                       }
                     >
-                      <Pencil size={16} color="#64748b" />
+                      <Pencil size={16} color="rgba(255,255,255,0.6)" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className="p-2 bg-red-50 rounded-xl"
+                      className="w-10 h-10 bg-destructive/10 rounded-xl items-center justify-center border border-destructive/20"
                       onPress={() => handleDeleteClass(item.id, item.name)}
                     >
-                      <Trash2 size={16} color="#ef4444" />
+                      <Trash2 size={16} color="hsl(var(--destructive))" />
                     </TouchableOpacity>
                   </View>
                 </View>
               )}
+
+              onEndReached={() => {
+                if (hasMoreClasses && !isLoadingMore) {
+                  fetchClasses(id!);
+                }
+              }}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={
+                isLoadingMore ? (
+                  <View className="py-6">
+                    <ActivityIndicator color="hsl(var(--primary))" />
+                  </View>
+                ) : null
+              }
             />
+
           )}
         </View>
       </View>

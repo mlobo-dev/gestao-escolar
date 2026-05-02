@@ -2,7 +2,9 @@
   "expo": {
     "name": "Gestão Escolar",
     "slug": "gestao-escolar",
+    "scheme": "gestao-escolar",
     "version": "1.0.0",
+
     "sdkVersion": "55.0.0",
     "newArchEnabled": false,
     "orientation": "portrait",
@@ -11,7 +13,8 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1a56db"
+      "backgroundColor": "#0f172a"
+
     },
     "assetBundlePatterns": [
       "**/*"
@@ -23,7 +26,8 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1a56db"
+        "backgroundColor": "#0f172a"
+
       },
       "package": "com.anonymous.gestaoescolar"
     },

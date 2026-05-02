@@ -32,16 +32,22 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
-      server.createList("school", 3).forEach((school) => {
-        server.createList("class", 2, { school });
+      server.createList("school", 100).forEach((school) => {
+        server.createList("class", 5, { school });
       });
     },
 
     routes() {
       this.namespace = "api";
 
-      this.get("/schools", (schema) => {
-        const schools = schema.all("school").models;
+      this.get("/schools", (schema, request) => {
+        const page = parseInt(request.queryParams.page || "1");
+        const limit = parseInt(request.queryParams.limit || "10");
+        const start = (page - 1) * limit;
+        const end = start + limit;
+
+        const allSchools = schema.all("school").models;
+        const schools = allSchools.slice(start, end);
         const classes = schema.all("class").models;
 
         return {
@@ -50,6 +56,10 @@ export function makeServer({ environment = "development" } = {}) {
             id: school.id,
             countClasses: classes.filter((c) => String(c.schoolId) === String(school.id)).length,
           })),
+          meta: {
+            total: allSchools.length,
+            hasMore: end < allSchools.length,
+          }
         };
       });
 
@@ -75,17 +85,29 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.get("/classes", (schema, request) => {
         const schoolId = request.queryParams.schoolId;
-        const classes = schoolId 
+        const page = parseInt(request.queryParams.page || "1");
+        const limit = parseInt(request.queryParams.limit || "10");
+        const start = (page - 1) * limit;
+        const end = start + limit;
+
+        const filteredClasses = schoolId 
           ? schema.where("class", { schoolId }).models
           : schema.all("class").models;
+        
+        const classes = filteredClasses.slice(start, end);
         
         return {
           classes: classes.map(c => ({
             ...c.attrs,
             id: c.id
-          }))
+          })),
+          meta: {
+            total: filteredClasses.length,
+            hasMore: end < filteredClasses.length,
+          }
         };
       });
+
 
       this.post("/classes", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);

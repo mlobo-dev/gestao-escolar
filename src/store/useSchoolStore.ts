@@ -7,7 +7,14 @@ interface SchoolState {
   schools: School[];
   classes: SchoolClass[];
   isLoading: boolean;
+  isLoadingMore: boolean;
   error: string | null;
+  
+  // Pagination metadata
+  schoolPage: number;
+  hasMoreSchools: boolean;
+  classPage: number;
+  hasMoreClasses: boolean;
 
   setSchools: (schools: School[]) => void;
   addSchool: (school: Omit<School, "id" | "countClasses">) => Promise<void>;
@@ -19,9 +26,10 @@ interface SchoolState {
   updateClass: (id: string, schoolClass: Partial<SchoolClass>) => Promise<void>;
   deleteClass: (id: string) => Promise<void>;
 
-  fetchSchools: () => Promise<void>;
-  fetchClasses: (schoolId: string) => Promise<void>;
+  fetchSchools: (refresh?: boolean) => Promise<void>;
+  fetchClasses: (schoolId: string, refresh?: boolean) => Promise<void>;
 }
+
 
 export const useSchoolStore = create<SchoolState>()(
   persist(
@@ -29,19 +37,36 @@ export const useSchoolStore = create<SchoolState>()(
       schools: [],
       classes: [],
       isLoading: false,
+      isLoadingMore: false,
       error: null,
+      schoolPage: 1,
+      hasMoreSchools: true,
+      classPage: 1,
+      hasMoreClasses: true,
 
       setSchools: (schools) => set({ schools }),
 
-      fetchSchools: async () => {
-        set({ isLoading: true });
+      fetchSchools: async (refresh = false) => {
+        const page = refresh ? 1 : get().schoolPage;
+        if (page === 1) {
+          set({ isLoading: true });
+        } else {
+          set({ isLoadingMore: true });
+        }
+
         try {
-          const response = await fetch("/api/schools");
+          const response = await fetch(`/api/schools?page=${page}&limit=10`);
           const data = await response.json();
-          // The API now returns countClasses directly
-          set({ schools: data.schools, isLoading: false });
+          
+          set((state) => ({
+            schools: refresh ? data.schools : [...state.schools, ...data.schools],
+            schoolPage: page + 1,
+            hasMoreSchools: data.meta.hasMore,
+            isLoading: false,
+            isLoadingMore: false,
+          }));
         } catch (error) {
-          set({ error: "Failed to fetch schools", isLoading: false });
+          set({ error: "Failed to fetch schools", isLoading: false, isLoadingMore: false });
         }
       },
 
@@ -88,18 +113,32 @@ export const useSchoolStore = create<SchoolState>()(
 
       setClasses: (classes) => set({ classes }),
 
-      fetchClasses: async (schoolId) => {
-        set({ isLoading: true });
+      fetchClasses: async (schoolId, refresh = false) => {
+        const page = refresh ? 1 : get().classPage;
+        if (page === 1) {
+          set({ isLoading: true });
+        } else {
+          set({ isLoadingMore: true });
+        }
+
         try {
-          const response = await fetch(`/api/classes?schoolId=${schoolId}`);
+          const response = await fetch(`/api/classes?schoolId=${schoolId}&page=${page}&limit=10`);
           const data = await response.json();
-          set({ classes: data.classes || [], isLoading: false });
+          
+          set((state) => ({
+            classes: refresh ? (data.classes || []) : [...state.classes, ...(data.classes || [])],
+            classPage: page + 1,
+            hasMoreClasses: data.meta.hasMore,
+            isLoading: false,
+            isLoadingMore: false,
+          }));
 
         } catch (error) {
           console.error("Fetch classes error:", error);
-          set({ error: "Failed to fetch classes", isLoading: false });
+          set({ error: "Failed to fetch classes", isLoading: false, isLoadingMore: false });
         }
       },
+
 
 
       addClass: async (schoolClass) => {

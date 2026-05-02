@@ -10,6 +10,12 @@ let mockState = {
   updateSchool: jest.fn(),
   addClass: jest.fn(),
   updateClass: jest.fn(),
+  isLoading: false,
+  isLoadingMore: false,
+  hasMoreSchools: false,
+  hasMoreClasses: false,
+  schoolPage: 1,
+  classPage: 1,
 };
 
 jest.mock("../../store/useSchoolStore", () => ({
@@ -23,6 +29,7 @@ jest.mock("expo-router", () => ({
   useRouter: () => ({
     back: mockBack,
     canGoBack: () => true,
+    replace: jest.fn(),
   }),
   useLocalSearchParams: () => ({ id: "1", classId: "c1" }),
   Stack: {
@@ -36,8 +43,7 @@ describe("Form Screens", () => {
 
     jest.clearAllMocks();
     mockState = {
-      schools: [{ id: "1", name: "Old School", address: "Old Address" }],
-      classes: [{ id: "c1", name: "Old Class", shift: "Morning", academicYear: "2024" }],
+      ...mockState,
       updateSchool: jest.fn(() => Promise.resolve()),
       addClass: jest.fn(() => Promise.resolve()),
       updateClass: jest.fn(() => Promise.resolve()),
@@ -55,7 +61,7 @@ describe("Form Screens", () => {
     const nameInput = getByDisplayValue("Old School");
     fireEvent.changeText(nameInput, "Updated School");
     
-    fireEvent.press(getByText("Update School"));
+    fireEvent.press(getByText("Atualizar Escola"));
     
     await waitFor(() => {
       expect(mockUpdateSchool).toHaveBeenCalledWith("1", expect.objectContaining({ name: "Updated School" }));
@@ -70,10 +76,10 @@ describe("Form Screens", () => {
     const { getByPlaceholderText, getByText } = render(<NewClassScreen />);
 
     
-    fireEvent.changeText(getByPlaceholderText("e.g. 1st Year A"), "New Class");
-    fireEvent.changeText(getByPlaceholderText("e.g. 2024"), "2025");
+    fireEvent.changeText(getByPlaceholderText("Ex: 1º Ano A"), "New Class");
+    fireEvent.changeText(getByPlaceholderText("Ex: 2024"), "2025");
     
-    fireEvent.press(getByText("Save Class"));
+    fireEvent.press(getByText("Salvar Turma"));
     
     await waitFor(() => {
       expect(mockAddClass).toHaveBeenCalledWith(expect.objectContaining({ schoolId: "1", name: "New Class", academicYear: "2025" }));
@@ -81,3 +87,4 @@ describe("Form Screens", () => {
     });
   });
 });
+
