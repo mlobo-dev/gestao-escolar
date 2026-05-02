@@ -1,0 +1,28 @@
+import { useSchoolStore } from '../store/useSchoolStore';
+import { useMemo } from 'react';
+
+export const useClasses = (schoolId: string, searchQuery: string = '') => {
+  const classes = useSchoolStore((state) => state.classes[schoolId] || []);
+  const isLoading = useSchoolStore((state) => state.isLoading);
+  const addClass = useSchoolStore((state) => state.addClass);
+  const updateClass = useSchoolStore((state) => state.updateClass);
+  const deleteClass = useSchoolStore((state) => state.deleteClass);
+  const fetchClasses = useSchoolStore((state) => state.fetchClasses);
+
+  const filteredClasses = useMemo(() => {
+    if (!searchQuery) return classes;
+    return classes.filter((cls) =>
+      cls.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [classes, searchQuery]);
+
+  return {
+    classes: filteredClasses,
+    allClasses: classes,
+    isLoading,
+    addClass,
+    updateClass,
+    deleteClass,
+    fetchClasses,
+  };
+};

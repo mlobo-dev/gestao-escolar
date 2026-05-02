@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useSchoolStore } from "../src/store/useSchoolStore";
+import { useSchools } from "../src/hooks/useSchools";
 import {
   Search,
   Plus,
@@ -16,21 +16,25 @@ import {
   ChevronRight,
 } from "lucide-react-native";
 import { Text } from "@gluestack-ui/nativewind";
+import { makeServer } from "../src/services/mirage";
+
+// Start MirageJS if in development
+if (__DEV__) {
+  if (!(window as any).server) {
+    (window as any).server = makeServer();
+  }
+}
 
 export default function SchoolListScreen() {
   const router = useRouter();
-  const { schools, fetchSchools, isLoading } = useSchoolStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const { schools, isLoading, fetchSchools } = useSchools(searchQuery);
 
   useEffect(() => {
     fetchSchools();
   }, []);
 
-  const filteredSchools = schools.filter(
-    (school) =>
-      school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      school.address.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSchools = schools;
 
   return (
     <View className="flex-1 bg-slate-50">

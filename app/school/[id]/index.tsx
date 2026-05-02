@@ -6,7 +6,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
-import { useSchoolStore } from "../../../src/store/useSchoolStore";
+import { useClasses } from "../../../src/hooks/useClasses";
+import { useSchools } from "../../../src/hooks/useSchools";
 import {
   Plus,
   School as SchoolIcon,
@@ -22,14 +23,8 @@ import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
 export default function SchoolDetailsScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const {
-    schools,
-    classes,
-    fetchClasses,
-    deleteSchool,
-    deleteClass,
-    isLoading,
-  } = useSchoolStore();
+  const { classes, fetchClasses, deleteClass, isLoading } = useClasses(id!);
+  const { allSchools, deleteSchool } = useSchools();
 
   const [modalConfig, setModalConfig] = useState<{
     isOpen: boolean;
@@ -43,7 +38,7 @@ export default function SchoolDetailsScreen() {
     onConfirm: () => {},
   });
 
-  const school = schools.find((s) => s.id === id);
+  const school = allSchools.find((s) => s.id === id);
 
   useEffect(() => {
     if (id) fetchClasses(id);
