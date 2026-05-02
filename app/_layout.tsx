@@ -3,10 +3,8 @@ import { GluestackUIProvider } from "@gluestack-ui/nativewind";
 import { makeServer } from "../src/mocks/server";
 import "../global.css";
 
-// Initialize mock server in development
-if (__DEV__) {
-  makeServer();
-}
+// Initialize mock server
+makeServer();
 
 export default function RootLayout() {
   return (
