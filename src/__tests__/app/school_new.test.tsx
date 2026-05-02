@@ -4,11 +4,15 @@ import NewSchoolScreen from "../../../app/school/new";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
 // Mock the store
+const mockStore = {
+  addSchool: jest.fn(),
+};
+
 jest.mock("../../store/useSchoolStore", () => ({
-  useSchoolStore: jest.fn(),
+  useSchoolStore: jest.fn((selector) => (selector ? selector(mockStore) : mockStore)),
 }));
 
-const mockAddSchool = jest.fn();
+
 const mockBack = jest.fn();
 
 // Mock useRouter from the setup but allow local overrides if needed
@@ -32,10 +36,8 @@ jest.mock("expo-router", () => ({
 describe("NewSchoolScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
-      addSchool: mockAddSchool,
-    });
   });
+
 
   it("renders correctly and validates inputs", async () => {
     const { getByPlaceholderText, getByText } = render(<NewSchoolScreen />);
@@ -61,11 +63,12 @@ describe("NewSchoolScreen", () => {
     fireEvent.press(saveButton);
 
     await waitFor(() => {
-      expect(mockAddSchool).toHaveBeenCalledWith({
+      expect(mockStore.addSchool).toHaveBeenCalledWith({
         name: "New Test School",
         address: "Test Address 123",
       });
       expect(mockBack).toHaveBeenCalled();
     });
+
   });
 });

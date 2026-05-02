@@ -1,0 +1,16 @@
+
+> gestao-escolar@1.0.0 test
+> jest
+
+PASS src/store/__tests__/useSchoolStore.test.ts
+PASS src/__tests__/app/index.test.tsx
+PASS src/__tests__/components/ConfirmationModal.test.tsx
+PASS src/__tests__/app/school_new.test.tsx
+PASS src/__tests__/app/forms.test.tsx
+PASS src/__tests__/app/school_details.test.tsx
+
+Test Suites: 6 passed, 6 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        3.21 s, estimated 4 s
+Ran all test suites.

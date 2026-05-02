@@ -2,7 +2,12 @@ import { useSchoolStore } from '../store/useSchoolStore';
 import { useMemo } from 'react';
 
 export const useClasses = (schoolId: string, searchQuery: string = '') => {
-  const classes = useSchoolStore((state) => state.classes[schoolId] || []);
+  const classes = useSchoolStore((state) => {
+    // Robust comparison using String to handle ID type mismatches
+    return state.classes.filter((c) => String(c.schoolId) === String(schoolId));
+  });
+
+
   const isLoading = useSchoolStore((state) => state.isLoading);
   const addClass = useSchoolStore((state) => state.addClass);
   const updateClass = useSchoolStore((state) => state.updateClass);
@@ -15,6 +20,7 @@ export const useClasses = (schoolId: string, searchQuery: string = '') => {
       cls.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [classes, searchQuery]);
+
 
   return {
     classes: filteredClasses,

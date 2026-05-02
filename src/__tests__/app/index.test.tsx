@@ -3,9 +3,19 @@ import { render, fireEvent } from "@testing-library/react-native";
 import HomeScreen from "../../../app/index";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
+const mockStore = {
+  schools: [
+    { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
+    { id: "2", name: "School 2", address: "Address 2", countClasses: 0 },
+  ],
+  fetchSchools: jest.fn(),
+  isLoading: false,
+};
+
 jest.mock("../../store/useSchoolStore", () => ({
-  useSchoolStore: jest.fn(),
+  useSchoolStore: jest.fn((selector) => (selector ? selector(mockStore) : mockStore)),
 }));
+
 
 const mockPush = jest.fn();
 
@@ -19,19 +29,10 @@ jest.mock("expo-router", () => ({
 }));
 
 describe("HomeScreen", () => {
-  const mockSchools = [
-    { id: "1", name: "School 1", address: "Address 1" },
-    { id: "2", name: "School 2", address: "Address 2" },
-  ];
-
   beforeEach(() => {
     jest.clearAllMocks();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
-      schools: mockSchools,
-      fetchSchools: jest.fn(),
-      isLoading: false,
-    });
   });
+
 
   it("renders the list of schools", () => {
     const { getByText } = render(<HomeScreen />);

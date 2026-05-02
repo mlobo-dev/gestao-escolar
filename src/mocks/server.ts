@@ -47,20 +47,23 @@ export function makeServer({ environment = "development" } = {}) {
         return {
           schools: schools.map((school) => ({
             ...school.attrs,
-            countClasses: classes.filter((c) => c.schoolId === school.id).length,
+            id: school.id,
+            countClasses: classes.filter((c) => String(c.schoolId) === String(school.id)).length,
           })),
         };
       });
 
       this.post("/schools", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
-        return schema.create("school", attrs);
+        const newSchool = schema.create("school", attrs);
+        return { school: { ...newSchool.attrs, id: newSchool.id } };
       });
 
       this.patch("/schools/:id", (schema, request) => {
         let id = request.params.id;
         let attrs = JSON.parse(request.requestBody);
-        return schema.find("school", id)?.update(attrs);
+        const updatedSchool = schema.find("school", id)?.update(attrs);
+        return { school: { ...updatedSchool?.attrs, id: updatedSchool?.id } };
       });
 
       this.del("/schools/:id", (schema, request) => {
@@ -69,23 +72,32 @@ export function makeServer({ environment = "development" } = {}) {
         return { success: true };
       });
 
+
       this.get("/classes", (schema, request) => {
         const schoolId = request.queryParams.schoolId;
-        if (schoolId) {
-          return schema.where("class", { schoolId });
-        }
-        return schema.all("class");
+        const classes = schoolId 
+          ? schema.where("class", { schoolId }).models
+          : schema.all("class").models;
+        
+        return {
+          classes: classes.map(c => ({
+            ...c.attrs,
+            id: c.id
+          }))
+        };
       });
 
       this.post("/classes", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
-        return schema.create("class", attrs);
+        const newClass = schema.create("class", attrs);
+        return { class: { ...newClass.attrs, id: newClass.id } };
       });
 
       this.patch("/classes/:id", (schema, request) => {
         let id = request.params.id;
         let attrs = JSON.parse(request.requestBody);
-        return schema.find("class", id)?.update(attrs);
+        const updatedClass = schema.find("class", id)?.update(attrs);
+        return { class: { ...updatedClass.attrs, id: updatedClass.id } };
       });
 
       this.del("/classes/:id", (schema, request) => {
@@ -93,6 +105,7 @@ export function makeServer({ environment = "development" } = {}) {
         schema.find("class", id)?.destroy();
         return { success: true };
       });
+
     },
   });
 

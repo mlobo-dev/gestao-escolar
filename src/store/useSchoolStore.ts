@@ -93,11 +93,14 @@ export const useSchoolStore = create<SchoolState>()(
         try {
           const response = await fetch(`/api/classes?schoolId=${schoolId}`);
           const data = await response.json();
-          set({ classes: data.classes, isLoading: false });
+          set({ classes: data.classes || [], isLoading: false });
+
         } catch (error) {
+          console.error("Fetch classes error:", error);
           set({ error: "Failed to fetch classes", isLoading: false });
         }
       },
+
 
       addClass: async (schoolClass) => {
         try {

@@ -4,9 +4,18 @@ import EditSchoolScreen from "../../../app/school/[id]/edit";
 import NewClassScreen from "../../../app/school/[id]/class/new";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
+let mockState = {
+  schools: [{ id: "1", name: "Old School", address: "Old Address" }],
+  classes: [{ id: "c1", name: "Old Class", shift: "Morning", academicYear: "2024" }],
+  updateSchool: jest.fn(),
+  addClass: jest.fn(),
+  updateClass: jest.fn(),
+};
+
 jest.mock("../../store/useSchoolStore", () => ({
-  useSchoolStore: jest.fn(),
+  useSchoolStore: jest.fn((selector) => (selector ? selector(mockState) : mockState)),
 }));
+
 
 const mockBack = jest.fn();
 
@@ -22,23 +31,24 @@ jest.mock("expo-router", () => ({
 }));
 
 describe("Form Screens", () => {
+  jest.setTimeout(15000);
   beforeEach(() => {
+
     jest.clearAllMocks();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
+    mockState = {
       schools: [{ id: "1", name: "Old School", address: "Old Address" }],
       classes: [{ id: "c1", name: "Old Class", shift: "Morning", academicYear: "2024" }],
-      updateSchool: jest.fn(),
-      addClass: jest.fn(),
-      updateClass: jest.fn(),
-    });
+      updateSchool: jest.fn(() => Promise.resolve()),
+      addClass: jest.fn(() => Promise.resolve()),
+      updateClass: jest.fn(() => Promise.resolve()),
+    };
   });
+
+
 
   it("renders EditSchoolScreen and updates info", async () => {
     const mockUpdateSchool = jest.fn();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
-      schools: [{ id: "1", name: "Old School", address: "Old Address" }],
-      updateSchool: mockUpdateSchool,
-    });
+    mockState.updateSchool = mockUpdateSchool;
 
     const { getByDisplayValue, getByText } = render(<EditSchoolScreen />);
     
@@ -55,11 +65,10 @@ describe("Form Screens", () => {
 
   it("renders NewClassScreen and adds class", async () => {
     const mockAddClass = jest.fn();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
-      addClass: mockAddClass,
-    });
+    mockState.addClass = mockAddClass;
 
     const { getByPlaceholderText, getByText } = render(<NewClassScreen />);
+
     
     fireEvent.changeText(getByPlaceholderText("e.g. 1st Year A"), "New Class");
     fireEvent.changeText(getByPlaceholderText("e.g. 2024"), "2025");

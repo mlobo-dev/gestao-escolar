@@ -16,14 +16,14 @@ import {
   ChevronRight,
 } from "lucide-react-native";
 import { Text } from "@gluestack-ui/nativewind";
-import { makeServer } from "../src/services/mirage";
+import { makeServer } from "../src/mocks/server";
 
 // Start MirageJS if in development
-if (__DEV__) {
-  if (!(window as any).server) {
-    (window as any).server = makeServer();
-  }
+// Start MirageJS mock server
+if (!(window as any).server) {
+  (window as any).server = makeServer();
 }
+
 
 export default function SchoolListScreen() {
   const router = useRouter();
