@@ -130,18 +130,18 @@ export default function SchoolDetailsScreen() {
       />
 
       {/* School Info Header */}
-      <View className="bg-card/50 pb-8 pt-6 px-6 rounded-b-[48px] border-b border-white/5">
+      <View className={`pb-8 pt-6 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
         <View className="flex-row items-center">
-          <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-2xl shadow-primary/40">
+          <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-md">
             <SchoolIcon size={40} color="#020617" />
           </View>
           <View className="flex-1 ml-5">
-            <Text className="text-foreground text-3xl font-bold tracking-tight">
+            <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                {school.name}
              </Text>
              <View className="flex-row items-center mt-2">
                <MapPin size={16} color={iconColor} />
-               <Text className="text-muted-foreground text-sm ml-1.5 flex-1" numberOfLines={1}>
+               <Text className={`text-sm ml-1.5 flex-1 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`} numberOfLines={1}>
                  {school.address}
                </Text>
              </View>
@@ -150,14 +150,14 @@ export default function SchoolDetailsScreen() {
 
         <View className="flex-row justify-between items-center mt-10">
           <View>
-            <Text className="text-foreground text-2xl font-bold">{t("classes")}</Text>
+            <Text className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}>{t("classes")}</Text>
             <Text className="text-primary text-sm font-medium mt-1">
               {t("units_found", { count: classes.length })}
             </Text>
           </View>
           <TouchableOpacity
             testID="add-class-button"
-            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-2xl shadow-primary/40"
+            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-md"
             onPress={() => router.push(`/school/${id}/class/new`)}
           >
             <Plus size={32} color="#020617" />
@@ -178,19 +178,22 @@ export default function SchoolDetailsScreen() {
               ListEmptyComponent={
                 <View className="items-center justify-center pt-16">
                   <Users size={48} color="#cbd5e1" />
-                  <Text className="text-slate-400 mt-4 text-center font-medium">
+                  <Text className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}>
                     {t("no_classes")}
                   </Text>
-
                 </View>
               }
               renderItem={({ item }) => (
-                <View className="bg-card mb-4 rounded-[32px] p-6 flex-row items-center border border-white/[0.05] shadow-sm shadow-black/20">
-                  <View className="w-14 h-14 bg-muted rounded-2xl items-center justify-center border border-border">
+                <View className={`mb-4 rounded-[32px] p-6 flex-row items-center border shadow-sm ${
+                  isDark ? "bg-card border-white/5" : "bg-white border-slate-100"
+                }`}>
+                  <View className={`w-14 h-14 rounded-2xl items-center justify-center border ${
+                    isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
+                  }`}>
                     <Users size={26} color={iconColor} />
                   </View>
                   <View className="flex-1 ml-5">
-                    <Text className="text-foreground font-bold text-lg tracking-tight">
+                    <Text className={`font-bold text-lg tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                       {item.name}
                     </Text>
                     <View className="flex-row items-center mt-1.5">
@@ -199,7 +202,7 @@ export default function SchoolDetailsScreen() {
                           {item.shift}
                         </Text>
                       </View>
-                      <Text className="text-muted-foreground text-xs font-medium">
+                      <Text className={`text-xs font-medium ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>
                         {t("academic_year")}: {item.academicYear}
                       </Text>
                     </View>

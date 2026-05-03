@@ -102,10 +102,10 @@ export default function SchoolListScreen() {
 
         <View className="flex-row justify-between items-center mt-10">
           <View className="flex-1">
-            <Text className="text-foreground text-3xl font-bold tracking-tight">
+            <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
               {t("schools")}
             </Text>
-            <Text className="text-muted-foreground text-sm font-medium mt-1">
+            <Text className={`text-sm font-medium mt-1 ${isDark ? "text-slate-400" : "text-slate-500"}`}>
               {t("units_found", { count: totalSchools })}
             </Text>
           </View>
@@ -148,31 +148,41 @@ export default function SchoolListScreen() {
                 <TouchableOpacity
                   onPress={() => router.push(`/school/${item.id}`)}
                   activeOpacity={0.7}
-                  className="bg-card border border-white/[0.05] p-6 rounded-[32px] mb-5 flex-row items-center shadow-sm shadow-black/40"
+                  className={`p-6 rounded-[32px] mb-5 flex-row items-center border shadow-sm ${
+                    isDark 
+                      ? "bg-card border-white/10 shadow-black/40" 
+                      : "bg-white border-slate-100 shadow-slate-200/50"
+                  }`}
                 >
-                  <View className="w-16 h-16 bg-primary/20 rounded-2xl items-center justify-center border border-primary/30">
-                    <SchoolIcon size={28} color="#10b981" />
+                  <View className={`w-16 h-16 rounded-2xl items-center justify-center border ${
+                    isDark ? "bg-white/5 border-white/10" : "bg-primary/10 border-primary/20"
+                  }`}>
+                    <SchoolIcon size={28} color={isDark ? "#10b981" : "#1a56db"} />
                   </View>
                   
                   <View className="flex-1 ml-5">
-                    <Text className="text-foreground text-xl font-bold">
+                    <Text className={`text-xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                       {item.name}
                     </Text>
-                    <View className="flex-row items-center mt-1.5">
+                    <View className="flex-row items-center mt-2">
                       <MapPin size={14} color={iconColor} />
-                      <Text className="text-muted-foreground text-sm ml-1.5 font-medium">
+                      <Text className={`text-sm ml-1.5 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                         {item.address}
                       </Text>
                     </View>
-                    <View className="bg-primary/15 self-start px-4 py-1.5 rounded-full mt-4 border border-primary/25">
+                    <View className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
+                      isDark ? "bg-primary/10 border-primary/25" : "bg-primary/10 border-primary/25"
+                    }`}>
                       <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
                         {item.countClasses || 0} {t("classes")}
                       </Text>
                     </View>
                   </View>
                   
-                  <View className="bg-white/5 w-10 h-10 rounded-full items-center justify-center">
-                    <ChevronRight size={20} color="#94a3b8" />
+                  <View className={`w-10 h-10 rounded-full items-center justify-center ${
+                    isDark ? "bg-white/5" : "bg-slate-50"
+                  }`}>
+                    <ChevronRight size={20} color={iconColor} />
                   </View>
                 </TouchableOpacity>
               )}
