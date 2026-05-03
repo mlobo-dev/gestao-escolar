@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
 import { useRouter, Stack } from "expo-router";
-import { useSchoolStore } from "../../src/store/useSchoolStore";
-// import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { useThemeStore } from "../../src/store/useThemeStore";
-
+import { useSchoolStore } from "../../src/store/useSchoolStore";
 import { useTranslation } from "react-i18next";
 
 export default function NewSchoolScreen() {

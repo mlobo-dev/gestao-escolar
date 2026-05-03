@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { useSchoolStore } from "../../../../src/store/useSchoolStore";
-// import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { Shift } from "../../../../src/types";
 import { useThemeStore } from "../../../../src/store/useThemeStore";
