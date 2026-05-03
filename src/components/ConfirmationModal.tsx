@@ -1,9 +1,9 @@
 import React from "react";
 import { Modal, View, TouchableOpacity, Platform } from "react-native";
-import { Text } from "@gluestack-ui/nativewind";
+import { Text } from "react-native";
 import { Trash2, X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../store/useThemeStore";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export const ConfirmationModal = ({
   cancelText,
 }: ConfirmationModalProps) => {
   const { t } = useTranslation();
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 
@@ -39,7 +39,9 @@ export const ConfirmationModal = ({
       <View className="flex-1 justify-center items-center bg-black/80 p-6" style={Platform.OS === 'web' ? { backdropFilter: 'blur(10px)' } : {}}>
         {/* Container */}
         <View 
-          className="bg-card w-full rounded-[40px] overflow-hidden border border-border"
+          className={`w-full rounded-[40px] overflow-hidden border ${
+            isDark ? "bg-[#0f172a] border-white/10" : "bg-white border-slate-200"
+          }`}
           style={Platform.OS === 'web' ? { maxWidth: 400 } : { maxWidth: '95%' }}
         >
           {/* Header */}
@@ -47,14 +49,18 @@ export const ConfirmationModal = ({
             <View className="w-20 h-20 bg-red-500/10 rounded-3xl items-center justify-center mb-6 border border-red-500/20">
               <Trash2 size={36} color="#ef4444" />
             </View>
-            <Text className="text-foreground text-2xl font-bold text-center tracking-tight leading-tight">
+            <Text className={`text-2xl font-bold text-center tracking-tight leading-tight ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}>
               {title || t("confirm_delete_title")}
             </Text>
           </View>
 
           {/* Body */}
           <View className="px-8 pb-8">
-            <Text className="text-muted-foreground text-center text-lg leading-relaxed">
+            <Text className={`text-center text-lg leading-relaxed ${
+              isDark ? "text-slate-400" : "text-slate-500"
+            }`}>
               {message || t("confirm_delete_desc")}
             </Text>
           </View>
@@ -64,9 +70,13 @@ export const ConfirmationModal = ({
             <TouchableOpacity
               onPress={onClose}
               activeOpacity={0.7}
-              className="flex-1 bg-muted h-16 rounded-2xl items-center justify-center border border-border"
+              className={`flex-1 h-16 rounded-2xl items-center justify-center border ${
+                isDark ? "bg-white/5 border-white/10" : "bg-slate-100 border-slate-200"
+              }`}
             >
-              <Text className="text-muted-foreground font-bold text-lg">{cancelText || t("cancel")}</Text>
+              <Text className={`font-bold text-lg ${
+                isDark ? "text-white" : "text-slate-600"
+              }`}>{cancelText || t("cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {

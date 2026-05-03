@@ -25,7 +25,7 @@ import { useTranslation } from "react-i18next";
 import { LanguagePicker } from "../src/components/LanguagePicker";
 import { ThemeToggle } from "../src/components/ThemeToggle";
 import { useAuth } from "../src/context/AuthContext";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../src/store/useThemeStore";
 
 
 
@@ -49,7 +49,7 @@ export default function SchoolListScreen() {
   }, []);
 
 
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 

@@ -1,19 +1,19 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Sun, Moon } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../store/useThemeStore";
 
 export function ThemeToggle() {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { colorScheme, toggleTheme } = useThemeStore();
   const isDark = colorScheme === "dark";
-
-  const handleToggle = () => {
-    setColorScheme(isDark ? "light" : "dark");
-  };
 
   return (
     <TouchableOpacity
-      onPress={handleToggle}
+      onPress={() => {
+        const target = colorScheme === "light" ? "dark" : "light";
+        console.log(`[ThemeToggle] Requesting change: ${colorScheme} -> ${target}`);
+        toggleTheme();
+      }}
       activeOpacity={0.7}
       className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
     >

@@ -18,7 +18,7 @@ import {
   Users,
   ChevronLeft,
 } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../../../src/store/useThemeStore";
 import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
 
 import { useTranslation } from "react-i18next";
@@ -82,7 +82,7 @@ export default function SchoolDetailsScreen() {
     });
   };
 
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 

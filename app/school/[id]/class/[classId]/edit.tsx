@@ -5,7 +5,7 @@ import { useSchoolStore } from "../../../../../src/store/useSchoolStore";
 // import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { Shift } from "../../../../../src/types";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../../../../../src/store/useThemeStore";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
@@ -17,7 +17,7 @@ export default function EditClassScreen() {
   const { id, classId } = useLocalSearchParams<{ id: string; classId: string }>();
   const { classes, updateClass } = useSchoolStore();
   const classData = classes.find((c) => c.id === classId);
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
 
   const [name, setName] = useState(classData?.name || "");

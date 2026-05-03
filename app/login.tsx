@@ -6,7 +6,7 @@ import { Stack } from "expo-router";
 import LogoImg from "../assets/images/logo.png";
 import { LanguagePicker } from "../src/components/LanguagePicker";
 import { ThemeToggle } from "../src/components/ThemeToggle";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../src/store/useThemeStore";
 import { useTranslation } from "react-i18next";
 
 
@@ -14,13 +14,12 @@ function LoginScreen() {
 
   const { signIn, isLoading } = useAuth();
   const { t } = useTranslation();
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
 
 
   return (
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""} justify-center items-center p-8`}>
-      <Stack.Screen options={{ headerShown: false }} />
       
       <View className="absolute top-12 right-6 flex-row items-center gap-3">
         <ThemeToggle />

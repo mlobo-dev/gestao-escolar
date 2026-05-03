@@ -3,8 +3,8 @@ import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-nativ
 import { useRouter, Stack } from "expo-router";
 import { useSchoolStore } from "../../src/store/useSchoolStore";
 // import { Text } from "@gluestack-ui/nativewind";
-import { ChevronLeft, Save } from "lucide-native";
-import { useColorScheme } from "nativewind";
+import { ChevronLeft, Save } from "lucide-react-native";
+import { useThemeStore } from "../../src/store/useThemeStore";
 
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +12,7 @@ export default function NewSchoolScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { addSchool } = useSchoolStore();
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
 
   const [name, setName] = useState("");

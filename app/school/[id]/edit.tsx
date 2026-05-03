@@ -4,7 +4,7 @@ import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { useSchoolStore } from "../../../src/store/useSchoolStore";
 // import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
+import { useThemeStore } from "../../../src/store/useThemeStore";
 
 import { useTranslation } from "react-i18next";
 
@@ -14,7 +14,7 @@ export default function EditSchoolScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { schools, updateSchool } = useSchoolStore();
   const school = schools.find((s) => s.id === id);
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useThemeStore();
   const isDark = colorScheme === "dark";
 
   const [name, setName] = useState(school?.name || "");
