@@ -1,12 +1,12 @@
 # Gestão Escolar 🍎
 
-Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza as tecnologias mais modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta fidelidade visual.
+Uma aplicação robusta de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza tecnologias modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta fidelidade visual.
 
 ---
 
-## 🚀 Tecnologias (The 200% Stack)
+## 🚀 Tecnologias Utilizadas
 
-O projeto foi construído utilizando as versões mais recentes e estáveis das tecnologias líderes de mercado:
+O projeto foi construído utilizando as versões estáveis mais recentes:
 
 - **Plataforma**: Expo SDK 55.0.19
 - **Framework**: React Native (React 19.2.5 / RN 0.83.6)
@@ -15,20 +15,20 @@ O projeto foi construído utilizando as versões mais recentes e estáveis das t
 - **Estado**: Zustand com persistência em AsyncStorage
 - **Autenticação**: Keycloak (OIDC/PKCE) via Expo Auth Session
 - **Internacionalização**: i18next (Suporte PT-BR / EN)
-- **Mock API**: MirageJS para simulação completa de backend com Paginação
-- **Testes**: Jest + Testing Library (15 testes unitários)
+- **Mock API**: MirageJS para simulação de backend com suporte a paginação
+- **Testes**: Jest + Testing Library (Suíte de testes unitários)
 
 ---
 
-## ✨ Diferenciais Premium (Entrega 200%)
+## ✨ Recursos Adicionais e Aprimoramentos
 
-Além dos requisitos básicos, este projeto implementa funcionalidades de nível Enterprise:
+Além dos requisitos básicos, este projeto implementa funcionalidades avançadas:
 
-- **🔐 Autenticação Enterprise**: Fluxo de login integrado ao Keycloak com proteção de rotas e persistência de sessão.
-- **🌍 Multi-idioma (i18n)**: Suporte completo a Português e Inglês, com troca de idioma em tempo real.
-- **🌓 Dark Mode Estabilizado**: Tema escuro implementado via Store manual para evitar conflitos de navegação no Android.
-- **📈 Paginação & Infinite Scroll**: Arquitetura preparada para grandes volumes de dados nas listagens de escolas e turmas.
-- **🎨 Glassmorphism Design**: UI moderna com efeitos de transparência, blur e micro-animações.
+- **🔐 Autenticação Segura**: Fluxo de login integrado ao Keycloak com proteção de rotas e persistência de sessão.
+- **🌍 Internacionalização (i18n)**: Suporte completo a Português e Inglês com troca dinâmica de idioma.
+- **🌓 Suporte a Temas Estabilizado**: Tema escuro implementado via Store manual para garantir transições suaves e evitar conflitos.
+- **📈 Paginação & Infinite Scroll**: Arquitetura preparada para grandes volumes de dados nas listagens.
+- **🎨 Interface de Alta Fidelidade**: UI moderna com foco em usabilidade e efeitos visuais contemporâneos.
 - **📱 Layout Adaptativo**: Interface otimizada para diferentes tamanhos de tela (Mobile e Tablet).
 
 ---
