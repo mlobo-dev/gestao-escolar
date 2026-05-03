@@ -129,9 +129,21 @@ export const useSchoolStore = create<SchoolState>()(
           const data = await response.json();
           
           set((state) => {
-            const newClasses = refresh ? (data.classes || []) : [...state.classes, ...(data.classes || [])];
-            // Remove duplicates by ID
-            const uniqueClasses = Array.from(new Map(newClasses.map(c => [c.id, c])).values());
+            const mappedClasses = (data.classes || []).map((c: any) => ({
+              ...c,
+              schoolId: c.schoolId || schoolId
+            }));
+
+            // If refresh, keep classes from OTHER schools, and replace current school classes
+            // If not refresh, just append new classes
+            const otherSchoolsClasses = refresh 
+              ? state.classes.filter((c: any) => String(c.schoolId) !== String(schoolId))
+              : state.classes;
+
+            const newClasses = [...otherSchoolsClasses, ...mappedClasses];
+            
+            // Remove duplicates by ID (just in case)
+            const uniqueClasses = Array.from(new Map(newClasses.map((c: any) => [c.id, c])).values());
 
             return {
               classes: uniqueClasses,

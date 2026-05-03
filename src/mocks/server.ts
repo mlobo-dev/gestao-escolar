@@ -33,7 +33,8 @@ export function makeServer({ environment = "development" } = {}) {
 
     seeds(server) {
       server.createList("school", 5).forEach((school) => {
-        server.createList("class", 2, { school });
+        const randomCount = Math.floor(Math.random() * 4) + 1;
+        server.createList("class", randomCount, { schoolId: school.id });
       });
     },
 
@@ -55,7 +56,7 @@ export function makeServer({ environment = "development" } = {}) {
           schools: allSchools.map((school) => ({
             ...school.attrs,
             id: school.id,
-            countClasses: classes.filter((c) => String(c.schoolId) === String(school.id)).length,
+            countClasses: classes.filter((c) => String(c.schoolId || c.attrs?.schoolId) === String(school.id)).length,
           })),
           meta: {
             total,
@@ -92,16 +93,22 @@ export function makeServer({ environment = "development" } = {}) {
         const start = (page - 1) * limit;
         const end = start + limit;
 
-        const filteredClasses = schoolId 
-          ? schema.where("class", { schoolId }).models
-          : schema.all("class").models;
+        let allModelClasses = schema.all("class").models;
+        let filteredClasses = allModelClasses;
+        
+        if (schoolId) {
+          filteredClasses = allModelClasses.filter(
+            (c) => String(c.schoolId || c.attrs?.schoolId) === String(schoolId)
+          );
+        }
         
         const classes = filteredClasses.slice(start, end);
         
         return {
           classes: classes.map(c => ({
             ...c.attrs,
-            id: c.id
+            id: c.id,
+            schoolId: c.schoolId || c.attrs?.schoolId
           })),
           meta: {
             total: filteredClasses.length,

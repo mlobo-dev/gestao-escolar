@@ -54,7 +54,7 @@ export default function SchoolDetailsScreen() {
   const school = allSchools.find((s) => s.id === id);
 
   useEffect(() => {
-    if (id) fetchClasses(id);
+    if (id) fetchClasses(id, true);
   }, [id]);
 
   const handleDeleteSchool = () => {

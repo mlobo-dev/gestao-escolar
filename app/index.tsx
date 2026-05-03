@@ -74,7 +74,7 @@ export default function SchoolListScreen() {
               <LanguagePicker />
               <TouchableOpacity
                 onPress={signOut}
-                className="w-10 h-10 bg-muted border border-border rounded-xl items-center justify-center active:bg-muted/80"
+                className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
               >
                 <LogOut size={18} color="#ef4444" />
               </TouchableOpacity>
@@ -113,7 +113,7 @@ export default function SchoolListScreen() {
           <TouchableOpacity
             testID="add-school-button"
             onPress={() => router.push("/school/new")}
-            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-2xl shadow-primary/40"
+            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-md"
           >
             <Plus size={32} color="#020617" />
           </TouchableOpacity>
