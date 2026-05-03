@@ -1,25 +1,37 @@
 # Gestão Escolar 🍎
 
-Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza as tecnologias mais modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta qualidade de código.
+Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza as tecnologias mais modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta fidelidade visual.
 
-## 🚀 Tecnologias Utilizadas
+---
 
-- **Plataforma**: Expo SDK 55
-- **Framework**: React Native (React 19)
+## 🚀 Tecnologias (The 200% Stack)
+
+O projeto foi construído utilizando as versões mais recentes e estáveis das tecnologias líderes de mercado:
+
+- **Plataforma**: Expo SDK 55.0.19
+- **Framework**: React Native (React 19.2.5 / RN 0.83.6)
 - **Navegação**: Expo Router (File-based navigation)
 - **UI & Styling**: Gluestack UI v2 + NativeWind v4 (Tailwind CSS)
 - **Estado**: Zustand com persistência em AsyncStorage
-- **Mock API**: MirageJS para simulação completa de backend
-- **Testes**: Jest + Testing Library
-- **Qualidade**: TypeScript + ESLint + Prettier
+- **Autenticação**: Keycloak (OIDC/PKCE) via Expo Auth Session
+- **Internacionalização**: i18next (Suporte PT-BR / EN)
+- **Mock API**: MirageJS para simulação completa de backend com Paginação
+- **Testes**: Jest + Testing Library (15 testes unitários)
 
-## ✨ Funcionalidades
+---
 
-- **Gestão de Escolas (CRUD)**: Listagem, criação, edição e exclusão de unidades escolares.
-- **Gestão de Turmas (CRUD)**: Registro de turmas vinculadas a escolas específicas (Nome, Turno e Ano Letivo).
-- **Busca em Tempo Real**: Filtro inteligente de escolas por nome ou endereço.
-- **Persistência Offline**: Todos os dados são salvos localmente, permitindo o uso em áreas sem conectividade.
-- **Interface Premium**: Design moderno com foco em usabilidade e responsividade.
+## ✨ Diferenciais Premium (Entrega 200%)
+
+Além dos requisitos básicos, este projeto implementa funcionalidades de nível Enterprise:
+
+- **🔐 Autenticação Enterprise**: Fluxo de login integrado ao Keycloak com proteção de rotas e persistência de sessão.
+- **🌍 Multi-idioma (i18n)**: Suporte completo a Português e Inglês, com troca de idioma em tempo real.
+- **🌓 Dark Mode Estabilizado**: Tema escuro implementado via Store manual para evitar conflitos de navegação no Android.
+- **📈 Paginação & Infinite Scroll**: Arquitetura preparada para grandes volumes de dados nas listagens de escolas e turmas.
+- **🎨 Glassmorphism Design**: UI moderna com efeitos de transparência, blur e micro-animações.
+- **📱 Layout Adaptativo**: Interface otimizada para diferentes tamanhos de tela (Mobile e Tablet).
+
+---
 
 ## 📦 Como Executar
 
@@ -37,38 +49,37 @@ Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte
    *(Nota: O uso de `--force` é recomendado devido à versão bleeding-edge do React 19 e SDK 55 em algumas bibliotecas nativas).*
 
 ### Execução
+1. Inicie o servidor Metro:
+   ```bash
+   npx expo start
+   ```
+2. Abra o app no emulador Android ou via Expo Go.
+
+---
+
 ## 🛠️ Detalhes Técnicos & Mock API
 
 ### MirageJS (Backend Simulado)
 O projeto utiliza **MirageJS** para interceptar as requisições HTTP e retornar dados simulados. Isso permite que o app funcione de forma totalmente independente de um servidor real.
 
-- **Configuração**: Localizada em `src/mocks/server.ts`.
 - **Endpoints**:
-  - `GET /api/schools`: Retorna a lista de escolas.
-  - `POST /api/schools`: Cria uma nova escola.
-  - `PUT /api/schools/:id`: Atualiza uma escola.
-  - `DELETE /api/schools/:id`: Remove uma escola.
-  - `GET /api/schools/:id/classes`: Retorna as turmas de uma escola.
-  - `POST /api/classes`: Cria uma nova turma.
+  - `GET /api/schools`: Lista com paginação (limit/offset).
+  - `POST /api/schools`: Criação de unidades.
+  - `GET /api/schools/:id/classes`: Filtro contextual de turmas.
+  - `POST /api/classes`: Cadastro de turmas associadas.
 
 ### Persistência Offline
 Utilizamos **Zustand** com o middleware `persist` e o **AsyncStorage**. 
-- Quando o app é aberto pela primeira vez, ele carrega dados do MirageJS.
-- Quaisquer alterações (Criação, Edição, Exclusão) são persistidas localmente.
-- Isso garante que os dados não sejam perdidos ao fechar o app, mesmo em ambiente de teste.
+- Todas as alterações (Criação, Edição, Exclusão) são persistidas localmente.
+- Isso garante que os dados não sejam perdidos ao fechar o app.
 
-## 🏗️ Arquitetura (200% Completion)
-
-O projeto foi estruturado seguindo o padrão de **Feature-based Architecture**:
-- **Domain-Driven Design (Inspirado)**: Separação de lógica por domínios (School, Class).
-- **Hooks Patterns**: Toda a lógica de comunicação com o mock e estado está encapsulada em hooks como `useSchools` e `useClasses`.
-- **Atomic Design Principles**: Componentes organizados por complexidade.
+---
 
 ## 🧪 Suíte de Testes
-Rodamos testes unitários para garantir que a lógica de negócio (Hooks e Utils) e os componentes de UI estejam funcionando:
+Rodamos testes unitários para garantir que a lógica de negócio e os componentes de UI estejam funcionando:
 ```bash
 npm test
 ```
 
 ---
-Desenvolvido com foco em excelência técnica, performance e design premium. 🚀
+Desenvolvido por Antigravity para o Desafio Técnico Prover. Foco em excelência técnica, performance e design premium. 🚀

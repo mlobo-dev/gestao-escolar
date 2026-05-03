@@ -10,8 +10,6 @@ export function ThemeToggle() {
   return (
     <TouchableOpacity
       onPress={() => {
-        const target = colorScheme === "light" ? "dark" : "light";
-        console.log(`[ThemeToggle] Requesting change: ${colorScheme} -> ${target}`);
         toggleTheme();
       }}
       activeOpacity={0.7}

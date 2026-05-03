@@ -31,7 +31,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     path: "auth",
   });
 
-  console.log("[Auth] Redirect URI:", redirectUri);
 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
