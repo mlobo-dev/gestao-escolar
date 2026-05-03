@@ -4,6 +4,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
 } from "react-native";
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { useClasses } from "../../../src/hooks/useClasses";
@@ -17,7 +18,6 @@ import {
   Users,
   ChevronLeft,
 } from "lucide-react-native";
-import { Text } from "@gluestack-ui/nativewind";
 import { useColorScheme } from "nativewind";
 import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
 

@@ -1,6 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, Image } from "react-native";
-import { Text } from "@gluestack-ui/nativewind";
+import { View, TouchableOpacity, Image, Text } from "react-native";
 import { useAuth } from "../src/context/AuthContext";
 import { LogIn, School as SchoolIcon } from "lucide-react-native";
 import { Stack } from "expo-router";
@@ -39,7 +38,7 @@ function LoginScreen() {
 
 
       <View className="items-center mb-12">
-        <Text className="text-muted-foreground text-center text-sm font-medium tracking-wide">
+        <Text className={`text-center text-sm font-medium tracking-wide ${isDark ? "text-slate-400" : "text-slate-500"}`}>
           {t("login_desc")}
         </Text>
       </View>

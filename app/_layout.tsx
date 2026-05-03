@@ -93,10 +93,10 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <View key={colorScheme} style={{ flex: 1 }} className={colorScheme === "dark" ? "dark" : ""}>
+      <View style={{ flex: 1 }} className={colorScheme === "dark" ? "dark" : ""}>
         <GluestackUIProvider>
           <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-          <InitialLayout />
+          <InitialLayout key={colorScheme} />
         </GluestackUIProvider>
       </View>
     </AuthProvider>

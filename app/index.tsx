@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  Text,
 } from "react-native";
 import { useRouter, Stack } from "expo-router";
 import LogoImg from "../assets/images/logo.png";
@@ -20,7 +21,6 @@ import {
   ChevronRight,
   LogOut,
 } from "lucide-react-native";
-import { Text } from "@gluestack-ui/nativewind";
 import { useTranslation } from "react-i18next";
 import { LanguagePicker } from "../src/components/LanguagePicker";
 import { ThemeToggle } from "../src/components/ThemeToggle";

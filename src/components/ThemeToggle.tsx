@@ -4,12 +4,16 @@ import { Sun, Moon } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 
 export function ThemeToggle() {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
+
+  const handleToggle = () => {
+    setColorScheme(isDark ? "light" : "dark");
+  };
 
   return (
     <TouchableOpacity
-      onPress={toggleColorScheme}
+      onPress={handleToggle}
       activeOpacity={0.7}
       className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
     >
