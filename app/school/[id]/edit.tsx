@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { useSchoolStore } from "../../../src/store/useSchoolStore";
-import { Text } from "@gluestack-ui/nativewind";
+// import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
+import { useColorScheme } from "nativewind";
 
 import { useTranslation } from "react-i18next";
 
@@ -13,6 +14,8 @@ export default function EditSchoolScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { schools, updateSchool } = useSchoolStore();
   const school = schools.find((s) => s.id === id);
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const [name, setName] = useState(school?.name || "");
   const [address, setAddress] = useState(school?.address || "");
@@ -28,8 +31,13 @@ export default function EditSchoolScreen() {
 
   if (!school) return null;
 
+  const labelColor = isDark ? "text-slate-400" : "text-slate-500";
+  const inputBg = isDark ? "bg-card" : "bg-slate-50";
+  const inputColor = isDark ? "text-white" : "text-slate-900";
+  const borderColor = isDark ? "border-white/10" : "border-slate-200";
+
   return (
-    <View className="flex-1 bg-background">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
           title: t("edit_school"),
@@ -38,24 +46,24 @@ export default function EditSchoolScreen() {
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
               className="mr-4"
             >
-              <ChevronLeft size={24} color="#fff" />
+              <ChevronLeft size={24} color="#f8fafc" />
             </TouchableOpacity>
           ),
-          headerStyle: { backgroundColor: "#0f172a" },
-          headerTintColor: "#fff",
+          headerStyle: { backgroundColor: "#020617" },
+          headerTintColor: "#f8fafc",
           headerShadowVisible: false,
         }}
       />
-      <ScrollView className="flex-1 bg-background">
+      <ScrollView className="flex-1">
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
                 {t("name")}
               </Text>
               <TextInput
-                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 value={name}
                 onChangeText={setName}
               />
@@ -67,12 +75,12 @@ export default function EditSchoolScreen() {
             </View>
 
             <View className="mb-10">
-              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
                 {t("address")}
               </Text>
               <TextInput
-                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground min-h-[120px]"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor} min-h-[120px]`}
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -102,7 +110,5 @@ export default function EditSchoolScreen() {
         </View>
       </ScrollView>
     </View>
-
-
   );
 }

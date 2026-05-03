@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { useSchoolStore } from "../../../../../src/store/useSchoolStore";
-import { Text } from "@gluestack-ui/nativewind";
+// import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { Shift } from "../../../../../src/types";
+import { useColorScheme } from "nativewind";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
@@ -16,6 +17,8 @@ export default function EditClassScreen() {
   const { id, classId } = useLocalSearchParams<{ id: string; classId: string }>();
   const { classes, updateClass } = useSchoolStore();
   const classData = classes.find((c) => c.id === classId);
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const [name, setName] = useState(classData?.name || "");
   const [shift, setShift] = useState<Shift>(classData?.shift || "Morning");
@@ -36,8 +39,13 @@ export default function EditClassScreen() {
 
   if (!classData) return null;
 
+  const labelColor = isDark ? "text-slate-400" : "text-slate-500";
+  const inputBg = isDark ? "bg-card" : "bg-slate-50";
+  const inputColor = isDark ? "text-white" : "text-slate-900";
+  const borderColor = isDark ? "border-white/10" : "border-slate-200";
+
   return (
-    <View className="flex-1 bg-background">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
           title: t("edit_class"),
@@ -46,11 +54,11 @@ export default function EditClassScreen() {
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
               className="mr-4"
             >
-              <ChevronLeft size={24} color="#fff" />
+              <ChevronLeft size={24} color="#f8fafc" />
             </TouchableOpacity>
           ),
-          headerStyle: { backgroundColor: "#0f172a" },
-          headerTintColor: "#fff",
+          headerStyle: { backgroundColor: "#020617" },
+          headerTintColor: "#f8fafc",
           headerShadowVisible: false,
         }}
       />
@@ -58,13 +66,13 @@ export default function EditClassScreen() {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
                 {t("name")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
                 placeholder={t("class_name_placeholder")}
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 value={name}
                 onChangeText={setName}
               />
@@ -77,7 +85,7 @@ export default function EditClassScreen() {
             </View>
 
             <View className="mb-8">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-4 ml-1">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1`}>
                 {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
@@ -88,12 +96,12 @@ export default function EditClassScreen() {
                     className={`mr-3 mb-3 px-5 py-3 rounded-2xl border ${
                       shift === s
                         ? "bg-primary border-primary"
-                        : "bg-white/5 border-white/10"
+                        : `${isDark ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`
                     }`}
                   >
                     <Text
                       className={`font-bold text-sm tracking-tight ${
-                        shift === s ? "text-[#0f172a]" : "text-white/60"
+                        shift === s ? "text-[#020617]" : `${isDark ? "text-white" : "text-slate-600"}`
                       }`}
                     >
                       {t(s.toLowerCase().replace("-", "_"))}
@@ -104,13 +112,13 @@ export default function EditClassScreen() {
             </View>
 
             <View className="mb-10">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
                 {t("academic_year")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
                 placeholder={t("year_placeholder")}
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 keyboardType="numeric"
                 value={year}
                 onChangeText={setYear}
@@ -130,8 +138,8 @@ export default function EditClassScreen() {
               onPress={handleUpdate}
               disabled={!name || !year || isSubmitting}
             >
-              <Save size={22} color="#0f172a" />
-              <Text className="text-[#0f172a] font-bold text-xl ml-3">
+              <Save size={22} color="#020617" />
+              <Text className="text-[#020617] font-bold text-xl ml-3">
                 {isSubmitting ? t("updating") : t("update")}
               </Text>
             </TouchableOpacity>
