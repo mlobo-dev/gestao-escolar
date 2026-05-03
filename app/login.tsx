@@ -4,39 +4,60 @@ import { Text } from "@gluestack-ui/nativewind";
 import { useAuth } from "../src/context/AuthContext";
 import { LogIn, School as SchoolIcon } from "lucide-react-native";
 import { Stack } from "expo-router";
+import LogoImg from "../assets/images/logo.png";
+import { LanguagePicker } from "../src/components/LanguagePicker";
+import { useTranslation } from "react-i18next";
 
-export default function LoginScreen() {
+
+function LoginScreen() {
+
   const { signIn, isLoading } = useAuth();
+  const { t } = useTranslation();
+
 
   return (
     <View className="flex-1 bg-background justify-center items-center p-8">
       <Stack.Screen options={{ headerShown: false }} />
       
-      <View className="w-24 h-24 bg-primary rounded-[32px] items-center justify-center shadow-2xl shadow-primary/40 mb-8">
-        <SchoolIcon size={48} color="#0f172a" />
+      <View className="absolute top-12 right-6">
+        <LanguagePicker />
       </View>
 
-      <Text className="text-white text-4xl font-bold tracking-tight text-center">
-        Gestão Escolar
-      </Text>
-      <Text className="text-white/40 text-lg text-center mt-2 mb-12">
-        Plataforma administrativa para unidades de ensino
-      </Text>
+      
+      <View className="mb-4">
+        <Image 
+          source={LogoImg} 
+          style={{ width: 280, height: 100, tintColor: "#f8fafc" }}
+          resizeMode="contain"
+        />
+      </View>
+
+
+      <View className="items-center mb-12">
+        <Text className="text-muted-foreground text-center text-sm font-medium tracking-wide">
+          {t("login_desc")}
+        </Text>
+      </View>
+
 
       <TouchableOpacity
-        onPress={signIn}
+        onPress={() => !isLoading && signIn()}
         disabled={isLoading}
-        className="bg-primary w-full h-16 rounded-[24px] flex-row items-center justify-center shadow-xl shadow-primary/20"
+        className={`bg-primary w-64 h-14 rounded-2xl flex-row items-center justify-center shadow-xl shadow-primary/20 ${
+          isLoading ? "opacity-50" : ""
+        }`}
       >
-        <LogIn size={24} color="#0f172a" />
-        <Text className="text-[#0f172a] font-bold text-xl ml-3">
-          Entrar com Keycloak
+        <LogIn size={20} color="#020617" />
+        <Text className="text-[#020617] font-bold text-lg ml-2">
+          {isLoading ? t("loading") : t("enter")}
         </Text>
+
       </TouchableOpacity>
 
-      <Text className="text-white/20 text-xs mt-12 uppercase tracking-widest font-bold">
-        Facilita Labs • v1.0.0
-      </Text>
+
+
     </View>
   );
 }
+
+export default LoginScreen;

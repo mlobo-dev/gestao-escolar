@@ -3,7 +3,26 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import SchoolDetailsScreen from "../../../app/school/[id]/index";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
+// Local mock for debugging
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (str: string) => str,
+    i18n: { changeLanguage: jest.fn() }
+  })
+}));
+
+jest.mock("../../context/AuthContext", () => ({
+  useAuth: () => ({
+    user: { name: "Test User" },
+    signOut: jest.fn(),
+    signIn: jest.fn(),
+    isLoading: false
+  }),
+  AuthProvider: ({ children }: any) => children
+}));
+
 const mockStore = {
+
   schools: [{ id: "1", name: "Test School", address: "Test Address", countClasses: 1 }],
   classes: [{ id: "c1", name: "Class 1", shift: "Morning", academicYear: "2024", schoolId: "1" }],
   fetchClasses: jest.fn(),

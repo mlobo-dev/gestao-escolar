@@ -8,15 +8,18 @@ import { Shift } from "../../../../../src/types";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
+import { useTranslation } from "react-i18next";
+
 export default function EditClassScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id, classId } = useLocalSearchParams<{ id: string; classId: string }>();
   const { classes, updateClass } = useSchoolStore();
-  const schoolClass = classes.find((c) => c.id === classId);
+  const classData = classes.find((c) => c.id === classId);
 
-  const [name, setName] = useState(schoolClass?.name || "");
-  const [shift, setShift] = useState<Shift>(schoolClass?.shift || "Morning");
-  const [year, setYear] = useState(schoolClass?.academicYear || "2024");
+  const [name, setName] = useState(classData?.name || "");
+  const [shift, setShift] = useState<Shift>(classData?.shift || "Morning");
+  const [year, setYear] = useState(classData?.academicYear || "2024");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleUpdate = async () => {
@@ -31,13 +34,13 @@ export default function EditClassScreen() {
     router.back();
   };
 
-  if (!schoolClass) return null;
+  if (!classData) return null;
 
   return (
     <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          title: "Editar Turma",
+          title: t("edit_class"),
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
@@ -56,24 +59,26 @@ export default function EditClassScreen() {
           <View className="w-full max-w-2xl">
             <View className="mb-8">
               <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
-                Nome da Turma
+                {t("name")}
               </Text>
               <TextInput
                 className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
+                placeholder={t("class_name_placeholder")}
                 placeholderTextColor="rgba(255,255,255,0.2)"
                 value={name}
                 onChangeText={setName}
               />
+
               {!name && (
                 <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
-                  O nome é obrigatório
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
             <View className="mb-8">
               <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-4 ml-1">
-                Turno
+                {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
                 {SHIFTS.map((s) => (
@@ -87,44 +92,47 @@ export default function EditClassScreen() {
                     }`}
                   >
                     <Text
-                      className={`font-medium ${
-                        shift === s ? "text-white" : "text-slate-600"
+                      className={`font-bold text-sm tracking-tight ${
+                        shift === s ? "text-[#0f172a]" : "text-white/60"
                       }`}
                     >
-                      {s}
+                      {t(s.toLowerCase().replace("-", "_"))}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
 
-            <View className="mb-8">
-              <Text className="text-slate-500 text-sm font-bold uppercase mb-2">
-                Academic Year
+            <View className="mb-10">
+              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
+                {t("academic_year")}
               </Text>
               <TextInput
-                className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-base text-slate-900"
+                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
+                placeholder={t("year_placeholder")}
+                placeholderTextColor="rgba(255,255,255,0.2)"
                 keyboardType="numeric"
                 value={year}
                 onChangeText={setYear}
               />
+
               {!year && (
-                <Text className="text-red-500 text-xs mt-1 ml-1">
-                  Academic year is required
+                <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
             <TouchableOpacity
-              className={`bg-blue-700 p-4 rounded-3xl flex-row items-center justify-center shadow-md ${
-                (!name || !year || isSubmitting) && "opacity-50"
+              className={`bg-primary p-5 rounded-[24px] flex-row items-center justify-center shadow-xl shadow-primary/20 ${
+                (!name || !year || isSubmitting) && "opacity-40"
               }`}
               onPress={handleUpdate}
               disabled={!name || !year || isSubmitting}
             >
-              <Save size={20} color="#fff" />
-              <Text className="text-white font-bold text-lg ml-2">
-                {isSubmitting ? "Updating..." : "Update Class"}
+              <Save size={22} color="#0f172a" />
+              <Text className="text-[#0f172a] font-bold text-xl ml-3">
+                {isSubmitting ? t("updating") : t("update")}
               </Text>
             </TouchableOpacity>
           </View>

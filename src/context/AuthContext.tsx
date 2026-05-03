@@ -26,13 +26,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const discovery = AuthSession.useAutoDiscovery(`${KEYCLOAK_URL}realms/${REALM}`);
   
+  const redirectUri = "gestao-escolar://auth";
+
+  console.log("[Auth] Redirect URI:", redirectUri);
+
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
       clientId: CLIENT_ID,
       scopes: ["openid", "profile", "email"],
-      redirectUri: AuthSession.makeRedirectUri({
-        scheme: "gestao-escolar",
-      }),
+      redirectUri,
+      usePKCE: true,
     },
     discovery
   );
@@ -56,8 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, isLoading }}>
+    <AuthContext.Provider value={{ user, signIn, signOut, isLoading: isLoading || !request }}>
       {children}
     </AuthContext.Provider>
   );
 };
+

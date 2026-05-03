@@ -8,7 +8,10 @@ import { Shift } from "../../../../src/types";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
+import { useTranslation } from "react-i18next";
+
 export default function NewClassScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { addClass } = useSchoolStore();
@@ -35,7 +38,7 @@ export default function NewClassScreen() {
     <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          title: "Nova Turma",
+          title: t("add_class"),
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
@@ -53,26 +56,27 @@ export default function NewClassScreen() {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
-                Nome da Turma
+              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+                {t("name")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
-                placeholder="Ex: 1º Ano A"
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
+                placeholder={t("class_name_placeholder")}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 value={name}
                 onChangeText={setName}
               />
+
               {!name && (
                 <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
-                  O nome é obrigatório
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
             <View className="mb-8">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-4 ml-1">
-                Turno
+              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1">
+                {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
                 {SHIFTS.map((s) => (
@@ -87,10 +91,10 @@ export default function NewClassScreen() {
                   >
                     <Text
                       className={`font-bold text-sm tracking-tight ${
-                        shift === s ? "text-[#0f172a]" : "text-white/60"
+                        shift === s ? "text-[#020617]" : "text-foreground"
                       }`}
                     >
-                      {s}
+                      {t(s.toLowerCase().replace("-", "_"))}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -98,20 +102,21 @@ export default function NewClassScreen() {
             </View>
 
             <View className="mb-10">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
-                Ano Letivo
+              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+                {t("academic_year")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
-                placeholder="Ex: 2024"
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
+                placeholder={t("year_placeholder")}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="numeric"
                 value={year}
                 onChangeText={setYear}
               />
+
               {!year && (
                 <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
-                  O ano letivo é obrigatório
+                  {t("required_field")}
                 </Text>
               )}
             </View>
@@ -123,15 +128,16 @@ export default function NewClassScreen() {
               onPress={handleSave}
               disabled={!name || !year || isSubmitting}
             >
-              <Save size={22} color="#0f172a" />
-              <Text className="text-[#0f172a] font-bold text-xl ml-3">
-                {isSubmitting ? "Salvando..." : "Salvar Turma"}
+              <Save size={22} color="#020617" />
+              <Text className="text-[#020617] font-bold text-xl ml-3">
+                {isSubmitting ? t("saving") : t("save")}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
     </View>
+
 
   );
 }

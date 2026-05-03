@@ -20,11 +20,12 @@ describe("ConfirmationModal", () => {
     expect(getByText("Test Title")).toBeTruthy();
     expect(getByText("Test Message")).toBeTruthy();
 
-    fireEvent.press(getByText("Delete"));
+    fireEvent.press(getByText("delete"));
     expect(mockOnConfirm).toHaveBeenCalled();
 
-    fireEvent.press(getByText("Cancel"));
+    fireEvent.press(getByText("cancel"));
     expect(mockOnClose).toHaveBeenCalled();
+
   });
 
   it("does not render when closed", () => {

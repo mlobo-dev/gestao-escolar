@@ -10,17 +10,29 @@ export const useSchools = (searchQuery: string = '') => {
   const updateSchool = useSchoolStore((state) => state.updateSchool);
   const deleteSchool = useSchoolStore((state) => state.deleteSchool);
   const fetchSchools = useSchoolStore((state) => state.fetchSchools);
+  const totalSchools = useSchoolStore((state) => state.totalSchools);
+
+
+  const classes = useSchoolStore((state) => state.classes);
 
   const filteredSchools = useMemo(() => {
-    if (!searchQuery) return schools;
-    return schools.filter((school) =>
+    const schoolsWithCount = schools.map(school => ({
+      ...school,
+      countClasses: (classes || []).filter(c => String(c.schoolId) === String(school.id)).length
+    }));
+
+
+    if (!searchQuery) return schoolsWithCount;
+    return schoolsWithCount.filter((school) =>
       school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       school.address.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [schools, searchQuery]);
+  }, [schools, searchQuery, classes]);
+
 
   return {
     schools: filteredSchools,
+    totalSchools,
     allSchools: schools,
     isLoading,
     isLoadingMore,
@@ -30,5 +42,6 @@ export const useSchools = (searchQuery: string = '') => {
     deleteSchool,
     fetchSchools,
   };
+
 
 };

@@ -5,7 +5,10 @@ import { useSchoolStore } from "../../../src/store/useSchoolStore";
 import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
 
+import { useTranslation } from "react-i18next";
+
 export default function EditSchoolScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { schools, updateSchool } = useSchoolStore();
@@ -29,7 +32,7 @@ export default function EditSchoolScreen() {
     <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          title: "Editar Unidade",
+          title: t("edit_school"),
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
@@ -47,29 +50,29 @@ export default function EditSchoolScreen() {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
-                Nome da Escola
+              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+                {t("name")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 value={name}
                 onChangeText={setName}
               />
               {!name && (
                 <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
-                  O nome é obrigatório
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
             <View className="mb-10">
-              <Text className="text-white/40 text-xs font-bold uppercase tracking-[2px] mb-3 ml-1">
-                Endereço Completo
+              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+                {t("address")}
               </Text>
               <TextInput
-                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-lg text-white min-h-[120px]"
-                placeholderTextColor="rgba(255,255,255,0.2)"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground min-h-[120px]"
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -78,7 +81,7 @@ export default function EditSchoolScreen() {
               />
               {!address && (
                 <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
-                  O endereço é obrigatório
+                  {t("required_field")}
                 </Text>
               )}
             </View>
@@ -90,15 +93,16 @@ export default function EditSchoolScreen() {
               onPress={handleUpdate}
               disabled={!name || !address || isSubmitting}
             >
-              <Save size={22} color="#0f172a" />
-              <Text className="text-[#0f172a] font-bold text-xl ml-3">
-                {isSubmitting ? "Salvando..." : "Atualizar Escola"}
+              <Save size={22} color="#020617" />
+              <Text className="text-[#020617] font-bold text-xl ml-3">
+                {isSubmitting ? t("updating") : t("update")}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
     </View>
+
 
   );
 }

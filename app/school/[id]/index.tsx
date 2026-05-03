@@ -59,8 +59,9 @@ export default function SchoolDetailsScreen() {
   const handleDeleteSchool = () => {
     setModalConfig({
       isOpen: true,
-      title: "Delete School",
-      message: `Are you sure you want to delete "${school?.name}"? This will also remove all its classes.`,
+      title: t("delete_school_title"),
+      message: t("delete_school_message", { name: school?.name }),
+
       onConfirm: async () => {
         await deleteSchool(id!);
         router.replace("/");
@@ -71,8 +72,9 @@ export default function SchoolDetailsScreen() {
   const handleDeleteClass = (classId: string, className: string) => {
     setModalConfig({
       isOpen: true,
-      title: "Delete Class",
-      message: `Are you sure you want to delete "${className}"?`,
+      title: t("delete_class_title"),
+      message: t("delete_class_message", { name: className }),
+
       onConfirm: async () => {
         await deleteClass(classId);
       },
@@ -85,7 +87,8 @@ export default function SchoolDetailsScreen() {
     <View className="flex-1 bg-background">
       <Stack.Screen
         options={{
-          headerTitle: "Unidade Escolar",
+          headerTitle: t("school_unit"),
+
           headerLeft: () => (
             <TouchableOpacity
               onPress={() =>
@@ -108,7 +111,7 @@ export default function SchoolDetailsScreen() {
                 onPress={handleDeleteSchool}
                 className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
               >
-                <Trash2 size={18} color="hsl(var(--destructive))" />
+                <Trash2 size={18} color="#ef4444" />
               </TouchableOpacity>
             </View>
           ),
@@ -120,37 +123,37 @@ export default function SchoolDetailsScreen() {
       />
 
       {/* School Info Header */}
-      <View className="bg-primary/20 pb-8 pt-6 px-6 rounded-b-[40px]">
+      <View className="bg-card/50 pb-8 pt-6 px-6 rounded-b-[48px] border-b border-white/5">
         <View className="flex-row items-center">
-          <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-lg shadow-primary/30">
-            <SchoolIcon size={40} color="#0f172a" />
+          <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-2xl shadow-primary/40">
+            <SchoolIcon size={40} color="#020617" />
           </View>
           <View className="flex-1 ml-5">
-            <Text className="text-white text-3xl font-bold tracking-tight">
+            <Text className="text-foreground text-3xl font-bold tracking-tight">
               {school.name}
             </Text>
             <View className="flex-row items-center mt-2">
-              <MapPin size={16} color="rgba(255,255,255,0.6)" />
-              <Text className="text-white/60 text-sm ml-1.5 flex-1" numberOfLines={1}>
+              <MapPin size={16} color="#94a3b8" />
+              <Text className="text-muted-foreground text-sm ml-1.5 flex-1" numberOfLines={1}>
                 {school.address}
               </Text>
             </View>
           </View>
         </View>
 
-        <View className="flex-row justify-between items-center mt-8">
+        <View className="flex-row justify-between items-center mt-10">
           <View>
-            <Text className="text-white text-2xl font-bold">{t("classes")}</Text>
-            <Text className="text-primary/80 text-sm font-medium">
+            <Text className="text-foreground text-2xl font-bold">{t("classes")}</Text>
+            <Text className="text-primary text-sm font-medium mt-1">
               {t("units_found", { count: classes.length })}
             </Text>
           </View>
           <TouchableOpacity
             testID="add-class-button"
-            className="bg-primary w-14 h-14 rounded-2xl items-center justify-center shadow-xl shadow-primary/20"
+            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-2xl shadow-primary/40"
             onPress={() => router.push(`/school/${id}/class/new`)}
           >
-            <Plus size={28} color="#0f172a" />
+            <Plus size={32} color="#020617" />
           </TouchableOpacity>
         </View>
       </View>
@@ -169,27 +172,28 @@ export default function SchoolDetailsScreen() {
                 <View className="items-center justify-center pt-16">
                   <Users size={48} color="#cbd5e1" />
                   <Text className="text-slate-400 mt-4 text-center font-medium">
-                    No classes registered for this school yet.
+                    {t("no_classes")}
                   </Text>
+
                 </View>
               }
               renderItem={({ item }) => (
-                <View className="glass mb-4 rounded-[28px] p-5 flex-row items-center border border-white/5">
+                <View className="bg-card mb-4 rounded-[32px] p-6 flex-row items-center border border-white/[0.05] shadow-sm shadow-black/20">
                   <View className="w-14 h-14 bg-white/5 rounded-2xl items-center justify-center border border-white/10">
-                    <Users size={26} color="rgba(255,255,255,0.7)" />
+                    <Users size={26} color="#94a3b8" />
                   </View>
-                  <View className="flex-1 ml-4">
-                    <Text className="text-white font-bold text-lg tracking-tight">
+                  <View className="flex-1 ml-5">
+                    <Text className="text-foreground font-bold text-lg tracking-tight">
                       {item.name}
                     </Text>
-                    <View className="flex-row items-center mt-1">
-                      <View className="bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20 mr-2">
+                    <View className="flex-row items-center mt-1.5">
+                      <View className="bg-primary/15 px-3 py-1 rounded-full border border-primary/25 mr-3">
                         <Text className="text-primary text-[10px] font-bold uppercase tracking-wider">
                           {item.shift}
                         </Text>
                       </View>
-                      <Text className="text-white/40 text-xs font-medium">
-                        Ano Letivo: {item.academicYear}
+                      <Text className="text-muted-foreground text-xs font-medium">
+                        {t("academic_year")}: {item.academicYear}
                       </Text>
                     </View>
                   </View>
@@ -200,13 +204,13 @@ export default function SchoolDetailsScreen() {
                         router.push(`/school/${id}/class/${item.id}/edit`)
                       }
                     >
-                      <Pencil size={16} color="rgba(255,255,255,0.6)" />
+                      <Pencil size={16} color="#94a3b8" />
                     </TouchableOpacity>
                     <TouchableOpacity
                       className="w-10 h-10 bg-destructive/10 rounded-xl items-center justify-center border border-destructive/20"
                       onPress={() => handleDeleteClass(item.id, item.name)}
                     >
-                      <Trash2 size={16} color="hsl(var(--destructive))" />
+                      <Trash2 size={16} color="#ef4444" />
                     </TouchableOpacity>
                   </View>
                 </View>

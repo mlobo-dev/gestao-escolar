@@ -8,12 +8,14 @@ const mockStore = {
     { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
     { id: "2", name: "School 2", address: "Address 2", countClasses: 0 },
   ],
+  classes: [],
   fetchSchools: jest.fn(),
   isLoading: false,
   isLoadingMore: false,
   hasMoreSchools: false,
   schoolPage: 1,
 };
+
 
 
 jest.mock("../../store/useSchoolStore", () => ({

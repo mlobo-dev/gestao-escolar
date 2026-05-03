@@ -61,7 +61,7 @@ describe("Form Screens", () => {
     const nameInput = getByDisplayValue("Old School");
     fireEvent.changeText(nameInput, "Updated School");
     
-    fireEvent.press(getByText("Atualizar Escola"));
+    fireEvent.press(getByText("update"));
     
     await waitFor(() => {
       expect(mockUpdateSchool).toHaveBeenCalledWith("1", expect.objectContaining({ name: "Updated School" }));
@@ -76,10 +76,11 @@ describe("Form Screens", () => {
     const { getByPlaceholderText, getByText } = render(<NewClassScreen />);
 
     
-    fireEvent.changeText(getByPlaceholderText("Ex: 1º Ano A"), "New Class");
-    fireEvent.changeText(getByPlaceholderText("Ex: 2024"), "2025");
+    fireEvent.changeText(getByPlaceholderText("class_name_placeholder"), "New Class");
+    fireEvent.changeText(getByPlaceholderText("year_placeholder"), "2025");
     
-    fireEvent.press(getByText("Salvar Turma"));
+    fireEvent.press(getByText("save"));
+
     
     await waitFor(() => {
       expect(mockAddClass).toHaveBeenCalledWith(expect.objectContaining({ schoolId: "1", name: "New Class", academicYear: "2025" }));

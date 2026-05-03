@@ -1,53 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+  content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/components/**/*.{js,jsx,ts,tsx}"],
   darkMode: "class",
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // Premium Midnight Navy & Emerald Palette (Hardcoded for stability)
+        background: "#020617", // Slate 950
+        foreground: "#f8fafc", // Slate 50
+        card: "#0f172a",       // Slate 900
+        "card-foreground": "#f8fafc",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#10b981",  // Emerald 500
+          foreground: "#020617",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#1e293b",  // Slate 800
+          foreground: "#94a3b8", // Slate 400
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        xl: "1rem",
-        "2xl": "1.5rem",
+        border: "#1e293b",
+        input: "#1e293b",
       },
       fontFamily: {
         sans: ["Outfit_400Regular"],
         bold: ["Outfit_700Bold"],
         semibold: ["Outfit_600SemiBold"],
       },
+      borderRadius: {
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
+      },
     },
   },
-
   plugins: [],
 };
-

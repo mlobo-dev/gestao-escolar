@@ -17,8 +17,10 @@ import { useEffect } from "react";
 import { AuthProvider, useAuth } from "../src/context/AuthContext";
 import { useRouter, useSegments } from "expo-router";
 
-// Initialize mock server
-makeServer();
+// Initialize mock server safely to prevent duplicate instances during Fast Refresh
+if (process.env.NODE_ENV === "development" && !(window as any).server) {
+  (window as any).server = makeServer();
+}
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -56,9 +58,10 @@ function InitialLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Gestão Escolar",
+          title: "EduManager",
         }}
       />
+
       <Stack.Screen
         name="login"
         options={{

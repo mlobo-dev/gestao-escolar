@@ -32,36 +32,38 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
-      server.createList("school", 100).forEach((school) => {
-        server.createList("class", 5, { school });
+      server.createList("school", 5).forEach((school) => {
+        server.createList("class", 2, { school });
       });
     },
+
+
 
     routes() {
       this.namespace = "api";
 
-      this.get("/schools", (schema, request) => {
-        const page = parseInt(request.queryParams.page || "1");
-        const limit = parseInt(request.queryParams.limit || "10");
-        const start = (page - 1) * limit;
-        const end = start + limit;
+      // Allow real authentication requests to pass through Mirage
+      this.passthrough("https://auth.facilitalabs.com.br/**");
 
+
+      this.get("/schools", (schema) => {
         const allSchools = schema.all("school").models;
-        const schools = allSchools.slice(start, end);
+        const total = allSchools.length;
         const classes = schema.all("class").models;
 
         return {
-          schools: schools.map((school) => ({
+          schools: allSchools.map((school) => ({
             ...school.attrs,
             id: school.id,
             countClasses: classes.filter((c) => String(c.schoolId) === String(school.id)).length,
           })),
           meta: {
-            total: allSchools.length,
-            hasMore: end < allSchools.length,
+            total,
+            hasMore: false,
           }
         };
       });
+
 
       this.post("/schools", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
@@ -128,7 +130,10 @@ export function makeServer({ environment = "development" } = {}) {
         return { success: true };
       });
 
+      // Final passthrough for any other unhandled requests (like assets, fonts, etc)
+      this.passthrough();
     },
+
   });
 
   return server;

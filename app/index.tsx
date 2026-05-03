@@ -5,8 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
+import LogoImg from "../assets/images/logo.png";
+
+
 import { useSchools } from "../src/hooks/useSchools";
 import {
   Search,
@@ -14,74 +18,107 @@ import {
   School as SchoolIcon,
   MapPin,
   ChevronRight,
+  LogOut,
 } from "lucide-react-native";
 import { Text } from "@gluestack-ui/nativewind";
-import { makeServer } from "../src/mocks/server";
 import { useTranslation } from "react-i18next";
+import { LanguagePicker } from "../src/components/LanguagePicker";
+import { useAuth } from "../src/context/AuthContext";
 
-// Start MirageJS if in development
-// Start MirageJS mock server
-if (!(window as any).server) {
-  (window as any).server = makeServer();
-}
+
 
 
 export default function SchoolListScreen() {
   const { t } = useTranslation();
+  const { signOut } = useAuth();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const { schools, isLoading, isLoadingMore, hasMoreSchools, fetchSchools } = useSchools(searchQuery);
+  const {
+    schools: filteredSchools,
+    totalSchools,
+    isLoading,
+    isLoadingMore,
+    hasMoreSchools,
+    fetchSchools,
+  } = useSchools(searchQuery);
 
   useEffect(() => {
     fetchSchools();
   }, []);
 
-  const filteredSchools = schools;
 
   return (
     <View className="flex-1 bg-background">
-      {/* Header */}
-      <View className="bg-primary/20 pb-10 pt-14 px-6 rounded-b-[40px]">
-        <View className="bg-white/10 flex-row items-center px-4 py-3 rounded-2xl border border-white/10">
-          <Search size={20} color="rgba(255,255,255,0.6)" />
-          <TextInput
-            className="flex-1 ml-3 text-white text-base"
-            placeholder={t("search")}
+      <Stack.Screen 
+        options={{
+          headerTitle: () => (
+            <Image 
+              source={LogoImg} 
+              style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
+              resizeMode="contain"
+            />
+          ),
 
-            placeholderTextColor="rgba(255,255,255,0.4)"
+
+          headerRight: () => (
+
+
+            <View className="flex-row items-center gap-3 pr-2">
+              <LanguagePicker />
+              <TouchableOpacity
+                onPress={signOut}
+                className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl items-center justify-center active:bg-white/10"
+              >
+                <LogOut size={18} color="#ef4444" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      {/* Header Section */}
+      <View className="bg-card/50 pb-10 pt-8 px-6 rounded-b-[48px] border-b border-white/5">
+        <View className="bg-white/5 flex-row items-center px-5 py-4 rounded-2xl border border-white/10">
+          <Search size={20} color="rgba(255,255,255,0.5)" />
+          <TextInput
+            className="flex-1 ml-3 text-foreground text-lg font-medium"
+            placeholder={t("search")}
+            placeholderTextColor="rgba(255,255,255,0.5)"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
-        <View className="flex-row justify-between items-center mt-6">
-          <View>
-            <Text className="text-white text-3xl font-bold tracking-tight">{t("schools")}</Text>
-            <Text className="text-white/60 text-sm font-medium">
-              {t("units_found", { count: filteredSchools.length })}
-            </Text>
 
+        <View className="flex-row justify-between items-center mt-10">
+          <View className="flex-1">
+            <Text className="text-foreground text-3xl font-bold tracking-tight">{t("schools")}</Text>
+            <Text className="text-muted-foreground text-sm font-medium mt-1">
+              {t("units_found", { count: totalSchools })}
+            </Text>
           </View>
+
           <TouchableOpacity
             testID="add-school-button"
-            className="bg-primary p-4 rounded-2xl shadow-lg shadow-primary/20"
             onPress={() => router.push("/school/new")}
+            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-2xl shadow-primary/40"
           >
-            <Plus size={24} color="#0f172a" />
+            <Plus size={32} color="#020617" />
           </TouchableOpacity>
         </View>
       </View>
 
 
+
       {/* List */}
       <View className="flex-1 items-center">
         <View className="w-full max-w-4xl flex-1">
-          {isLoading && schools.length === 0 ? (
+          {isLoading && filteredSchools.length === 0 ? (
             <View className="flex-1 justify-center items-center">
               <ActivityIndicator size="large" color="#1a56db" />
             </View>
           ) : (
             <FlatList
               data={filteredSchools}
+
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
               ListEmptyComponent={
@@ -93,46 +130,36 @@ export default function SchoolListScreen() {
                 </View>
               }
               renderItem={({ item }) => (
+
                 <TouchableOpacity
-                  className="glass mb-5 rounded-[32px] p-5 flex-row items-center border border-white/5"
                   onPress={() => router.push(`/school/${item.id}`)}
+                  activeOpacity={0.7}
+                  className="bg-card border border-white/[0.05] p-6 rounded-[32px] mb-5 flex-row items-center shadow-sm shadow-black/40"
                 >
-                  <View className="w-16 h-16 bg-primary/10 rounded-2xl items-center justify-center border border-primary/20">
-                    <SchoolIcon size={30} color="hsl(var(--primary))" />
+                  <View className="w-16 h-16 bg-primary/20 rounded-2xl items-center justify-center border border-primary/30">
+                    <SchoolIcon size={28} color="#10b981" />
                   </View>
-                  <View className="flex-1 ml-4">
-                    <Text className="text-white font-bold text-xl tracking-tight">
-                      {item.name}
-                    </Text>
+                  
+                  <View className="flex-1 ml-5">
+                    <Text className="text-foreground text-xl font-bold">{item.name}</Text>
                     <View className="flex-row items-center mt-1.5">
-                      <MapPin size={14} color="rgba(255,255,255,0.5)" />
-                      <Text className="text-white/50 text-sm ml-1 flex-1" numberOfLines={1}>
-                        {item.address}
-                      </Text>
+                      <MapPin size={14} color="#94a3b8" />
+                      <Text className="text-muted-foreground text-sm ml-1.5 font-medium">{item.address}</Text>
                     </View>
-                    <View className="bg-primary/10 self-start px-3 py-1 rounded-full mt-3 border border-primary/20">
-                      <Text className="text-primary text-xs font-bold uppercase tracking-wider">
-                        {item.countClasses || 0} Turmas
+                    <View className="bg-primary/15 self-start px-4 py-1.5 rounded-full mt-4 border border-primary/25">
+                      <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
+                        {item.countClasses || 0} {t("classes")}
                       </Text>
                     </View>
                   </View>
-                  <ChevronRight size={20} color="rgba(255,255,255,0.3)" />
+                  
+                  <View className="bg-white/5 w-10 h-10 rounded-full items-center justify-center">
+                    <ChevronRight size={20} color="#94a3b8" />
+                  </View>
                 </TouchableOpacity>
               )}
-              onEndReached={() => {
-                if (hasMoreSchools && !isLoadingMore) {
-                  fetchSchools();
-                }
-              }}
-              onEndReachedThreshold={0.5}
-              ListFooterComponent={
-                isLoadingMore ? (
-                  <View className="py-6">
-                    <ActivityIndicator color="hsl(var(--primary))" />
-                  </View>
-                ) : null
-              }
             />
+
 
           )}
         </View>

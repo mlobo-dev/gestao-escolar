@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, View, TouchableOpacity, Platform } from "react-native";
 import { Text } from "@gluestack-ui/nativewind";
 import { Trash2, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -19,9 +20,11 @@ export const ConfirmationModal = ({
   onConfirm,
   title,
   message,
-  confirmText = "Delete",
-  cancelText = "Cancel",
+  confirmText,
+  cancelText,
 }: ConfirmationModalProps) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       transparent
@@ -29,26 +32,27 @@ export const ConfirmationModal = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/80 p-6">
+      <View className="flex-1 justify-center items-center bg-black/60 p-6" style={Platform.OS === 'web' ? { backdropFilter: 'blur(10px)' } : {}}>
         {/* Container */}
+
         <View 
-          className="bg-background w-full rounded-[40px] overflow-hidden border border-white/10"
+          className="bg-card w-full rounded-[40px] overflow-hidden border border-white/10"
           style={Platform.OS === 'web' ? { maxWidth: 400 } : { maxWidth: '90%' }}
         >
           {/* Header */}
           <View className="bg-destructive/10 p-8 items-center border-b border-white/5">
             <View className="w-20 h-20 bg-destructive/20 rounded-3xl items-center justify-center mb-6 border border-destructive/30">
-              <Trash2 size={36} color="hsl(var(--destructive))" />
+              <Trash2 size={36} color="#ef4444" />
             </View>
-            <Text className="text-white text-2xl font-bold text-center tracking-tight">
-              {title}
+            <Text className="text-foreground text-2xl font-bold text-center tracking-tight">
+              {title || t("confirm_delete_title")}
             </Text>
           </View>
 
           {/* Body */}
           <View className="p-8">
-            <Text className="text-white/60 text-center text-lg leading-6 font-medium">
-              {message}
+            <Text className="text-muted-foreground text-center text-lg leading-6 font-medium">
+              {message || t("confirm_delete_desc")}
             </Text>
           </View>
 
@@ -58,7 +62,7 @@ export const ConfirmationModal = ({
               onPress={onClose}
               className="flex-1 bg-white/5 h-16 rounded-2xl items-center justify-center border border-white/10"
             >
-              <Text className="text-white/70 font-bold text-lg">{cancelText}</Text>
+              <Text className="text-white/70 font-bold text-lg">{cancelText || t("cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -67,7 +71,7 @@ export const ConfirmationModal = ({
               }}
               className="flex-1 bg-destructive h-16 rounded-2xl items-center justify-center shadow-lg shadow-destructive/20"
             >
-              <Text className="text-white font-bold text-lg">{confirmText}</Text>
+              <Text className="text-foreground font-bold text-lg">{confirmText || t("delete")}</Text>
             </TouchableOpacity>
           </View>
 

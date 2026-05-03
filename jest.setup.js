@@ -111,17 +111,20 @@ jest.mock("./src/mocks/server", () => ({
 
 // Mock react-i18next
 jest.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-    i18n: {
-      changeLanguage: () => Promise.resolve(),
-    },
-  }),
-  initReactI18next: {
-    type: "3rdParty",
-    init: jest.fn(),
+  useTranslation: () => {
+    return {
+      t: (str) => str,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    };
   },
+  initReactI18next: {
+    type: '3rdParty',
+    init: jest.fn(),
+  }
 }));
+
 
 // Mock AuthContext
 jest.mock("./src/context/AuthContext", () => ({
@@ -153,3 +156,13 @@ jest.mock("@expo-google-fonts/outfit", () => ({
   Outfit_600SemiBold: "Outfit_600SemiBold",
   Outfit_700Bold: "Outfit_700Bold",
 }));
+
+// Mock LanguagePicker to avoid Reanimated issues in other tests
+jest.mock("./src/components/LanguagePicker", () => ({
+  LanguagePicker: () => null,
+}));
+
+
+
+
+

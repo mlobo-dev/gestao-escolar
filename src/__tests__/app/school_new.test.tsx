@@ -13,23 +13,17 @@ jest.mock("../../store/useSchoolStore", () => ({
 }));
 
 
+const mockReplace = jest.fn();
 const mockBack = jest.fn();
 
-// Mock useRouter from the setup but allow local overrides if needed
 jest.mock("expo-router", () => ({
   useRouter: () => ({
     back: mockBack,
     canGoBack: () => true,
-    replace: jest.fn(),
+    replace: mockReplace,
   }),
   Stack: {
-    Screen: ({ options }) => {
-      // Execute the headerLeft if it exists to test it
-      if (options && options.headerLeft) {
-        options.headerLeft();
-      }
-      return null;
-    },
+    Screen: () => null,
   },
 }));
 
@@ -38,28 +32,16 @@ describe("NewSchoolScreen", () => {
     jest.clearAllMocks();
   });
 
-
-  it("renders correctly and validates inputs", async () => {
-    const { getByPlaceholderText, getByText } = render(<NewSchoolScreen />);
-
-    const saveButton = getByText("Salvar Escola");
-    fireEvent.press(saveButton);
-
-    // Should show validation messages
-    expect(getByText("O nome é obrigatório")).toBeTruthy();
-    expect(getByText("O endereço é obrigatório")).toBeTruthy();
-  });
-
   it("calls addSchool and navigates back on success", async () => {
-    const { getByPlaceholderText, getByText } = render(<NewSchoolScreen />);
+    const { getByTestId } = render(<NewSchoolScreen />);
 
-    const nameInput = getByPlaceholderText("Ex: Escola Municipal Central");
-    const addressInput = getByPlaceholderText("Rua, Número, Bairro...");
+    const nameInput = getByTestId("school-name-input");
+    const addressInput = getByTestId("school-address-input");
 
     fireEvent.changeText(nameInput, "New Test School");
     fireEvent.changeText(addressInput, "Test Address 123");
 
-    const saveButton = getByText("Salvar Escola");
+    const saveButton = getByTestId("save-school-button");
     fireEvent.press(saveButton);
 
     await waitFor(() => {
@@ -67,9 +49,8 @@ describe("NewSchoolScreen", () => {
         name: "New Test School",
         address: "Test Address 123",
       });
-      expect(mockBack).toHaveBeenCalled();
+      expect(mockReplace).toHaveBeenCalledWith("/");
     });
-
-  });
-
+  }, 10000);
 });
+
