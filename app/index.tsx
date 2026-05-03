@@ -23,7 +23,9 @@ import {
 import { Text } from "@gluestack-ui/nativewind";
 import { useTranslation } from "react-i18next";
 import { LanguagePicker } from "../src/components/LanguagePicker";
+import { ThemeToggle } from "../src/components/ThemeToggle";
 import { useAuth } from "../src/context/AuthContext";
+import { useColorScheme } from "nativewind";
 
 
 
@@ -47,8 +49,12 @@ export default function SchoolListScreen() {
   }, []);
 
 
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const iconColor = isDark ? "#94a3b8" : "#64748b";
+
   return (
-    <View className="flex-1 bg-background">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen 
         options={{
           headerTitle: () => (
@@ -64,25 +70,31 @@ export default function SchoolListScreen() {
 
 
             <View className="flex-row items-center gap-3 pr-2">
+              <ThemeToggle />
               <LanguagePicker />
               <TouchableOpacity
                 onPress={signOut}
-                className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl items-center justify-center active:bg-white/10"
+                className="w-10 h-10 bg-muted border border-border rounded-xl items-center justify-center active:bg-muted/80"
               >
                 <LogOut size={18} color="#ef4444" />
               </TouchableOpacity>
             </View>
-          )
+          ),
+          headerStyle: {
+            backgroundColor: "#020617",
+          },
+          headerTintColor: "#f8fafc",
+          headerShadowVisible: false,
         }}
       />
       {/* Header Section */}
-      <View className="bg-card/50 pb-10 pt-8 px-6 rounded-b-[48px] border-b border-white/5">
-        <View className="bg-white/5 flex-row items-center px-5 py-4 rounded-2xl border border-white/10">
-          <Search size={20} color="rgba(255,255,255,0.5)" />
+      <View className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
+        <View className={`flex-row items-center px-5 py-4 rounded-2xl border ${isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"}`}>
+          <Search size={20} color={iconColor} />
           <TextInput
-            className="flex-1 ml-3 text-foreground text-lg font-medium"
+            className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
             placeholder={t("search")}
-            placeholderTextColor="rgba(255,255,255,0.5)"
+            placeholderTextColor={iconColor}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -90,7 +102,9 @@ export default function SchoolListScreen() {
 
         <View className="flex-row justify-between items-center mt-10">
           <View className="flex-1">
-            <Text className="text-foreground text-3xl font-bold tracking-tight">{t("schools")}</Text>
+            <Text className="text-foreground text-3xl font-bold tracking-tight">
+              {t("schools")}
+            </Text>
             <Text className="text-muted-foreground text-sm font-medium mt-1">
               {t("units_found", { count: totalSchools })}
             </Text>
@@ -141,10 +155,14 @@ export default function SchoolListScreen() {
                   </View>
                   
                   <View className="flex-1 ml-5">
-                    <Text className="text-foreground text-xl font-bold">{item.name}</Text>
+                    <Text className="text-foreground text-xl font-bold">
+                      {item.name}
+                    </Text>
                     <View className="flex-row items-center mt-1.5">
-                      <MapPin size={14} color="#94a3b8" />
-                      <Text className="text-muted-foreground text-sm ml-1.5 font-medium">{item.address}</Text>
+                      <MapPin size={14} color={iconColor} />
+                      <Text className="text-muted-foreground text-sm ml-1.5 font-medium">
+                        {item.address}
+                      </Text>
                     </View>
                     <View className="bg-primary/15 self-start px-4 py-1.5 rounded-full mt-4 border border-primary/25">
                       <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">

@@ -18,6 +18,7 @@ import {
   ChevronLeft,
 } from "lucide-react-native";
 import { Text } from "@gluestack-ui/nativewind";
+import { useColorScheme } from "nativewind";
 import { ConfirmationModal } from "../../../src/components/ConfirmationModal";
 
 import { useTranslation } from "react-i18next";
@@ -81,10 +82,14 @@ export default function SchoolDetailsScreen() {
     });
   };
 
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const iconColor = isDark ? "#94a3b8" : "#64748b";
+
   if (!school) return null;
 
   return (
-    <View className="flex-1 bg-background">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
           headerTitle: t("school_unit"),
@@ -96,16 +101,16 @@ export default function SchoolDetailsScreen() {
               }
               className="mr-4"
             >
-              <ChevronLeft size={24} color="#fff" />
+              <ChevronLeft size={24} color="#f8fafc" />
             </TouchableOpacity>
           ),
           headerRight: () => (
             <View className="flex-row">
               <TouchableOpacity
                 onPress={() => router.push(`/school/${id}/edit`)}
-                className="mr-4 w-10 h-10 bg-white/10 rounded-full items-center justify-center border border-white/10"
+                className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
               >
-                <Pencil size={18} color="#fff" />
+                <Pencil size={18} color="#f8fafc" />
               </TouchableOpacity>
               <TouchableOpacity 
                 onPress={handleDeleteSchool}
@@ -115,8 +120,10 @@ export default function SchoolDetailsScreen() {
               </TouchableOpacity>
             </View>
           ),
-          headerStyle: { backgroundColor: "#0f172a" },
-          headerTintColor: "#fff",
+          headerStyle: {
+            backgroundColor: "#020617",
+          },
+          headerTintColor: "#f8fafc",
           headerTitleStyle: { fontWeight: "bold" },
           headerShadowVisible: false,
         }}
@@ -130,14 +137,14 @@ export default function SchoolDetailsScreen() {
           </View>
           <View className="flex-1 ml-5">
             <Text className="text-foreground text-3xl font-bold tracking-tight">
-              {school.name}
-            </Text>
-            <View className="flex-row items-center mt-2">
-              <MapPin size={16} color="#94a3b8" />
-              <Text className="text-muted-foreground text-sm ml-1.5 flex-1" numberOfLines={1}>
-                {school.address}
-              </Text>
-            </View>
+               {school.name}
+             </Text>
+             <View className="flex-row items-center mt-2">
+               <MapPin size={16} color={iconColor} />
+               <Text className="text-muted-foreground text-sm ml-1.5 flex-1" numberOfLines={1}>
+                 {school.address}
+               </Text>
+             </View>
           </View>
         </View>
 
@@ -179,8 +186,8 @@ export default function SchoolDetailsScreen() {
               }
               renderItem={({ item }) => (
                 <View className="bg-card mb-4 rounded-[32px] p-6 flex-row items-center border border-white/[0.05] shadow-sm shadow-black/20">
-                  <View className="w-14 h-14 bg-white/5 rounded-2xl items-center justify-center border border-white/10">
-                    <Users size={26} color="#94a3b8" />
+                  <View className="w-14 h-14 bg-muted rounded-2xl items-center justify-center border border-border">
+                    <Users size={26} color={iconColor} />
                   </View>
                   <View className="flex-1 ml-5">
                     <Text className="text-foreground font-bold text-lg tracking-tight">

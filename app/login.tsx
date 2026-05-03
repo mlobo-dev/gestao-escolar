@@ -6,6 +6,8 @@ import { LogIn, School as SchoolIcon } from "lucide-react-native";
 import { Stack } from "expo-router";
 import LogoImg from "../assets/images/logo.png";
 import { LanguagePicker } from "../src/components/LanguagePicker";
+import { ThemeToggle } from "../src/components/ThemeToggle";
+import { useColorScheme } from "nativewind";
 import { useTranslation } from "react-i18next";
 
 
@@ -13,13 +15,16 @@ function LoginScreen() {
 
   const { signIn, isLoading } = useAuth();
   const { t } = useTranslation();
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
 
   return (
-    <View className="flex-1 bg-background justify-center items-center p-8">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""} justify-center items-center p-8`}>
       <Stack.Screen options={{ headerShown: false }} />
       
-      <View className="absolute top-12 right-6">
+      <View className="absolute top-12 right-6 flex-row items-center gap-3">
+        <ThemeToggle />
         <LanguagePicker />
       </View>
 
@@ -27,7 +32,7 @@ function LoginScreen() {
       <View className="mb-4">
         <Image 
           source={LogoImg} 
-          style={{ width: 280, height: 100, tintColor: "#f8fafc" }}
+          style={{ width: 280, height: 100, tintColor: isDark ? "#f8fafc" : "#020617" }}
           resizeMode="contain"
         />
       </View>

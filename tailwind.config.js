@@ -6,21 +6,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Premium Midnight Navy & Emerald Palette (Hardcoded for stability)
-        background: "#020617", // Slate 950
-        foreground: "#f8fafc", // Slate 50
-        card: "#0f172a",       // Slate 900
-        "card-foreground": "#f8fafc",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: "hsl(var(--card))",
+        "card-foreground": "hsl(var(--card-foreground))",
         primary: {
-          DEFAULT: "#10b981",  // Emerald 500
-          foreground: "#020617",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         muted: {
-          DEFAULT: "#1e293b",  // Slate 800
-          foreground: "#94a3b8", // Slate 400
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
-        border: "#1e293b",
-        input: "#1e293b",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--border))",
       },
       fontFamily: {
         sans: ["Outfit_400Regular"],

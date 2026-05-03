@@ -26,7 +26,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const discovery = AuthSession.useAutoDiscovery(`${KEYCLOAK_URL}realms/${REALM}`);
   
-  const redirectUri = "gestao-escolar://auth";
+  const redirectUri = AuthSession.makeRedirectUri({
+    scheme: "gestao-escolar",
+    path: "auth",
+  });
 
   console.log("[Auth] Redirect URI:", redirectUri);
 

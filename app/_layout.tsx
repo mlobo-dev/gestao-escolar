@@ -1,6 +1,8 @@
 import { Stack } from "expo-router";
 import { GluestackUIProvider } from "@gluestack-ui/nativewind";
 import { makeServer } from "../src/mocks/server";
+import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "nativewind";
 import "../global.css";
 import "../src/i18n";
 
@@ -29,6 +31,7 @@ function InitialLayout() {
   const { user, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     if (isLoading) return;
@@ -43,32 +46,24 @@ function InitialLayout() {
   }, [user, isLoading, segments]);
 
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#0f172a",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        headerShadowVisible: false,
-      }}
-    >
-      <Stack.Screen
-        name="index"
-        options={{
-          title: "EduManager",
+    <>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#020617",
+          },
+          headerTintColor: "#f8fafc",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: colorScheme === "dark" ? "#020617" : "#fff",
+          },
         }}
       />
-
-      <Stack.Screen
-        name="login"
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack>
+    </>
   );
 }
 

@@ -16,18 +16,12 @@ export const useSchools = (searchQuery: string = '') => {
   const classes = useSchoolStore((state) => state.classes);
 
   const filteredSchools = useMemo(() => {
-    const schoolsWithCount = schools.map(school => ({
-      ...school,
-      countClasses: (classes || []).filter(c => String(c.schoolId) === String(school.id)).length
-    }));
-
-
-    if (!searchQuery) return schoolsWithCount;
-    return schoolsWithCount.filter((school) =>
+    if (!searchQuery) return schools;
+    return schools.filter((school) =>
       school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       school.address.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [schools, searchQuery, classes]);
+  }, [schools, searchQuery]);
 
 
   return {

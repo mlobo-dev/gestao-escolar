@@ -37,26 +37,12 @@ export const LanguagePicker = () => {
   };
 
   return (
-    <View className="flex-row items-center bg-white/5 border border-white/10 rounded-full px-2 py-1">
-      <TouchableOpacity
-        onPress={() => changeLanguage("pt")}
-        className={`w-10 h-10 items-center justify-center rounded-full ${
-          i18n.language === "pt" ? "bg-primary" : "bg-transparent"
-        }`}
-      >
-        <Text className="text-xl">🇧🇷</Text>
-      </TouchableOpacity>
-      
-      <View className="w-[1px] h-4 bg-white/10 mx-1" />
-
-      <TouchableOpacity
-        onPress={() => changeLanguage("en")}
-        className={`w-10 h-10 items-center justify-center rounded-full ${
-          i18n.language === "en" ? "bg-primary" : "bg-transparent"
-        }`}
-      >
-        <Text className="text-xl">🇺🇸</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={() => changeLanguage(i18n.language === "pt" ? "en" : "pt")}
+      activeOpacity={0.7}
+      className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
+    >
+      <Text className="text-2xl">{i18n.language === "pt" ? "🇧🇷" : "🇺🇸"}</Text>
+    </TouchableOpacity>
   );
 };

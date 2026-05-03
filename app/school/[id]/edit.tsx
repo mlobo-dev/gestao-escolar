@@ -46,7 +46,7 @@ export default function EditSchoolScreen() {
           headerShadowVisible: false,
         }}
       />
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 bg-background">
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">

@@ -3,6 +3,7 @@ import { Modal, View, TouchableOpacity, Platform } from "react-native";
 import { Text } from "@gluestack-ui/nativewind";
 import { Trash2, X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
+import { useColorScheme } from "nativewind";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -24,6 +25,9 @@ export const ConfirmationModal = ({
   cancelText,
 }: ConfirmationModalProps) => {
   const { t } = useTranslation();
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const iconColor = isDark ? "#94a3b8" : "#64748b";
 
   return (
     <Modal
@@ -32,56 +36,56 @@ export const ConfirmationModal = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/60 p-6" style={Platform.OS === 'web' ? { backdropFilter: 'blur(10px)' } : {}}>
+      <View className="flex-1 justify-center items-center bg-black/80 p-6" style={Platform.OS === 'web' ? { backdropFilter: 'blur(10px)' } : {}}>
         {/* Container */}
-
         <View 
-          className="bg-card w-full rounded-[40px] overflow-hidden border border-white/10"
-          style={Platform.OS === 'web' ? { maxWidth: 400 } : { maxWidth: '90%' }}
+          className="bg-card w-full rounded-[40px] overflow-hidden border border-border"
+          style={Platform.OS === 'web' ? { maxWidth: 400 } : { maxWidth: '95%' }}
         >
           {/* Header */}
-          <View className="bg-destructive/10 p-8 items-center border-b border-white/5">
-            <View className="w-20 h-20 bg-destructive/20 rounded-3xl items-center justify-center mb-6 border border-destructive/30">
+          <View className="p-8 items-center pt-10">
+            <View className="w-20 h-20 bg-red-500/10 rounded-3xl items-center justify-center mb-6 border border-red-500/20">
               <Trash2 size={36} color="#ef4444" />
             </View>
-            <Text className="text-foreground text-2xl font-bold text-center tracking-tight">
+            <Text className="text-foreground text-2xl font-bold text-center tracking-tight leading-tight">
               {title || t("confirm_delete_title")}
             </Text>
           </View>
 
           {/* Body */}
-          <View className="p-8">
-            <Text className="text-muted-foreground text-center text-lg leading-6 font-medium">
+          <View className="px-8 pb-8">
+            <Text className="text-muted-foreground text-center text-lg leading-relaxed">
               {message || t("confirm_delete_desc")}
             </Text>
           </View>
 
           {/* Footer */}
-          <View className="flex-row p-8 pt-0 gap-4">
+          <View className="flex-row px-6 pb-10 gap-3">
             <TouchableOpacity
               onPress={onClose}
-              className="flex-1 bg-white/5 h-16 rounded-2xl items-center justify-center border border-white/10"
+              activeOpacity={0.7}
+              className="flex-1 bg-muted h-16 rounded-2xl items-center justify-center border border-border"
             >
-              <Text className="text-white/70 font-bold text-lg">{cancelText || t("cancel")}</Text>
+              <Text className="text-muted-foreground font-bold text-lg">{cancelText || t("cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 onConfirm();
                 onClose();
               }}
-              className="flex-1 bg-destructive h-16 rounded-2xl items-center justify-center shadow-lg shadow-destructive/20"
+              activeOpacity={0.8}
+              className="flex-1 bg-red-600 h-16 rounded-2xl items-center justify-center shadow-lg shadow-red-900/40"
             >
-              <Text className="text-foreground font-bold text-lg">{confirmText || t("delete")}</Text>
+              <Text className="text-white font-bold text-lg">{confirmText || t("delete")}</Text>
             </TouchableOpacity>
           </View>
-
 
           {/* Close button top right */}
           <TouchableOpacity
             onPress={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full"
+            className="absolute top-6 right-6 p-2 rounded-full bg-white/5"
           >
-            <X size={20} color="#94a3b8" />
+            <X size={20} color={iconColor} />
           </TouchableOpacity>
         </View>
       </View>

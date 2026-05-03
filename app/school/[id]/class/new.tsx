@@ -56,11 +56,11 @@ export default function NewClassScreen() {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className="text-slate-300 text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
                 {t("name")}
               </Text>
               <TextInput
-                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
                 placeholder={t("class_name_placeholder")}
                 placeholderTextColor="rgba(255,255,255,0.4)"
                 value={name}
@@ -75,7 +75,7 @@ export default function NewClassScreen() {
             </View>
 
             <View className="mb-8">
-              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1">
+              <Text className="text-slate-300 text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1">
                 {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
@@ -91,7 +91,7 @@ export default function NewClassScreen() {
                   >
                     <Text
                       className={`font-bold text-sm tracking-tight ${
-                        shift === s ? "text-[#020617]" : "text-foreground"
+                        shift === s ? "text-[#020617]" : "text-white"
                       }`}
                     >
                       {t(s.toLowerCase().replace("-", "_"))}
@@ -102,11 +102,11 @@ export default function NewClassScreen() {
             </View>
 
             <View className="mb-10">
-              <Text className="text-muted-foreground text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
+              <Text className="text-slate-300 text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1">
                 {t("academic_year")}
               </Text>
               <TextInput
-                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-foreground"
+                className="bg-card border border-white/10 rounded-2xl px-5 py-4 text-lg text-white"
                 placeholder={t("year_placeholder")}
                 placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="numeric"
