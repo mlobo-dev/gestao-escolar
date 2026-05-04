@@ -22,8 +22,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { AuthProvider, useAuth } from "../src/context/AuthContext";
 import { useRouter, useSegments, useRootNavigationState } from "expo-router";
 
-if (process.env.NODE_ENV === "development" && !(window as any).server) {
-  (window as any).server = makeServer();
+// Initialize MirageJS mock server for development and production (demo mode)
+if (!(window as any).server) {
+  (window as any).server = makeServer({ environment: "development" });
 }
 
 SplashScreen.preventAutoHideAsync();
