@@ -1,7 +1,7 @@
 include:
-  - project: "platform/ci-cd/templates"
-    file: "pipelines/cloudflare-pages/cloudflare-pages.yml"
-    ref: "main"
+  - project: 'platform/ci-cd/templates/pipelines/cloudflare-pages'
+    file: 'cloudflare-pages.yml'
+    ref: 'main'
 
 variables:
   CLOUDFLARE_PROJECT_NAME: "edumanager-app"
