@@ -56,6 +56,9 @@ O projeto foi construído sobre uma base moderna e resiliente, atendendo integra
 
 ### **3.5. Testes Unitários**
 - ✅ **35 Testes Unitários Passando** (Jest + RTL), cobrindo stores, componentes, telas e funcionalidades de busca com excelência.
+- 📊 **Cobertura de Código > 85%**: O projeto atinge um alto nível de maturidade técnica, superando a recomendação de mercado de 80%.
+  
+![Relatório de Cobertura de Testes](./assets/images/coverage.png)
 - **Métricas de Cobertura (Snapshot)**:
 
 ```mermaid
