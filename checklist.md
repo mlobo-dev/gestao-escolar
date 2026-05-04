@@ -59,6 +59,8 @@ O projeto foi construído sobre uma base moderna e resiliente, atendendo integra
 - 📊 **Cobertura de Código > 85%**: O projeto atinge um alto nível de maturidade técnica, superando a recomendação de mercado de 80%.
   
 ![Relatório de Cobertura de Testes](./assets/images/coverage.png)
+
+
 | Métrica | Cobertura |
 | :--- | :--- |
 | **Statements** | 84.78% |
