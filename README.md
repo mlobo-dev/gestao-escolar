@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../edumanager-logo-removebg.png" width="150" alt="EduManager Logo" />
+  <img src="./assets/images/logo.png" width="150" alt="EduManager Logo" />
 </p>
 
 # Gestão Escolar 🍎
