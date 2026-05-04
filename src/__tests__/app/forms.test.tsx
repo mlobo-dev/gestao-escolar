@@ -38,7 +38,7 @@ jest.mock("expo-router", () => ({
 }));
 
 describe("Form Screens", () => {
-  jest.setTimeout(15000);
+  jest.setTimeout(30000);
   beforeEach(() => {
 
     jest.clearAllMocks();

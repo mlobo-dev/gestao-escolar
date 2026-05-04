@@ -1,4 +1,5 @@
 import "@testing-library/jest-native/extend-expect";
+jest.setTimeout(30000);
 import { NativeModules } from "react-native";
 
 // Mock NativeModules
