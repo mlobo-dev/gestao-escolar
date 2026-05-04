@@ -75,6 +75,21 @@ npx expo start --web
 
 ---
 
+## ⚙️ Configuração de Ambiente
+
+O projeto utiliza variáveis de ambiente para gerenciar a integração com o Keycloak e comportamentos de desenvolvimento. Crie um arquivo `.env` na raiz da pasta `gestao-escolar` (baseado no `.env.example`):
+
+| Variável | Descrição |
+| :--- | :--- |
+| `EXPO_PUBLIC_KEYCLOAK_URL` | URL base do servidor Keycloak. |
+| `EXPO_PUBLIC_KEYCLOAK_REALM` | Nome do Realm no Keycloak. |
+| `EXPO_PUBLIC_KEYCLOAK_CLIENT_ID` | Client ID da aplicação. |
+| `EXPO_PUBLIC_SKIP_AUTH` | Se `true` (padrão), ignora o fluxo de OIDC e utiliza um usuário mock. |
+
+> **💡 Dica de Avaliação**: Por padrão, a aplicação está configurada com `EXPO_PUBLIC_SKIP_AUTH=true` para permitir o teste imediato de todas as funcionalidades sem a necessidade de um servidor Keycloak ativo. Caso deseje testar o fluxo real de OIDC, altere esta variável para `false`.
+
+---
+
 ## 🧪 Testes e Qualidade
 
 O projeto possui uma suíte de testes abrangente para garantir a estabilidade das regras de negócio.
