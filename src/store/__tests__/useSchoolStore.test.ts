@@ -21,8 +21,12 @@ describe("useSchoolStore", () => {
     
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ schools: mockSchools }),
+      json: async () => ({ 
+        schools: mockSchools,
+        meta: { total: 1, hasMore: false }
+      }),
     });
+
 
     const store = useSchoolStore.getState();
     await store.fetchSchools();

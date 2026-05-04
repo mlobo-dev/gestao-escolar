@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { useSchoolStore } from "../../../src/store/useSchoolStore";
-import { Text } from "@gluestack-ui/nativewind";
 import { ChevronLeft, Save } from "lucide-react-native";
+import { useThemeStore } from "../../../src/store/useThemeStore";
+
+import { useTranslation } from "react-i18next";
 
 export default function EditSchoolScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { schools, updateSchool } = useSchoolStore();
   const school = schools.find((s) => s.id === id);
+  const { colorScheme } = useThemeStore();
+  const isDark = colorScheme === "dark";
 
   const [name, setName] = useState(school?.name || "");
   const [address, setAddress] = useState(school?.address || "");
@@ -25,46 +30,56 @@ export default function EditSchoolScreen() {
 
   if (!school) return null;
 
+  const labelColor = isDark ? "text-slate-400" : "text-slate-500";
+  const inputBg = isDark ? "bg-card" : "bg-slate-50";
+  const inputColor = isDark ? "text-white" : "text-slate-900";
+  const borderColor = isDark ? "border-white/10" : "border-slate-200";
+
   return (
-    <View className="flex-1 bg-white">
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
-          title: "Edit School",
+          title: t("edit_school"),
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
               className="mr-4"
             >
-              <ChevronLeft size={24} color="#fff" />
+              <ChevronLeft size={24} color="#f8fafc" />
             </TouchableOpacity>
           ),
+          headerStyle: { backgroundColor: "#020617" },
+          headerTintColor: "#f8fafc",
+          headerShadowVisible: false,
         }}
       />
       <ScrollView className="flex-1">
-        <View className="items-center p-6">
+        <View className="items-center p-8">
           <View className="w-full max-w-2xl">
-            <View className="mb-6">
-              <Text className="text-slate-500 text-sm font-bold uppercase mb-2">
-                School Name
+            <View className="mb-8">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+                {t("name")}
               </Text>
               <TextInput
-                className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-base text-slate-900"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 value={name}
                 onChangeText={setName}
               />
               {!name && (
-                <Text className="text-red-500 text-xs mt-1 ml-1">
-                  School name is required
+                <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
-            <View className="mb-8">
-              <Text className="text-slate-500 text-sm font-bold uppercase mb-2">
-                Address
+            <View className="mb-10">
+              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+                {t("address")}
               </Text>
               <TextInput
-                className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-base text-slate-900"
+                className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor} min-h-[120px]`}
+                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -72,22 +87,22 @@ export default function EditSchoolScreen() {
                 onChangeText={setAddress}
               />
               {!address && (
-                <Text className="text-red-500 text-xs mt-1 ml-1">
-                  Address is required
+                <Text className="text-destructive text-[10px] mt-2 ml-1 font-bold uppercase tracking-wider">
+                  {t("required_field")}
                 </Text>
               )}
             </View>
 
             <TouchableOpacity
-              className={`bg-blue-700 p-4 rounded-3xl flex-row items-center justify-center shadow-md ${
-                (!name || !address || isSubmitting) && "opacity-50"
+              className={`bg-primary p-5 rounded-[24px] flex-row items-center justify-center shadow-xl shadow-primary/20 ${
+                (!name || !address || isSubmitting) && "opacity-40"
               }`}
               onPress={handleUpdate}
               disabled={!name || !address || isSubmitting}
             >
-              <Save size={20} color="#fff" />
-              <Text className="text-white font-bold text-lg ml-2">
-                {isSubmitting ? "Updating..." : "Update School"}
+              <Save size={22} color="#020617" />
+              <Text className="text-[#020617] font-bold text-xl ml-3">
+                {isSubmitting ? t("updating") : t("update")}
               </Text>
             </TouchableOpacity>
           </View>

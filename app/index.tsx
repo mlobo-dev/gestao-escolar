@@ -5,74 +5,134 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
+  Text,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { useSchoolStore } from "../src/store/useSchoolStore";
+import { useRouter, Stack } from "expo-router";
+import LogoImg from "../assets/images/logo.png";
+
+
+import { useSchools } from "../src/hooks/useSchools";
 import {
   Search,
   Plus,
   School as SchoolIcon,
   MapPin,
   ChevronRight,
+  LogOut,
 } from "lucide-react-native";
-import { Text } from "@gluestack-ui/nativewind";
+import { useTranslation } from "react-i18next";
+import { LanguagePicker } from "../src/components/LanguagePicker";
+import { ThemeToggle } from "../src/components/ThemeToggle";
+import { useAuth } from "../src/context/AuthContext";
+import { useThemeStore } from "../src/store/useThemeStore";
+
+
+
 
 export default function SchoolListScreen() {
+  const { t } = useTranslation();
+  const { signOut } = useAuth();
   const router = useRouter();
-  const { schools, fetchSchools, isLoading } = useSchoolStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const {
+    schools: filteredSchools,
+    totalSchools,
+    isLoading,
+    isLoadingMore,
+    hasMoreSchools,
+    fetchSchools,
+  } = useSchools(searchQuery);
 
   useEffect(() => {
     fetchSchools();
   }, []);
 
-  const filteredSchools = schools.filter(
-    (school) =>
-      school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      school.address.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+  const { colorScheme } = useThemeStore();
+  const isDark = colorScheme === "dark";
+  const iconColor = isDark ? "#94a3b8" : "#64748b";
 
   return (
-    <View className="flex-1 bg-slate-50">
-      {/* Header with Search */}
-      <View className="bg-blue-700 px-4 pt-4 pb-8 rounded-b-[32px] shadow-lg">
-        <View className="flex-row items-center bg-white/20 rounded-2xl px-4 py-2 border border-white/30">
-          <Search size={20} color="#fff" opacity={0.7} />
+    <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
+      <Stack.Screen 
+        options={{
+          headerTitle: () => (
+            <Image 
+              source={LogoImg} 
+              style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
+              resizeMode="contain"
+            />
+          ),
+
+
+          headerRight: () => (
+
+
+            <View className="flex-row items-center gap-3 pr-2">
+              <ThemeToggle />
+              <LanguagePicker />
+              <TouchableOpacity
+                onPress={signOut}
+                className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
+              >
+                <LogOut size={18} color="#ef4444" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerStyle: {
+            backgroundColor: "#020617",
+          },
+          headerTintColor: "#f8fafc",
+          headerShadowVisible: false,
+        }}
+      />
+      {/* Header Section */}
+      <View className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
+        <View className={`flex-row items-center px-5 py-4 rounded-2xl border ${isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"}`}>
+          <Search size={20} color={iconColor} />
           <TextInput
-            className="flex-1 ml-2 text-white text-base"
-            placeholder="Search schools..."
-            placeholderTextColor="rgba(255,255,255,0.5)"
+            className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
+            placeholder={t("search")}
+            placeholderTextColor={iconColor}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
-        <View className="flex-row justify-between items-center mt-6">
-          <View>
-            <Text className="text-white text-2xl font-bold">Public Schools</Text>
-            <Text className="text-blue-100 text-sm opacity-80">
-              {filteredSchools.length} schools found
+
+        <View className="flex-row justify-between items-center mt-10">
+          <View className="flex-1">
+            <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+              {t("schools")}
+            </Text>
+            <Text className={`text-sm font-medium mt-1 ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+              {t("units_found", { count: totalSchools })}
             </Text>
           </View>
+
           <TouchableOpacity
             testID="add-school-button"
-            className="bg-white p-3 rounded-2xl shadow-sm"
             onPress={() => router.push("/school/new")}
+            className="bg-primary w-16 h-16 rounded-[22px] items-center justify-center shadow-md"
           >
-            <Plus size={24} color="#1a56db" />
+            <Plus size={32} color="#020617" />
           </TouchableOpacity>
         </View>
       </View>
 
+
+
       {/* List */}
       <View className="flex-1 items-center">
         <View className="w-full max-w-4xl flex-1">
-          {isLoading && schools.length === 0 ? (
+          {isLoading && filteredSchools.length === 0 ? (
             <View className="flex-1 justify-center items-center">
               <ActivityIndicator size="large" color="#1a56db" />
             </View>
           ) : (
             <FlatList
               data={filteredSchools}
+
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
               ListEmptyComponent={
@@ -84,33 +144,51 @@ export default function SchoolListScreen() {
                 </View>
               }
               renderItem={({ item }) => (
+
                 <TouchableOpacity
-                  className="bg-white mb-4 rounded-3xl p-4 flex-row items-center shadow-sm border border-slate-100"
                   onPress={() => router.push(`/school/${item.id}`)}
+                  activeOpacity={0.7}
+                  className={`p-6 rounded-[32px] mb-5 flex-row items-center border shadow-sm ${
+                    isDark 
+                      ? "bg-card border-white/10 shadow-black/40" 
+                      : "bg-white border-slate-100 shadow-slate-200/50"
+                  }`}
                 >
-                  <View className="w-14 h-14 bg-blue-50 rounded-2xl items-center justify-center">
-                    <SchoolIcon size={28} color="#1a56db" />
+                  <View className={`w-16 h-16 rounded-2xl items-center justify-center border ${
+                    isDark ? "bg-white/5 border-white/10" : "bg-primary/10 border-primary/20"
+                  }`}>
+                    <SchoolIcon size={28} color={isDark ? "#10b981" : "#1a56db"} />
                   </View>
-                  <View className="flex-1 ml-4">
-                    <Text className="text-slate-900 font-bold text-lg">
+                  
+                  <View className="flex-1 ml-5">
+                    <Text className={`text-xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                       {item.name}
                     </Text>
-                    <View className="flex-row items-center mt-1">
-                      <MapPin size={14} color="#64748b" />
-                      <Text className="text-slate-500 text-sm ml-1" numberOfLines={1}>
+                    <View className="flex-row items-center mt-2">
+                      <MapPin size={14} color={iconColor} />
+                      <Text className={`text-sm ml-1.5 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                         {item.address}
                       </Text>
                     </View>
-                    <View className="bg-slate-100 self-start px-2 py-0.5 rounded-lg mt-2">
-                      <Text className="text-slate-600 text-xs font-bold uppercase tracking-wider">
-                        {item.countClasses} {item.countClasses === 1 ? "Class" : "Classes"}
+                    <View className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
+                      isDark ? "bg-primary/10 border-primary/25" : "bg-primary/10 border-primary/25"
+                    }`}>
+                      <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
+                        {item.countClasses || 0} {t("classes")}
                       </Text>
                     </View>
                   </View>
-                  <ChevronRight size={20} color="#cbd5e1" />
+                  
+                  <View className={`w-10 h-10 rounded-full items-center justify-center ${
+                    isDark ? "bg-white/5" : "bg-slate-50"
+                  }`}>
+                    <ChevronRight size={20} color={iconColor} />
+                  </View>
                 </TouchableOpacity>
               )}
             />
+
+
           )}
         </View>
       </View>

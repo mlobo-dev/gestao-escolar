@@ -1,25 +1,37 @@
 # Gestão Escolar 🍎
 
-Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza as tecnologias mais modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta qualidade de código.
+Uma aplicação robusta de gestão de escolas públicas, desenvolvida como parte do desafio técnico Prover. O projeto utiliza tecnologias modernas do ecossistema React Native para entregar uma experiência fluida, offline-first e com alta fidelidade visual.
+
+---
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Plataforma**: Expo SDK 55
-- **Framework**: React Native (React 19)
+O projeto foi construído utilizando as versões estáveis mais recentes:
+
+- **Plataforma**: Expo SDK 55.0.19
+- **Framework**: React Native (React 19.2.5 / RN 0.83.6)
 - **Navegação**: Expo Router (File-based navigation)
 - **UI & Styling**: Gluestack UI v2 + NativeWind v4 (Tailwind CSS)
 - **Estado**: Zustand com persistência em AsyncStorage
-- **Mock API**: MirageJS para simulação completa de backend
-- **Testes**: Jest + Testing Library
-- **Qualidade**: TypeScript + ESLint + Prettier
+- **Autenticação**: Keycloak (OIDC/PKCE) via Expo Auth Session
+- **Internacionalização**: i18next (Suporte PT-BR / EN)
+- **Mock API**: MirageJS para simulação de backend com suporte a paginação
+- **Testes**: Jest + Testing Library (Suíte de testes unitários)
 
-## ✨ Funcionalidades
+---
 
-- **Gestão de Escolas (CRUD)**: Listagem, criação, edição e exclusão de unidades escolares.
-- **Gestão de Turmas (CRUD)**: Registro de turmas vinculadas a escolas específicas (Nome, Turno e Ano Letivo).
-- **Busca em Tempo Real**: Filtro inteligente de escolas por nome ou endereço.
-- **Persistência Offline**: Todos os dados são salvos localmente, permitindo o uso em áreas sem conectividade.
-- **Interface Premium**: Design moderno com foco em usabilidade e responsividade.
+## ✨ Recursos Adicionais e Aprimoramentos
+
+Além dos requisitos básicos, este projeto implementa funcionalidades avançadas:
+
+- **🔐 Autenticação Segura**: Fluxo de login integrado ao Keycloak com proteção de rotas e persistência de sessão.
+- **🌍 Internacionalização (i18n)**: Suporte completo a Português e Inglês com troca dinâmica de idioma.
+- **🌓 Suporte a Temas Estabilizado**: Tema escuro implementado via Store manual para garantir transições suaves e evitar conflitos.
+- **📈 Paginação & Infinite Scroll**: Arquitetura preparada para grandes volumes de dados nas listagens.
+- **🎨 Interface de Alta Fidelidade**: UI moderna com foco em usabilidade e efeitos visuais contemporâneos.
+- **📱 Layout Adaptativo**: Interface otimizada para diferentes tamanhos de tela (Mobile e Tablet).
+
+---
 
 ## 📦 Como Executar
 
@@ -37,30 +49,37 @@ Uma aplicação premium de gestão de escolas públicas, desenvolvida como parte
    *(Nota: O uso de `--force` é recomendado devido à versão bleeding-edge do React 19 e SDK 55 em algumas bibliotecas nativas).*
 
 ### Execução
-- **Web (Recomendado para teste imediato)**:
-  ```bash
-  npm run web
-  ```
-- **Android/iOS (Expo Go)**:
-  ```bash
-  npm run start
-  ```
-  *(Escaneie o QR Code com o app Expo Go).*
+1. Inicie o servidor Metro:
+   ```bash
+   npx expo start
+   ```
+2. Abra o app no emulador Android ou via Expo Go.
 
-### Testes
-Para rodar a suíte de testes unitários:
+---
+
+## 🛠️ Detalhes Técnicos & Mock API
+
+### MirageJS (Backend Simulado)
+O projeto utiliza **MirageJS** para interceptar as requisições HTTP e retornar dados simulados. Isso permite que o app funcione de forma totalmente independente de um servidor real.
+
+- **Endpoints**:
+  - `GET /api/schools`: Lista com paginação (limit/offset).
+  - `POST /api/schools`: Criação de unidades.
+  - `GET /api/schools/:id/classes`: Filtro contextual de turmas.
+  - `POST /api/classes`: Cadastro de turmas associadas.
+
+### Persistência Offline
+Utilizamos **Zustand** com o middleware `persist` e o **AsyncStorage**. 
+- Todas as alterações (Criação, Edição, Exclusão) são persistidas localmente.
+- Isso garante que os dados não sejam perdidos ao fechar o app.
+
+---
+
+## 🧪 Suíte de Testes
+Rodamos testes unitários para garantir que a lógica de negócio e os componentes de UI estejam funcionando:
 ```bash
 npm test
 ```
 
-## 🏗️ Arquitetura
-
-O projeto segue princípios de **Clean Code** e **S.O.L.I.D.**, com separação clara de responsabilidades:
-- `app/`: Roteamento e telas (Expo Router).
-- `src/components/`: Componentes de UI reutilizáveis.
-- `src/store/`: Gerenciamento de estado global e lógica de persistência.
-- `src/mocks/`: Configuração do servidor de simulação MirageJS.
-- `src/types/`: Definições globais de TypeScript.
-
 ---
-Desenvolvido com foco em excelência técnica e experiência do usuário.
+Desenvolvido por Antigravity para o Desafio Técnico Prover. Foco em excelência técnica, performance e design premium. 🚀

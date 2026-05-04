@@ -32,35 +32,51 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
-      server.createList("school", 3).forEach((school) => {
-        server.createList("class", 2, { school });
+      server.createList("school", 5).forEach((school) => {
+        const randomCount = Math.floor(Math.random() * 4) + 1;
+        server.createList("class", randomCount, { schoolId: school.id });
       });
     },
+
+
 
     routes() {
       this.namespace = "api";
 
+      // Allow real authentication requests to pass through Mirage
+      this.passthrough("https://auth.facilitalabs.com.br/**");
+
+
       this.get("/schools", (schema) => {
-        const schools = schema.all("school").models;
+        const allSchools = schema.all("school").models;
+        const total = allSchools.length;
         const classes = schema.all("class").models;
 
         return {
-          schools: schools.map((school) => ({
+          schools: allSchools.map((school) => ({
             ...school.attrs,
-            countClasses: classes.filter((c) => c.schoolId === school.id).length,
+            id: school.id,
+            countClasses: classes.filter((c) => String(c.schoolId || c.attrs?.schoolId) === String(school.id)).length,
           })),
+          meta: {
+            total,
+            hasMore: false,
+          }
         };
       });
 
+
       this.post("/schools", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
-        return schema.create("school", attrs);
+        const newSchool = schema.create("school", attrs);
+        return { school: { ...newSchool.attrs, id: newSchool.id } };
       });
 
       this.patch("/schools/:id", (schema, request) => {
         let id = request.params.id;
         let attrs = JSON.parse(request.requestBody);
-        return schema.find("school", id)?.update(attrs);
+        const updatedSchool = schema.find("school", id)?.update(attrs);
+        return { school: { ...updatedSchool?.attrs, id: updatedSchool?.id } };
       });
 
       this.del("/schools/:id", (schema, request) => {
@@ -69,23 +85,50 @@ export function makeServer({ environment = "development" } = {}) {
         return { success: true };
       });
 
+
       this.get("/classes", (schema, request) => {
         const schoolId = request.queryParams.schoolId;
+        const page = parseInt(request.queryParams.page || "1");
+        const limit = parseInt(request.queryParams.limit || "10");
+        const start = (page - 1) * limit;
+        const end = start + limit;
+
+        let allModelClasses = schema.all("class").models;
+        let filteredClasses = allModelClasses;
+        
         if (schoolId) {
-          return schema.where("class", { schoolId });
+          filteredClasses = allModelClasses.filter(
+            (c) => String(c.schoolId || c.attrs?.schoolId) === String(schoolId)
+          );
         }
-        return schema.all("class");
+        
+        const classes = filteredClasses.slice(start, end);
+        
+        return {
+          classes: classes.map(c => ({
+            ...c.attrs,
+            id: c.id,
+            schoolId: c.schoolId || c.attrs?.schoolId
+          })),
+          meta: {
+            total: filteredClasses.length,
+            hasMore: end < filteredClasses.length,
+          }
+        };
       });
+
 
       this.post("/classes", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
-        return schema.create("class", attrs);
+        const newClass = schema.create("class", attrs);
+        return { class: { ...newClass.attrs, id: newClass.id } };
       });
 
       this.patch("/classes/:id", (schema, request) => {
         let id = request.params.id;
         let attrs = JSON.parse(request.requestBody);
-        return schema.find("class", id)?.update(attrs);
+        const updatedClass = schema.find("class", id)?.update(attrs);
+        return { class: { ...updatedClass.attrs, id: updatedClass.id } };
       });
 
       this.del("/classes/:id", (schema, request) => {
@@ -93,7 +136,11 @@ export function makeServer({ environment = "development" } = {}) {
         schema.find("class", id)?.destroy();
         return { success: true };
       });
+
+      // Final passthrough for any other unhandled requests (like assets, fonts, etc)
+      this.passthrough();
     },
+
   });
 
   return server;

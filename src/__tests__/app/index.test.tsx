@@ -3,9 +3,26 @@ import { render, fireEvent } from "@testing-library/react-native";
 import HomeScreen from "../../../app/index";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
+const mockStore = {
+  schools: [
+    { id: "1", name: "School 1", address: "Address 1", countClasses: 3 },
+    { id: "2", name: "School 2", address: "Address 2", countClasses: 5 },
+  ],
+  classes: [],
+  fetchSchools: jest.fn(),
+  totalSchools: 2,
+  isLoading: false,
+  isLoadingMore: false,
+  hasMoreSchools: false,
+  schoolPage: 1,
+};
+
+
+
 jest.mock("../../store/useSchoolStore", () => ({
-  useSchoolStore: jest.fn(),
+  useSchoolStore: jest.fn((selector) => (selector ? selector(mockStore) : mockStore)),
 }));
+
 
 const mockPush = jest.fn();
 
@@ -18,25 +35,24 @@ jest.mock("expo-router", () => ({
   },
 }));
 
-describe("HomeScreen", () => {
-  const mockSchools = [
-    { id: "1", name: "School 1", address: "Address 1" },
-    { id: "2", name: "School 2", address: "Address 2" },
-  ];
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
 
+describe("HomeScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useSchoolStore as unknown as jest.Mock).mockReturnValue({
-      schools: mockSchools,
-      fetchSchools: jest.fn(),
-      isLoading: false,
-    });
   });
 
-  it("renders the list of schools", () => {
+
+  it("renders the list of schools and their class counts", () => {
     const { getByText } = render(<HomeScreen />);
     expect(getByText("School 1")).toBeTruthy();
+    expect(getByText(/3 classes/i)).toBeTruthy();
     expect(getByText("School 2")).toBeTruthy();
+    expect(getByText(/5 classes/i)).toBeTruthy();
   });
 
   it("navigates to school details on press", () => {

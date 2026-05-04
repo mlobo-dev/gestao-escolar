@@ -1,0 +1,109 @@
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
+const resources = {
+  en: {
+    translation: {
+      welcome: "Welcome",
+      schools: "Schools",
+      classes: "Classes",
+      add_school: "Add School",
+      edit_school: "Edit School",
+      add_class: "Add Class",
+      edit_class: "Edit Class",
+      delete: "Delete",
+      save: "Save",
+      update: "Update",
+      search: "Search...",
+      units_found: "{{count}} units found",
+      name: "Name",
+      name_placeholder: "e.g. Central High School",
+      address: "Address",
+      address_placeholder: "e.g. 123 Education St, City",
+      academic_year: "Academic Year",
+      year_placeholder: "e.g. 2024",
+      class_name_placeholder: "e.g. 1st Year A",
+      shift: "Shift",
+      required_field: "This field is required",
+      confirm_delete_title: "Are you sure?",
+      confirm_delete_desc: "This action cannot be undone.",
+      delete_school_title: "Delete School",
+      delete_school_message: 'Are you sure you want to delete "{{name}}"? This will also remove all its classes.',
+      delete_class_title: "Delete Class",
+      delete_class_message: 'Are you sure you want to delete "{{name}}"?',
+      no_schools: "No schools found",
+      no_classes: "No classes found for this school",
+      school_unit: "School Unit",
+      login_desc: "Administrative platform for teaching units",
+      loading: "Loading...",
+      enter: "Enter",
+      cancel: "Cancel",
+
+      saving: "Saving...",
+      updating: "Updating...",
+      morning: "Morning",
+      afternoon: "Afternoon",
+      night: "Night",
+      full_time: "Full-time",
+    },
+  },
+  pt: {
+    translation: {
+      welcome: "Bem-vindo",
+      schools: "Escolas",
+      classes: "Turmas",
+      add_school: "Nova Unidade",
+      edit_school: "Editar Unidade",
+      add_class: "Nova Turma",
+      edit_class: "Editar Turma",
+      delete: "Excluir",
+      save: "Salvar",
+      update: "Atualizar",
+      search: "Buscar...",
+      units_found: "{{count}} unidades encontradas",
+      name: "Nome",
+      name_placeholder: "Ex: Escola Municipal Central",
+      address: "Endereço",
+      address_placeholder: "Rua, Número, Bairro...",
+      academic_year: "Ano Letivo",
+      year_placeholder: "Ex: 2024",
+      class_name_placeholder: "Ex: 1º Ano A",
+      shift: "Turno",
+      required_field: "Campo obrigatório",
+      confirm_delete_title: "Tem certeza?",
+      confirm_delete_desc: "Esta ação não pode ser desfeita.",
+      delete_school_title: "Excluir Unidade",
+      delete_school_message: 'Tem certeza que deseja excluir a unidade "{{name}}"? Isso também removerá todas as turmas.',
+      delete_class_title: "Excluir Turma",
+      delete_class_message: 'Tem certeza que deseja excluir a turma "{{name}}"?',
+      no_schools: "Nenhuma escola encontrada",
+      no_classes: "Nenhuma turma cadastrada para esta escola",
+      school_unit: "Unidade Escolar",
+      login_desc: "Plataforma administrativa para unidades de ensino",
+      loading: "Carregando...",
+      enter: "Entrar",
+      cancel: "Cancelar",
+
+      saving: "Salvando...",
+      updating: "Atualizando...",
+      morning: "Manhã",
+      afternoon: "Tarde",
+      night: "Noite",
+      full_time: "Integral",
+    },
+  },
+};
+
+
+
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "pt", // default language
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
+
+export default i18n;

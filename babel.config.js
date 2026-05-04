@@ -19,13 +19,16 @@ module.exports = function (api) {
       "babel-plugin-transform-import-meta",
       "@babel/plugin-transform-class-static-block",
       [
-        "babel-plugin-module-resolver",
+        "module-resolver",
         {
           alias: {
-            "react-native-worklets": "./packages/react-native-worklets-stub",
+            "../../../packages/react-native-worklets-stub": "react-native-worklets",
           },
         },
       ],
+      // In Reanimated 4, the reanimated plugin already handles worklets transformation.
+      // Including both causes a "Duplicate plugin" error.
+      "react-native-reanimated/plugin",
     ],
   };
 };
