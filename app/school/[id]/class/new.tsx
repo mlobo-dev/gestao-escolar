@@ -20,7 +20,7 @@ export default function NewClassScreen() {
 
   const [name, setName] = useState("");
   const [shift, setShift] = useState<Shift>("Morning");
-  const [year, setYear] = useState("2024");
+  const [year, setYear] = useState(new Date().getFullYear().toString());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSave = async () => {

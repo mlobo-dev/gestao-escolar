@@ -19,7 +19,9 @@ export const useClasses = (schoolId: string, searchQuery: string = '') => {
   const filteredClasses = useMemo(() => {
     if (!searchQuery) return classes;
     return classes.filter((cls) =>
-      cls.name.toLowerCase().includes(searchQuery.toLowerCase())
+      cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cls.shift.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(cls.academicYear).includes(searchQuery)
     );
   }, [classes, searchQuery]);
 

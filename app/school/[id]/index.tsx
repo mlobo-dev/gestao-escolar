@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
+  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   Text,
@@ -11,6 +12,7 @@ import { useClasses } from "../../../src/hooks/useClasses";
 import { useSchools } from "../../../src/hooks/useSchools";
 import {
   Plus,
+  Search,
   School as SchoolIcon,
   MapPin,
   Pencil,
@@ -28,6 +30,7 @@ export default function SchoolDetailsScreen() {
   const router = useRouter();
 
   const { id } = useLocalSearchParams<{ id: string }>();
+  const [searchQuery, setSearchQuery] = useState("");
   const { 
     classes, 
     fetchClasses, 
@@ -35,7 +38,7 @@ export default function SchoolDetailsScreen() {
     isLoading, 
     isLoadingMore, 
     hasMoreClasses 
-  } = useClasses(id!);
+  } = useClasses(id!, searchQuery);
 
   const { allSchools, deleteSchool } = useSchools();
 
@@ -163,6 +166,20 @@ export default function SchoolDetailsScreen() {
             <Plus size={32} color="#020617" />
           </TouchableOpacity>
         </View>
+
+        {/* Search Input for Classes */}
+        <View className={`flex-row items-center px-5 py-3.5 rounded-2xl border mt-6 ${
+          isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"
+        }`}>
+          <Search size={18} color={iconColor} />
+          <TextInput
+            className={`flex-1 ml-3 text-base font-medium ${isDark ? "text-white" : "text-slate-900"}`}
+            placeholder={t("search")}
+            placeholderTextColor={iconColor}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
       </View>
 
       {/* Classes Section */}
@@ -177,9 +194,13 @@ export default function SchoolDetailsScreen() {
               contentContainerStyle={{ paddingBottom: 40 }}
               ListEmptyComponent={
                 <View className="items-center justify-center pt-16">
-                  <Users size={48} color="#cbd5e1" />
+                  {searchQuery ? (
+                    <Search size={48} color="#cbd5e1" />
+                  ) : (
+                    <Users size={48} color="#cbd5e1" />
+                  )}
                   <Text className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}>
-                    {t("no_classes")}
+                    {searchQuery ? t("no_results_found") : t("no_classes")}
                   </Text>
                 </View>
               }

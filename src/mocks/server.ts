@@ -27,7 +27,7 @@ export function makeServer({ environment = "development" } = {}) {
           return `Class ${i + 1}`;
         },
         shift: "Morning",
-        academicYear: "2024",
+        academicYear: new Date().getFullYear().toString(),
       }),
     },
 

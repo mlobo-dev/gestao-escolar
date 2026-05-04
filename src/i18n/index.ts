@@ -21,7 +21,7 @@ const resources = {
       address: "Address",
       address_placeholder: "e.g. 123 Education St, City",
       academic_year: "Academic Year",
-      year_placeholder: "e.g. 2024",
+      year_placeholder: `e.g. ${new Date().getFullYear()}`,
       class_name_placeholder: "e.g. 1st Year A",
       shift: "Shift",
       required_field: "This field is required",
@@ -45,6 +45,7 @@ const resources = {
       afternoon: "Afternoon",
       night: "Night",
       full_time: "Full-time",
+      no_results_found: "No results found for your search",
     },
   },
   pt: {
@@ -66,7 +67,7 @@ const resources = {
       address: "Endereço",
       address_placeholder: "Rua, Número, Bairro...",
       academic_year: "Ano Letivo",
-      year_placeholder: "Ex: 2024",
+      year_placeholder: `Ex: ${new Date().getFullYear()}`,
       class_name_placeholder: "Ex: 1º Ano A",
       shift: "Turno",
       required_field: "Campo obrigatório",
@@ -90,6 +91,7 @@ const resources = {
       afternoon: "Tarde",
       night: "Noite",
       full_time: "Integral",
+      no_results_found: "Nenhum resultado encontrado para sua busca",
     },
   },
 };
