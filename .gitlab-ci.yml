@@ -1,0 +1,10 @@
+include:
+  - project: 'platform/ci-cd/templates'
+    file: 'pipelines/cloudflare-pages/cloudflare-pages.yml'
+
+variables:
+  CF_BUILD_COMMAND: "npm run build:web"
+  CF_OUTPUT_DIR: "dist"
+  CF_PRODUCTION_BRANCH: "master"
+  CLOUDFLARE_PROJECT_NAME: "gestao-escolar-app"
+  NODE_VERSION: "20"

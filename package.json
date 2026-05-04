@@ -10,6 +10,7 @@
     "test": "jest",
     "lint": "eslint .",
     "build:apk": "npx eas-cli build --platform android --profile preview",
+    "build:web": "npx expo export --platform web",
     "postinstall": "patch-package"
   },
   "dependencies": {
