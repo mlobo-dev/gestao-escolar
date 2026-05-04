@@ -46,6 +46,7 @@ Antes de iniciar, certifique-se de ter o ambiente de desenvolvimento React Nativ
 - **Node.js**: v18 ou superior.
 - **Java JDK**: v17 (necessário para o build nativo do Android).
 - **Android Studio**: SDK configurado e um emulador (ou dispositivo físico via USB).
+- **Compatibilidade Android**: Testado em **API Level 34** (Android 14) e **API Level 35** (Android 15).
 - **EAS CLI**: Caso deseje realizar builds em nuvem (`npm install -g eas-cli`).
 
 ---
