@@ -15,10 +15,10 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const useAuth = () => useContext(AuthContext);
 
-// Keycloak config from user
-const KEYCLOAK_URL = "https://auth.facilitalabs.com.br/";
-const REALM = "gestao-escolar";
-const CLIENT_ID = "gestao-escolar-app"; // Assuming this ID
+// Keycloak config from environment variables
+const KEYCLOAK_URL = process.env.EXPO_PUBLIC_KEYCLOAK_URL;
+const REALM = process.env.EXPO_PUBLIC_KEYCLOAK_REALM;
+const CLIENT_ID = process.env.EXPO_PUBLIC_KEYCLOAK_CLIENT_ID;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any | null>(null);
@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
-      clientId: CLIENT_ID,
+      clientId: CLIENT_ID!,
       scopes: ["openid", "profile", "email"],
       redirectUri,
       usePKCE: true,
@@ -42,17 +42,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     discovery
   );
 
+  const isSkipAuth = process.env.EXPO_PUBLIC_SKIP_AUTH === 'true';
+
   useEffect(() => {
+    if (isSkipAuth) {
+      setUser({ name: "Mock User (Bypass)", email: "mock@escola.com" });
+      setIsLoading(false);
+      return;
+    }
+
     if (response?.type === "success") {
       const { code } = response.params;
-      // In a real app, you would exchange the code for a token here.
-      // For this mock/technical challenge, we'll simulate a successful login.
       setUser({ name: "User Admin", email: "admin@escola.com" });
     }
     setIsLoading(false);
-  }, [response]);
+  }, [response, isSkipAuth]);
 
   const signIn = async () => {
+    if (isSkipAuth) {
+      setUser({ name: "Mock User (Bypass)", email: "mock@escola.com" });
+      return;
+    }
     await promptAsync();
   };
 
@@ -61,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, isLoading: isLoading || !request }}>
+    <AuthContext.Provider value={{ user, signIn, signOut, isLoading: isLoading || (!isSkipAuth && !request) }}>
       {children}
     </AuthContext.Provider>
   );

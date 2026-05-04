@@ -1,5 +1,6 @@
 import { createServer, Model, hasMany, belongsTo, Factory } from "miragejs";
 
+// Configuração do servidor de Mock para ambiente de desenvolvimento e testes
 export function makeServer({ environment = "development" } = {}) {
   let server = createServer({
     environment,
@@ -27,6 +28,7 @@ export function makeServer({ environment = "development" } = {}) {
           return `Class ${i + 1}`;
         },
         shift: "Morning",
+        // Gerenciamento dinâmico de ano letivo (sempre atual)
         academicYear: new Date().getFullYear().toString(),
       }),
     },
@@ -43,8 +45,7 @@ export function makeServer({ environment = "development" } = {}) {
     routes() {
       this.namespace = "api";
 
-      // Allow real authentication requests to pass through Mirage
-      this.passthrough("https://auth.facilitalabs.com.br/**");
+      this.passthrough(`${process.env.EXPO_PUBLIC_KEYCLOAK_URL}**`);
 
 
       this.get("/schools", (schema) => {
@@ -137,7 +138,6 @@ export function makeServer({ environment = "development" } = {}) {
         return { success: true };
       });
 
-      // Final passthrough for any other unhandled requests (like assets, fonts, etc)
       this.passthrough();
     },
 
