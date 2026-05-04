@@ -9,7 +9,7 @@ interface SchoolState {
   isLoading: boolean;
   isLoadingMore: boolean;
   error: string | null;
-  
+
   // Pagination metadata
   schoolPage: number;
   hasMoreSchools: boolean;
@@ -34,6 +34,7 @@ interface SchoolState {
 
 
 export const useSchoolStore = create<SchoolState>()(
+  // Persistência local configurada para manter os dados mesmo após fechar o app
   persist(
     (set, get) => ({
       schools: [],
@@ -51,15 +52,14 @@ export const useSchoolStore = create<SchoolState>()(
       setSchools: (schools) => set({ schools }),
 
       fetchSchools: async (refresh = false) => {
-        // Optimization: Only skip if we are on page 1, have data, and it's not a refresh.
-        // This prevents overwriting local data on app start while allowing pagination.
+        // Lógica de cache: evita sobrescrever dados locais com seeds do mock
         if (get().schools.length > 0 && !refresh && get().schoolPage === 1) return;
 
         set({ isLoading: true });
         try {
           const response = await fetch("/api/schools");
           const data = await response.json();
-          
+
           set({
             schools: data.schools,
             totalSchools: data.meta.total,
@@ -122,8 +122,7 @@ export const useSchoolStore = create<SchoolState>()(
 
       fetchClasses: async (schoolId, refresh = false) => {
         const page = refresh ? 1 : get().classPage;
-        
-        // Optimization: Only skip if we are on page 1 for this school and have data.
+
         const hasLocalClasses = get().classes.some(c => String(c.schoolId) === String(schoolId));
         if (hasLocalClasses && !refresh && page === 1) return;
         if (page === 1) {
@@ -135,22 +134,19 @@ export const useSchoolStore = create<SchoolState>()(
         try {
           const response = await fetch(`/api/classes?schoolId=${schoolId}&page=${page}&limit=10`);
           const data = await response.json();
-          
+
           set((state) => {
             const mappedClasses = (data.classes || []).map((c: any) => ({
               ...c,
               schoolId: c.schoolId || schoolId
             }));
 
-            // If refresh, keep classes from OTHER schools, and replace current school classes
-            // If not refresh, just append new classes
-            const otherSchoolsClasses = refresh 
+            const otherSchoolsClasses = refresh
               ? state.classes.filter((c: any) => String(c.schoolId) !== String(schoolId))
               : state.classes;
 
             const newClasses = [...otherSchoolsClasses, ...mappedClasses];
-            
-            // Remove duplicates by ID (just in case)
+
             const uniqueClasses = Array.from(new Map(newClasses.map((c: any) => [c.id, c])).values());
 
             return {

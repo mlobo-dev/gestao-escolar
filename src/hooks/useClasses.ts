@@ -1,9 +1,9 @@
 import { useSchoolStore } from '../store/useSchoolStore';
 import { useMemo } from 'react';
 
+// Hook customizado para abstrair a lógica de filtragem e busca de turmas
 export const useClasses = (schoolId: string, searchQuery: string = '') => {
   const classes = useSchoolStore((state) => {
-    // Robust comparison using String to handle ID type mismatches
     return state.classes.filter((c) => String(c.schoolId) === String(schoolId));
   });
 
@@ -17,6 +17,7 @@ export const useClasses = (schoolId: string, searchQuery: string = '') => {
   const fetchClasses = useSchoolStore((state) => state.fetchClasses);
 
   const filteredClasses = useMemo(() => {
+    // Otimização: filtragem realizada via memoization para evitar re-renders desnecessários
     if (!searchQuery) return classes;
     return classes.filter((cls) =>
       cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

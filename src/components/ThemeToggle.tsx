@@ -4,6 +4,7 @@ import { Sun, Moon } from "lucide-react-native";
 import { useThemeStore } from "../store/useThemeStore";
 
 export function ThemeToggle() {
+  // Gerenciamento de tema manual via Store para evitar conflitos nativos
   const { colorScheme, toggleTheme } = useThemeStore();
   const isDark = colorScheme === "dark";
 

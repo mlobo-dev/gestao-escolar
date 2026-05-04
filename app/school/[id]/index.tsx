@@ -132,7 +132,6 @@ export default function SchoolDetailsScreen() {
         }}
       />
 
-      {/* School Info Header */}
       <View className={`pb-8 pt-6 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
         <View className="flex-row items-center">
           <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-md">
@@ -167,7 +166,6 @@ export default function SchoolDetailsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Search Input for Classes */}
         <View className={`flex-row items-center px-5 py-3.5 rounded-2xl border mt-6 ${
           isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"
         }`}>
@@ -182,7 +180,6 @@ export default function SchoolDetailsScreen() {
         </View>
       </View>
 
-      {/* Classes Section */}
       <View className="flex-1 items-center px-4 mt-4">
         <View className="w-full max-w-4xl flex-1">
           {isLoading ? (

@@ -3,7 +3,6 @@ import { render, fireEvent } from "@testing-library/react-native";
 import SchoolDetailsScreen from "../../../app/school/[id]/index";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
-// Mocking translations
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (str: string) => str,
@@ -11,15 +10,12 @@ jest.mock("react-i18next", () => ({
   })
 }));
 
-// Mocking Auth
 jest.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     signOut: jest.fn(),
   }),
 }));
 
-// Mocking Router
-const mockPush = jest.fn();
 jest.mock("expo-router", () => ({
   useRouter: () => ({
     push: mockPush,
@@ -31,7 +27,6 @@ jest.mock("expo-router", () => ({
   },
 }));
 
-// Data for testing
 const mockClasses = [
   { id: "c1", name: "Matemática A", shift: "Morning", academicYear: new Date().getFullYear().toString(), schoolId: "1" },
   { id: "c2", name: "Português B", shift: "Afternoon", academicYear: new Date().getFullYear().toString(), schoolId: "1" },

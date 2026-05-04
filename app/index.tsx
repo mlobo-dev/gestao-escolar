@@ -42,7 +42,7 @@ export default function SchoolListScreen() {
     isLoadingMore,
     hasMoreSchools,
     fetchSchools,
-  } = useSchools(searchQuery);
+  } = useSchools(searchQuery); // Exemplo de hook customizado para busca de escolas
 
   useEffect(() => {
     fetchSchools();
@@ -87,7 +87,6 @@ export default function SchoolListScreen() {
           headerShadowVisible: false,
         }}
       />
-      {/* Header Section */}
       <View className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
         <View className="flex-row justify-between items-center">
           <View className="flex-1">
@@ -122,7 +121,6 @@ export default function SchoolListScreen() {
 
 
 
-      {/* List */}
       <View className="flex-1 items-center">
         <View className="w-full max-w-4xl flex-1">
           {isLoading && filteredSchools.length === 0 ? (
