@@ -75,11 +75,14 @@ Utilizamos **Zustand** com o middleware `persist` e o **AsyncStorage**.
 
 ---
 
-## 🧪 Suíte de Testes
-Rodamos testes unitários para garantir que a lógica de negócio e os componentes de UI estejam funcionando:
+### Executar Testes
 ```bash
 npm test
 ```
+
+### Gerar Relatório de Cobertura (84%)
+- **Tabela Completa**: `npm test -- --coverage`
+- **Resumo no Terminal**: `npm test -- --coverage --coverageReporters="text-summary"`
 
 ---
 Desenvolvido por Antigravity para o Desafio Técnico Prover. Foco em excelência técnica, performance e design premium. 🚀
