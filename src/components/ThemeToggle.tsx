@@ -9,6 +9,7 @@ export function ThemeToggle() {
 
   return (
     <TouchableOpacity
+      testID="theme-toggle-button"
       onPress={() => {
         toggleTheme();
       }}

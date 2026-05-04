@@ -11,100 +11,211 @@ global.fetch = jest.fn();
 describe("useSchoolStore", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset store state manually if needed, but since it's a hook we just test its actions
-  });
-
-  it("should fetch schools and update state", async () => {
-    const mockSchools = [
-      { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
-    ];
-    
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ 
-        schools: mockSchools,
-        meta: { total: 1, hasMore: false }
-      }),
-    });
-
-
-    const store = useSchoolStore.getState();
-    await store.fetchSchools();
-
-    expect(useSchoolStore.getState().schools).toEqual(mockSchools);
-    expect(useSchoolStore.getState().isLoading).toBe(false);
-  });
-
-  it("should add a new school", async () => {
-    const newSchool = { name: "New School", address: "New Address" };
-    const savedSchool = { id: "2", ...newSchool, countClasses: 0 };
-
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ school: savedSchool }),
-    });
-
-    const store = useSchoolStore.getState();
-    await store.addSchool(newSchool);
-
-    const schools = useSchoolStore.getState().schools;
-    expect(schools).toContainEqual(savedSchool);
-  });
-
-  it("should delete a school and its associated classes", async () => {
-    // Setup state
     useSchoolStore.setState({
-      schools: [{ id: "1", name: "School 1", address: "A1", countClasses: 1 }],
-      classes: [{ id: "c1", schoolId: "1", name: "Class 1", shift: "Morning", academicYear: "2024" }],
+      schools: [],
+      classes: [],
+      isLoading: false,
+      isLoadingMore: false,
+      error: null,
+      schoolPage: 1,
+      hasMoreSchools: true,
+      totalSchools: 0,
+      classPage: 1,
+      hasMoreClasses: true,
     });
-
-    (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
-
-    const store = useSchoolStore.getState();
-    await store.deleteSchool("1");
-
-    expect(useSchoolStore.getState().schools).toHaveLength(0);
-    expect(useSchoolStore.getState().classes).toHaveLength(0);
   });
 
-  it("should delete a class and update school class count", async () => {
-    // Setup state
-    useSchoolStore.setState({
-      schools: [{ id: "1", name: "School 1", address: "A1", countClasses: 1 }],
-      classes: [{ id: "c1", schoolId: "1", name: "Class 1", shift: "Morning", academicYear: "2024" }],
+  describe("Schools", () => {
+    it("should fetch schools and update state", async () => {
+      const mockSchools = [
+        { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
+      ];
+      
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ 
+          schools: mockSchools,
+          meta: { total: 1, hasMore: false }
+        }),
+      });
+
+      await useSchoolStore.getState().fetchSchools();
+
+      const state = useSchoolStore.getState();
+      expect(state.schools).toEqual(mockSchools);
+      expect(state.totalSchools).toBe(1);
+      expect(state.isLoading).toBe(false);
     });
 
-    (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
+    it("should handle fetch schools error", async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
 
-    const store = useSchoolStore.getState();
-    await store.deleteClass("c1");
+      await useSchoolStore.getState().fetchSchools();
 
-    expect(useSchoolStore.getState().classes).toHaveLength(0);
-    expect(useSchoolStore.getState().schools[0].countClasses).toBe(0);
+      const state = useSchoolStore.getState();
+      expect(state.error).toBe("Failed to fetch schools");
+      expect(state.isLoading).toBe(false);
+    });
+
+    it("should add a new school and update totals", async () => {
+      const newSchoolData = { name: "New School", address: "New Address" };
+      const savedSchool = { id: "2", ...newSchoolData, countClasses: 0 };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ school: savedSchool }),
+      });
+
+      await useSchoolStore.getState().addSchool(newSchoolData);
+
+      const state = useSchoolStore.getState();
+      expect(state.schools).toContainEqual(savedSchool);
+      expect(state.totalSchools).toBe(1);
+    });
+
+    it("should handle add school error", async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
+
+      await useSchoolStore.getState().addSchool({ name: "Fail", address: "Fail" });
+
+      expect(useSchoolStore.getState().error).toBe("Failed to add school");
+    });
+
+    it("should update an existing school", async () => {
+      useSchoolStore.setState({
+        schools: [{ id: "1", name: "Old Name", address: "A1", countClasses: 0 }],
+      });
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
+
+      await useSchoolStore.getState().updateSchool("1", { name: "New Name" });
+
+      const school = useSchoolStore.getState().schools[0];
+      expect(school.name).toBe("New Name");
+    });
+
+    it("should handle update school error", async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+
+      await useSchoolStore.getState().updateSchool("1", { name: "Fail" });
+
+      expect(useSchoolStore.getState().error).toBe("Failed to update school");
+    });
+
+    it("should delete a school and its associated classes", async () => {
+      useSchoolStore.setState({
+        schools: [{ id: "1", name: "School 1", address: "A1", countClasses: 1 }],
+        classes: [{ id: "c1", schoolId: "1", name: "Class 1", shift: "Morning", academicYear: "2024" }],
+        totalSchools: 1
+      });
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
+
+      await useSchoolStore.getState().deleteSchool("1");
+
+      const state = useSchoolStore.getState();
+      expect(state.schools).toHaveLength(0);
+      expect(state.classes).toHaveLength(0);
+      expect(state.totalSchools).toBe(0);
+    });
   });
 
-  it("should only update the count of the correct school when deleting a class", async () => {
-    // Setup state
-    useSchoolStore.setState({
-      schools: [
-        { id: "1", name: "S1", address: "A1", countClasses: 1 },
-        { id: "2", name: "S2", address: "A2", countClasses: 1 },
-      ],
-      classes: [
-        { id: "c1", schoolId: "1", name: "C1", shift: "Morning", academicYear: "2024" },
-        { id: "c2", schoolId: "2", name: "C2", shift: "Morning", academicYear: "2024" },
-      ],
+  describe("Classes", () => {
+    it("should fetch classes for a specific school", async () => {
+      const mockClasses = [
+        { id: "c1", name: "Class 1", shift: "Morning", academicYear: "2024", schoolId: "1" },
+      ];
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ 
+          classes: mockClasses,
+          meta: { hasMore: false }
+        }),
+      });
+
+      await useSchoolStore.getState().fetchClasses("1");
+
+      const state = useSchoolStore.getState();
+      expect(state.classes).toEqual(mockClasses);
+      expect(state.isLoading).toBe(false);
     });
 
-    (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
+    it("should append classes when paginating", async () => {
+      useSchoolStore.setState({
+        classes: [{ id: "c1", schoolId: "1", name: "C1", shift: "M", academicYear: "24" }],
+        classPage: 2
+      });
 
-    const store = useSchoolStore.getState();
-    await store.deleteClass("c1");
+      const nextClasses = [
+        { id: "c2", schoolId: "1", name: "C2", shift: "M", academicYear: "24" },
+      ];
 
-    const state = useSchoolStore.getState();
-    expect(state.classes).toHaveLength(1);
-    expect(state.classes[0].id).toBe("c2");
-    expect(state.schools.find((s) => s.id === "1")?.countClasses).toBe(0);
-    expect(state.schools.find((s) => s.id === "2")?.countClasses).toBe(1);
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ 
+          classes: nextClasses,
+          meta: { hasMore: false }
+        }),
+      });
+
+      await useSchoolStore.getState().fetchClasses("1");
+
+      const state = useSchoolStore.getState();
+      expect(state.classes).toHaveLength(2);
+      expect(state.classPage).toBe(3);
+    });
+
+    it("should handle fetch classes error", async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+
+      await useSchoolStore.getState().fetchClasses("1");
+
+      expect(useSchoolStore.getState().error).toBe("Failed to fetch classes");
+    });
+
+    it("should add a new class and update school class count", async () => {
+      useSchoolStore.setState({
+        schools: [{ id: "1", name: "S1", address: "A1", countClasses: 0 }],
+      });
+
+      const newClassData = { schoolId: "1", name: "C1", shift: "Morning", academicYear: "2024" } as any;
+      const savedClass = { id: "c1", ...newClassData };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ class: savedClass }),
+      });
+
+      await useSchoolStore.getState().addClass(newClassData);
+
+      const state = useSchoolStore.getState();
+      expect(state.classes).toContainEqual(savedClass);
+      expect(state.schools[0].countClasses).toBe(1);
+    });
+
+    it("should update a class", async () => {
+      useSchoolStore.setState({
+        classes: [{ id: "c1", schoolId: "1", name: "Old", shift: "M", academicYear: "24" }],
+      });
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true });
+
+      await useSchoolStore.getState().updateClass("c1", { name: "New" });
+
+      expect(useSchoolStore.getState().classes[0].name).toBe("New");
+    });
+
+    it("should handle delete class error", async () => {
+        useSchoolStore.setState({
+          classes: [{ id: "c1", schoolId: "1", name: "C1", shift: "M", academicYear: "24" }],
+        });
+  
+        (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+  
+        await useSchoolStore.getState().deleteClass("c1");
+  
+        expect(useSchoolStore.getState().error).toBe("Failed to delete class");
+      });
   });
 });
