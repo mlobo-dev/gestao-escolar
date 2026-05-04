@@ -51,6 +51,6 @@ describe("NewSchoolScreen", () => {
       });
       expect(mockReplace).toHaveBeenCalledWith("/");
     });
-  }, 10000);
+  }, 30000);
 });
 

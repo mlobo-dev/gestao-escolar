@@ -115,15 +115,6 @@ npm test -- --coverage --coverageReporters="text-summary"
 
 O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantindo manutenibilidade e escalabilidade.
 
-```mermaid
-graph TD
-    UI[Telas e Componentes] --> Hooks[Custom Hooks / Logic]
-    Hooks --> Stores[Zustand Stores]
-    Stores --> Storage[AsyncStorage / Persistence]
-    Hooks --> API[MirageJS / API Mock]
-    API --> Models[Data Models]
-```
-
 ### Development Client vs Expo Go
 A escolha pelo **Development Client** em detrimento ao Expo Go tradicional reflete uma abordagem profissional e alinhada com padrões de mercado para ambientes de produção. Esta estratégia permite lidar com requisitos customizados (como a integração nativa com Keycloak e SDKs bleeding-edge) que excedem as capacidades padrão do Expo Go, garantindo que o ambiente de desenvolvimento seja uma réplica fiel do comportamento nativo final do aplicativo.
 

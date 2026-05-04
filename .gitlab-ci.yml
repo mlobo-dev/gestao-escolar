@@ -1,0 +1,12 @@
+include:
+  - project: 'platform/ci-cd/templates/pipelines/cloudflare-pages'
+    file: 'cloudflare-pages.yml'
+    ref: 'main'
+
+variables:
+  CLOUDFLARE_PROJECT_NAME: "edumanager-app"
+  CF_CUSTOM_DOMAIN: "edumanager.facilitalabs.com.br"
+  CF_OUTPUT_DIR: "dist"
+  CF_BUILD_COMMAND: "npm run build:web"
+  CF_PRODUCTION_BRANCH: "master"
+  NODE_VERSION: "20"
