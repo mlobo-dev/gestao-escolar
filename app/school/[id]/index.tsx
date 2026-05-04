@@ -217,7 +217,7 @@ export default function SchoolDetailsScreen() {
                     <View className="flex-row items-center mt-1.5">
                       <View className="bg-primary/15 px-3 py-1 rounded-full border border-primary/25 mr-3">
                         <Text className="text-primary text-[10px] font-bold uppercase tracking-wider">
-                          {item.shift}
+                          {t(item.shift.toLowerCase().replace("-", "_"))}
                         </Text>
                       </View>
                       <Text className={`text-xs font-medium ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>

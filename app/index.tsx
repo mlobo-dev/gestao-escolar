@@ -172,7 +172,7 @@ export default function SchoolListScreen() {
                       isDark ? "bg-primary/10 border-primary/25" : "bg-primary/10 border-primary/25"
                     }`}>
                       <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
-                        {item.countClasses || 0} {t("classes")}
+                        {item.countClasses || 0} {t("class", { count: item.countClasses || 0 })}
                       </Text>
                     </View>
                   </View>
