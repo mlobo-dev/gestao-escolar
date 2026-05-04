@@ -59,20 +59,12 @@ O projeto foi construído sobre uma base moderna e resiliente, atendendo integra
 - 📊 **Cobertura de Código > 85%**: O projeto atinge um alto nível de maturidade técnica, superando a recomendação de mercado de 80%.
   
 ![Relatório de Cobertura de Testes](./assets/images/coverage.png)
-- **Métricas de Cobertura (Snapshot)**:
-
-```mermaid
-pie title Cobertura Global de Código
-    "Coberto (Statements)" : 84.38
-    "Não Coberto" : 15.62
-```
-
 | Métrica | Cobertura |
 | :--- | :--- |
-| **Statements** | 84.38% |
-| **Lines** | 84.41% |
-| **Functions** | 71.69% |
-| **Branches** | 59.91% |
+| **Statements** | 84.78% |
+| **Lines** | 85.53% |
+| **Functions** | 72.89% |
+| **Branches** | 60.83% |
 
 ---
 
