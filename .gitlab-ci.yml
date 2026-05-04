@@ -1,11 +1,11 @@
 include:
-  - project: 'platform/ci-cd/templates'
-    file: 'pipelines/cloudflare-pages/cloudflare-pages.yml'
-    ref: 'main'
+  - project: "platform/ci-cd/templates"
+    file: "pipelines/cloudflare-pages/cloudflare-pages.yml"
+    ref: "main"
 
 variables:
-  CLOUDFLARE_PROJECT_NAME: "gestao-escolar-app"
-  CF_CUSTOM_DOMAIN: "gestao-escolar.facilitalabs.com.br"
+  CLOUDFLARE_PROJECT_NAME: "edumanager-app"
+  CF_CUSTOM_DOMAIN: "edumanager.facilitalabs.com.br"
   CF_OUTPUT_DIR: "dist"
   CF_BUILD_COMMAND: "npm run build:web"
   CF_PRODUCTION_BRANCH: "master"
