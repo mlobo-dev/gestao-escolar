@@ -3,6 +3,8 @@ import { render, fireEvent } from "@testing-library/react-native";
 import SchoolDetailsScreen from "../../../app/school/[id]/index";
 import { useSchoolStore } from "../../store/useSchoolStore";
 
+const mockPush = jest.fn();
+
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (str: string) => str,
