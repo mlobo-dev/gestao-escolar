@@ -89,18 +89,7 @@ export default function SchoolListScreen() {
       />
       {/* Header Section */}
       <View className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
-        <View className={`flex-row items-center px-5 py-4 rounded-2xl border ${isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"}`}>
-          <Search size={20} color={iconColor} />
-          <TextInput
-            className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
-            placeholder={t("search")}
-            placeholderTextColor={iconColor}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-
-        <View className="flex-row justify-between items-center mt-10">
+        <View className="flex-row justify-between items-center">
           <View className="flex-1">
             <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
               {t("schools")}
@@ -117,6 +106,17 @@ export default function SchoolListScreen() {
           >
             <Plus size={32} color="#020617" />
           </TouchableOpacity>
+        </View>
+
+        <View className={`flex-row items-center px-5 py-4 rounded-2xl border mt-8 ${isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"}`}>
+          <Search size={20} color={iconColor} />
+          <TextInput
+            className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
+            placeholder={t("search")}
+            placeholderTextColor={iconColor}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
         </View>
       </View>
 

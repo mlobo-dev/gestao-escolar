@@ -21,7 +21,7 @@ export default function EditClassScreen() {
 
   const [name, setName] = useState(classData?.name || "");
   const [shift, setShift] = useState<Shift>(classData?.shift || "Morning");
-  const [year, setYear] = useState(classData?.academicYear || "2024");
+  const [year, setYear] = useState(classData?.academicYear || new Date().getFullYear().toString());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleUpdate = async () => {
