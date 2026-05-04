@@ -88,6 +88,10 @@ O projeto utiliza variáveis de ambiente para gerenciar a integração com o Key
 
 > **💡 Dica de Avaliação**: Por padrão, a aplicação está configurada com `EXPO_PUBLIC_SKIP_AUTH=true` para permitir o teste imediato de todas as funcionalidades sem a necessidade de um servidor Keycloak ativo. Caso deseje testar o fluxo real de OIDC, altere esta variável para `false`.
 
+### 🔑 Provisionamento do Keycloak
+Caso deseje configurar um ambiente local ou de staging do Keycloak para testar a integração real, os arquivos de configuração do Realm (usuários, clientes e escopos) estão disponíveis em:
+👉 [**etc/keycloak/realm-export.json**](./etc/keycloak/realm-export.json)
+
 ---
 
 ## 🧪 Testes e Qualidade
