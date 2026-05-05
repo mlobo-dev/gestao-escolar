@@ -4,7 +4,7 @@ import { cssInterop } from "nativewind";
 import * as SplashScreen from "expo-splash-screen";
 
 // Inicialização Global
-import "../global.css"; // CSS global geralmente fica relativo à raiz ou app
+import "../global.css";
 import "@/i18n";
 import "@/mocks/init";
 

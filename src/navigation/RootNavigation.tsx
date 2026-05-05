@@ -15,9 +15,9 @@ export const RootNavigation = () => {
   const { isLoading } = useProtectedRoutes();
 
   // Sincroniza o colorScheme do Context com o NativeWind
-  useEffect(() => {
-    setColorScheme(colorScheme);
-  }, [colorScheme, setColorScheme]);
+  // useEffect(() => {
+  //   setColorScheme(colorScheme);
+  // }, [colorScheme, setColorScheme]);
 
   // Enquanto estiver carregando estado de auth ou navegação, não renderizamos nada
   if (isLoading) return null;
