@@ -138,7 +138,8 @@ O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantin
 │   ├── i18n/             # Configurações de Internacionalização
 │   └── mocks/            # Configuração do MirageJS (Mock Backend)
 ├── etc/                  # Configurações de infraestrutura (Keycloak)
-└── checklist.md          # Relatório de conformidade dos requisitos
+├── docs/                 # Documentação de processo e requisitos
+│   └── checklist.md      # Relatório de conformidade dos requisitos
 ```
 
 ### Development Client vs Expo Go
@@ -165,7 +166,7 @@ O estado global é gerenciado pelo **Zustand** com persistência em **AsyncStora
 
 Para visualizar a lista completa de requisitos mínimos atendidos, tecnologias detalhadas e critérios de avaliação do desafio:
 
-👉 [**Acessar Checklist Completo do Projeto**](./checklist.md)
+👉 [**Acessar Checklist Completo do Projeto**](./docs/checklist.md)
 
 ---
 
