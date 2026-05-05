@@ -114,7 +114,32 @@ npm test -- --coverage --coverageReporters="text-summary"
 
 ## 🏗️ Arquitetura e Decisões Técnicas
 
-O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantindo manutenibilidade e escalabilidade.
+O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantindo manutenibilidade e escalabilidade. A organização é baseada em **Features**, onde cada funcionalidade importante tem seu próprio ecossistema.
+
+### 📁 Estrutura de Pastas
+
+```text
+.
+├── app/                  # Camada de Roteamento (Expo Router)
+│   ├── (auth)/           # Fluxos de autenticação (Login)
+│   ├── school/           # Rotas de Escolas (Listagem, Cadastro, Edição)
+│   ├── class/            # Rotas de Turmas (Listagem, Cadastro, Edição)
+│   └── _layout.tsx       # Root Layout e Injeção de Providers
+├── src/                  # Core da Aplicação
+│   ├── components/       # Componentes de UI genéricos e reutilizáveis
+│   ├── context/          # Provedores de estado (SchoolContext, ThemeContext)
+│   ├── features/         # Módulos de negócio (Feature-First)
+│   │   ├── schools/      # Screens e Componentes específicos de Escolas
+│   │   └── classes/      # Screens e Componentes específicos de Turmas
+│   ├── services/         # Integração com APIs (SchoolService, ClassService)
+│   ├── types/            # Definições de Interfaces e Types TypeScript
+│   ├── constants/        # Enums e configurações globais
+│   ├── hooks/            # Hooks customizados compartilhados
+│   ├── i18n/             # Configurações de Internacionalização
+│   └── mocks/            # Configuração do MirageJS (Mock Backend)
+├── etc/                  # Configurações de infraestrutura (Keycloak)
+└── checklist.md          # Relatório de conformidade dos requisitos
+```
 
 ### Development Client vs Expo Go
 A escolha pelo **Development Client** em detrimento ao Expo Go tradicional reflete uma abordagem profissional e alinhada com padrões de mercado para ambientes de produção. Esta estratégia permite lidar com requisitos customizados (como a integração nativa com Keycloak e SDKs bleeding-edge) que excedem as capacidades padrão do Expo Go, garantindo que o ambiente de desenvolvimento seja uma réplica fiel do comportamento nativo final do aplicativo.
