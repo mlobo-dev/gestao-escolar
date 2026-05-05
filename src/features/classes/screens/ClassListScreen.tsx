@@ -24,6 +24,7 @@ import { useThemeContext } from "../../../context/ThemeContext";
 import { ConfirmationModal } from "../../../components/ConfirmationModal";
 import { useTranslation } from "react-i18next";
 import { ClassCard } from "../components/ClassCard";
+import { SearchInput } from "../../../components/common/SearchInput";
 
 export const ClassListScreen = () => {
   const { t } = useTranslation();
@@ -161,18 +162,13 @@ export const ClassListScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className={`flex-row items-center px-5 py-3.5 rounded-2xl border mt-6 ${
-          isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"
-        }`}>
-          <Search size={18} color={iconColor} />
-          <TextInput
-            className={`flex-1 ml-3 text-base font-medium ${isDark ? "text-white" : "text-slate-900"}`}
-            placeholder={t("search")}
-            placeholderTextColor={iconColor}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+        <SearchInput
+          placeholder={t("search")}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          containerClassName="mt-6"
+          className="text-base"
+        />
       </View>
 
       <View className="flex-1 items-center px-4 mt-4">
@@ -201,8 +197,6 @@ export const ClassListScreen = () => {
                   item={item}
                   onEdit={(classId) => router.push(`/school/${id}/class/${classId}/edit`)}
                   onDelete={handleDeleteClass}
-                  isDark={isDark}
-                  iconColor={iconColor}
                 />
               )}
               onEndReached={() => {
