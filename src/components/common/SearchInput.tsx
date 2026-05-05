@@ -9,6 +9,7 @@ interface SearchInputProps extends TextInputProps {
 
 export const SearchInput: React.FC<SearchInputProps> = ({ 
   containerClassName = "",
+  className: inputClassName = "",
   ...props 
 }) => {
   const { colorScheme } = useThemeContext();
@@ -21,7 +22,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     } ${containerClassName}`}>
       <Search size={20} color={iconColor} />
       <TextInput
-        className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
+        className={`flex-1 ml-3 text-lg font-medium ${
+          isDark ? "text-white" : "text-slate-900"
+        } ${inputClassName}`}
         placeholderTextColor={iconColor}
         {...props}
       />

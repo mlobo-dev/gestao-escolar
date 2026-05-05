@@ -8,4 +8,4 @@ if (process.env.EXPO_PUBLIC_PLATFORM === "web") {
   config.resolver.resolverMainFields = ["browser", "module", "main"];
 }
 
-module.exports = withNativeWind(config, { input: "./global.css" });
+module.exports = withNativeWind(config, { input: "./src/styles/global.css" });

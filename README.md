@@ -127,6 +127,7 @@ O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantin
 │   └── _layout.tsx       # Root Layout e Injeção de Providers
 ├── src/                  # Core da Aplicação
 │   ├── components/       # Componentes de UI genéricos e reutilizáveis
+│   ├── styles/           # Estilos globais e configurações do NativeWind
 │   ├── context/          # Provedores de estado (SchoolContext, ThemeContext)
 │   ├── features/         # Módulos de negócio (Feature-First)
 │   │   ├── schools/      # Screens e Componentes específicos de Escolas
