@@ -1,6 +1,13 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
+import { useThemeContext } from "../../context/ThemeContext";
+
+jest.mock("../../context/ThemeContext", () => ({
+  useThemeContext: jest.fn(() => ({
+    colorScheme: "light",
+  })),
+}));
 
 describe("ConfirmationModal", () => {
   const mockOnClose = jest.fn();

@@ -1,11 +1,11 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { ThemeToggle } from "../../components/ThemeToggle";
-import { useThemeStore } from "../../store/useThemeStore";
+import { useThemeContext } from "../../context/ThemeContext";
 
-// Mock the store
-jest.mock("../../store/useThemeStore", () => ({
-  useThemeStore: jest.fn(),
+// Mock the context
+jest.mock("../../context/ThemeContext", () => ({
+  useThemeContext: jest.fn(),
 }));
 
 describe("ThemeToggle", () => {
@@ -13,7 +13,7 @@ describe("ThemeToggle", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useThemeStore as unknown as jest.Mock).mockReturnValue({
+    (useThemeContext as unknown as jest.Mock).mockReturnValue({
       colorScheme: "light",
       toggleTheme: mockToggleTheme,
     });
@@ -26,7 +26,7 @@ describe("ThemeToggle", () => {
   });
 
   it("renders correctly in dark mode", () => {
-    (useThemeStore as unknown as jest.Mock).mockReturnValue({
+    (useThemeContext as unknown as jest.Mock).mockReturnValue({
       colorScheme: "dark",
       toggleTheme: mockToggleTheme,
     });
