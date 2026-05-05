@@ -23,6 +23,7 @@ import { ThemeToggle } from "../../../components/ThemeToggle";
 import { useAuth } from "../../../context/AuthContext";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { SchoolCard } from "../components/SchoolCard";
+import { SearchInput } from "../../../components/common/SearchInput";
 
 export const SchoolListScreen = () => {
   const { t } = useTranslation();
@@ -92,16 +93,12 @@ export const SchoolListScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className={`flex-row items-center px-5 py-4 rounded-2xl border mt-8 ${isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"}`}>
-          <Search size={20} color={iconColor} />
-          <TextInput
-            className={`flex-1 ml-3 text-lg font-medium ${isDark ? "text-white" : "text-slate-900"}`}
-            placeholder={t("search")}
-            placeholderTextColor={iconColor}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+        <SearchInput
+          placeholder={t("search")}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          containerClassName="mt-8"
+        />
       </View>
 
       <View className="flex-1 items-center">
@@ -127,8 +124,6 @@ export const SchoolListScreen = () => {
                 <SchoolCard 
                   item={item} 
                   onPress={(id) => router.push(`/school/${id}`)}
-                  isDark={isDark}
-                  iconColor={iconColor}
                 />
               )}
             />
