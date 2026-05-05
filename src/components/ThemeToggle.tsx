@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Sun, Moon } from "lucide-react-native";
-import { useThemeStore } from "../store/useThemeStore";
+import { useThemeContext } from "../context/ThemeContext";
 
 export function ThemeToggle() {
-  // Gerenciamento de tema manual via Store para evitar conflitos nativos
-  const { colorScheme, toggleTheme } = useThemeStore();
+  // Gerenciamento de tema manual via Context para evitar conflitos nativos
+  const { colorScheme, toggleTheme } = useThemeContext();
   const isDark = colorScheme === "dark";
 
   return (

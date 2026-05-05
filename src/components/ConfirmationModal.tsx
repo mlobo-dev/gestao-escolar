@@ -3,7 +3,7 @@ import { Modal, View, TouchableOpacity, Platform } from "react-native";
 import { Text } from "react-native";
 import { Trash2, X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
-import { useThemeStore } from "../store/useThemeStore";
+import { useThemeContext } from "../context/ThemeContext";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export const ConfirmationModal = ({
   cancelText,
 }: ConfirmationModalProps) => {
   const { t } = useTranslation();
-  const { colorScheme } = useThemeStore();
+  const { colorScheme } = useThemeContext();
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 

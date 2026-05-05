@@ -22,6 +22,7 @@ module.exports = function (api) {
         "module-resolver",
         {
           alias: {
+            "@": "./src",
             "../../../packages/react-native-worklets-stub": "react-native-worklets",
           },
         },
