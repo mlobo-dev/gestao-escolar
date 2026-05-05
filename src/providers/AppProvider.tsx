@@ -3,6 +3,7 @@ import { GluestackUIProvider } from "@gluestack-ui/nativewind";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SchoolProvider } from "@/context/SchoolContext";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -13,14 +14,16 @@ interface AppProviderProps {
  */
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <SchoolProvider>
-          <GluestackUIProvider>
-            {children}
-          </GluestackUIProvider>
-        </SchoolProvider>
-      </ThemeProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ThemeProvider>
+          <SchoolProvider>
+            <GluestackUIProvider>
+              {children}
+            </GluestackUIProvider>
+          </SchoolProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 };
