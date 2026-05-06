@@ -121,25 +121,37 @@ O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantin
 ```text
 .
 ├── app/                  # Camada de Roteamento (Expo Router)
-│   ├── (auth)/           # Fluxos de autenticação (Login)
-│   ├── school/           # Rotas de Escolas (Listagem, Cadastro, Edição)
-│   ├── class/            # Rotas de Turmas (Listagem, Cadastro, Edição)
+│   ├── index.tsx         # Listagem de Escolas (Home)
+│   ├── login.tsx         # Tela de Login
+│   ├── auth.tsx          # Callback de Autenticação (OIDC)
+│   ├── school/           # Rotas de Escolas
+│   │   ├── new.tsx       # Cadastro de Escola
+│   │   └── [id]/         # Detalhes e Turmas da Escola
+│   │       ├── index.tsx # Detalhes/Listagem de Turmas
+│   │       ├── edit.tsx  # Edição da Escola
+│   │       └── class/    # Sub-rotas de Turmas (new, [classId])
 │   └── _layout.tsx       # Root Layout e Injeção de Providers
 ├── src/                  # Core da Aplicação
 │   ├── components/       # Componentes de UI genéricos e reutilizáveis
-│   ├── context/          # Provedores de estado (SchoolContext, ThemeContext)
+│   ├── styles/           # Estilos globais e configurações do NativeWind
 │   ├── features/         # Módulos de negócio (Feature-First)
-│   │   ├── schools/      # Screens e Componentes específicos de Escolas
-│   │   └── classes/      # Screens e Componentes específicos de Turmas
-│   ├── services/         # Integração com APIs (SchoolService, ClassService)
-│   ├── types/            # Definições de Interfaces e Types TypeScript
-│   ├── constants/        # Enums e configurações globais
+│   │   ├── schools/      # Telas e Componentes de Escolas
+│   │   ├── classes/      # Telas e Componentes de Turmas
+│   │   └── auth/         # Telas e Lógica de Autenticação
+│   ├── context/          # Provedores de estado (School, Theme, Auth)
+│   ├── services/         # Integração com APIs (Service Layer)
 │   ├── hooks/            # Hooks customizados compartilhados
+│   ├── navigation/       # Lógica de navegação e RootNavigation
+│   ├── providers/        # Agregador de Providers (AppProvider)
 │   ├── i18n/             # Configurações de Internacionalização
-│   └── mocks/            # Configuração do MirageJS (Mock Backend)
+│   ├── mocks/            # Configuração do MirageJS (Backend Mock)
+│   ├── utils/            # Funções utilitárias e helpers
+│   ├── types/            # Definições de Interfaces TypeScript
+│   ├── constants/        # Enums e configurações globais
+│   └── __tests__/        # Testes unitários e mocks
 ├── etc/                  # Configurações de infraestrutura (Keycloak)
-├── docs/                 # Documentação de processo e requisitos
-│   └── checklist.md      # Relatório de conformidade dos requisitos
+└── docs/                 # Documentação de processo e requisitos
+    └── checklist.md      # Relatório de conformidade dos requisitos
 ```
 
 ### Development Client vs Expo Go
