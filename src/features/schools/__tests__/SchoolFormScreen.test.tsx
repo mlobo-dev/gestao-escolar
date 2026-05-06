@@ -67,18 +67,21 @@ describe("SchoolFormScreen", () => {
   it("calls updateSchool and navigates back on success", async () => {
     const { useLocalSearchParams } = require("expo-router");
     (useLocalSearchParams as jest.Mock).mockReturnValue({ id: "1" });
-    
+
     const { getByDisplayValue, getByTestId } = render(<SchoolFormScreen />);
 
     const nameInput = getByDisplayValue("Old School");
     fireEvent.changeText(nameInput, "Updated School");
-    
+
     fireEvent.press(getByTestId("save-school-button"));
 
     await waitFor(() => {
-      expect(mockUpdateSchool).toHaveBeenCalledWith("1", expect.objectContaining({
-        name: "Updated School",
-      }));
+      expect(mockUpdateSchool).toHaveBeenCalledWith(
+        "1",
+        expect.objectContaining({
+          name: "Updated School",
+        })
+      );
       expect(mockBack).toHaveBeenCalled();
     });
   });

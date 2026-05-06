@@ -1,6 +1,10 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { School as SchoolIcon, MapPin, ChevronRight } from "lucide-react-native";
+import {
+  School as SchoolIcon,
+  MapPin,
+  ChevronRight,
+} from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { School } from "../../../types";
 import { BaseCard } from "../../../components/common/BaseCard";
@@ -21,34 +25,49 @@ export const SchoolCard: React.FC<SchoolCardProps> = ({ item, onPress }) => {
     <BaseCard
       onPress={() => onPress(item.id)}
       leftContent={
-        <View className={`w-16 h-16 rounded-2xl items-center justify-center border ${
-          isDark ? "bg-white/5 border-white/10" : "bg-primary/10 border-primary/20"
-        }`}>
+        <View
+          className={`w-16 h-16 rounded-2xl items-center justify-center border ${
+            isDark
+              ? "bg-white/5 border-white/10"
+              : "bg-primary/10 border-primary/20"
+          }`}
+        >
           <SchoolIcon size={28} color={isDark ? "#10b981" : "#1a56db"} />
         </View>
       }
       rightContent={
-        <View className={`w-10 h-10 rounded-full items-center justify-center ${
-          isDark ? "bg-white/5" : "bg-slate-50"
-        }`}>
+        <View
+          className={`w-10 h-10 rounded-full items-center justify-center ${
+            isDark ? "bg-white/5" : "bg-slate-50"
+          }`}
+        >
           <ChevronRight size={20} color={iconColor} />
         </View>
       }
     >
-      <Text className={`text-xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+      <Text
+        className={`text-xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
+      >
         {item.name}
       </Text>
       <View className="flex-row items-center mt-2">
         <MapPin size={14} color={iconColor} />
-        <Text className={`text-sm ml-1.5 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+        <Text
+          className={`text-sm ml-1.5 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}
+        >
           {item.address}
         </Text>
       </View>
-      <View className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
-        isDark ? "bg-primary/10 border-primary/25" : "bg-primary/10 border-primary/25"
-      }`}>
+      <View
+        className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
+          isDark
+            ? "bg-primary/10 border-primary/25"
+            : "bg-primary/10 border-primary/25"
+        }`}
+      >
         <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
-          {item.countClasses || 0} {t("class", { count: item.countClasses || 0 })}
+          {item.countClasses || 0}{" "}
+          {t("class", { count: item.countClasses || 0 })}
         </Text>
       </View>
     </BaseCard>

@@ -32,7 +32,6 @@ describe("ConfirmationModal", () => {
 
     fireEvent.press(getByText("cancel"));
     expect(mockOnClose).toHaveBeenCalled();
-
   });
 
   it("does not render when closed", () => {

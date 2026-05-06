@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import { 
+import {
   useFonts,
   Outfit_400Regular,
   Outfit_600SemiBold,
-  Outfit_700Bold 
+  Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 
 /**

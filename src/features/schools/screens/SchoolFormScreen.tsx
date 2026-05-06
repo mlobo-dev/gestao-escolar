@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+} from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
@@ -49,7 +55,9 @@ export const SchoolFormScreen = () => {
           title: isEditing ? t("edit_school") : t("add_school"),
           headerLeft: () => (
             <TouchableOpacity
-              onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
+              onPress={() =>
+                router.canGoBack() ? router.back() : router.replace("/")
+              }
               className="mr-4"
             >
               <ChevronLeft size={24} color="#f8fafc" />
@@ -64,14 +72,18 @@ export const SchoolFormScreen = () => {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+              <Text
+                className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}
+              >
                 {t("name")}
               </Text>
               <TextInput
                 testID="school-name-input"
                 className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
                 placeholder={t("name_placeholder")}
-                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
+                placeholderTextColor={
+                  isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"
+                }
                 value={name}
                 onChangeText={setName}
               />
@@ -83,14 +95,18 @@ export const SchoolFormScreen = () => {
             </View>
 
             <View className="mb-10">
-              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+              <Text
+                className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}
+              >
                 {t("address")}
               </Text>
               <TextInput
                 testID="school-address-input"
                 className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor} min-h-[120px]`}
                 placeholder={t("address_placeholder")}
-                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
+                placeholderTextColor={
+                  isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"
+                }
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -114,7 +130,13 @@ export const SchoolFormScreen = () => {
             >
               <Save size={22} color="#020617" />
               <Text className="text-[#020617] font-bold text-xl ml-3">
-                {isSubmitting ? (isEditing ? t("updating") : t("saving")) : (isEditing ? t("update") : t("save"))}
+                {isSubmitting
+                  ? isEditing
+                    ? t("updating")
+                    : t("saving")
+                  : isEditing
+                    ? t("update")
+                    : t("save")}
               </Text>
             </TouchableOpacity>
           </View>

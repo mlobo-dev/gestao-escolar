@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ThemeContextType {
@@ -11,8 +18,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const STORAGE_KEY = "theme-storage";
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [colorScheme, setColorSchemeState] = useState<"light" | "dark">("light");
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [colorScheme, setColorSchemeState] = useState<"light" | "dark">(
+    "light"
+  );
 
   useEffect(() => {
     const loadTheme = async () => {
@@ -32,7 +43,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const setTheme = useCallback(async (theme: "light" | "dark") => {
     setColorSchemeState(theme);
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { colorScheme: theme } }));
+      await AsyncStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ state: { colorScheme: theme } })
+      );
     } catch (e) {
       console.error("Failed to save theme", e);
     }
@@ -43,13 +57,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(newTheme);
   }, [colorScheme, setTheme]);
 
-  const value = useMemo(() => ({
-    colorScheme,
-    toggleTheme,
-    setTheme,
-  }), [colorScheme, toggleTheme, setTheme]);
+  const value = useMemo(
+    () => ({
+      colorScheme,
+      toggleTheme,
+      setTheme,
+    }),
+    [colorScheme, toggleTheme, setTheme]
+  );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 };
 
 export const useThemeContext = () => {

@@ -23,7 +23,7 @@ export const useProtectedRoutes = () => {
     // 1. Se não houver usuário e não estiver na tela de login -> Vai para o login
     if (!user && !isAtLogin) {
       router.replace("/login");
-    } 
+    }
     // 2. Se houver usuário e estiver na tela de login -> Vai para o home
     else if (user && isAtLogin) {
       router.replace("/");

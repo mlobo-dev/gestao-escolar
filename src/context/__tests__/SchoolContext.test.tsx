@@ -26,12 +26,12 @@ describe("SchoolContext", () => {
       const mockSchools = [
         { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
       ];
-      
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           schools: mockSchools,
-          meta: { total: 1, hasMore: false }
+          meta: { total: 1, hasMore: false },
         }),
       });
 
@@ -46,7 +46,9 @@ describe("SchoolContext", () => {
     });
 
     it("should handle fetch schools error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(
+        new Error("Network error")
+      );
 
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
@@ -88,8 +90,13 @@ describe("SchoolContext", () => {
     });
 
     it("should update an existing school", async () => {
-      const initialSchool = { id: "1", name: "Old Name", address: "A1", countClasses: 0 };
-      
+      const initialSchool = {
+        id: "1",
+        name: "Old Name",
+        address: "A1",
+        countClasses: 0,
+      };
+
       // Setup state through addSchool mock to ensure it's in the state
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
@@ -102,10 +109,10 @@ describe("SchoolContext", () => {
         await result.current.addSchool({ name: "Old Name", address: "A1" });
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({ 
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => ({ success: true })
+        json: async () => ({ success: true }),
       });
 
       await act(async () => {
@@ -139,10 +146,10 @@ describe("SchoolContext", () => {
         await result.current.addSchool(school);
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({ 
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => ({ success: true })
+        json: async () => ({ success: true }),
       });
 
       await act(async () => {
@@ -157,14 +164,20 @@ describe("SchoolContext", () => {
   describe("Classes", () => {
     it("should fetch classes for a specific school", async () => {
       const mockClasses = [
-        { id: "c1", name: "Class 1", shift: "Morning", academicYear: "2024", schoolId: "1" },
+        {
+          id: "c1",
+          name: "Class 1",
+          shift: "Morning",
+          academicYear: "2024",
+          schoolId: "1",
+        },
       ];
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           classes: mockClasses,
-          meta: { hasMore: false }
+          meta: { hasMore: false },
         }),
       });
 
@@ -183,9 +196,9 @@ describe("SchoolContext", () => {
       // First page
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           classes: [{ id: "c1", name: "C1", schoolId: "1" }],
-          meta: { hasMore: true }
+          meta: { hasMore: true },
         }),
       });
 
@@ -196,9 +209,9 @@ describe("SchoolContext", () => {
       // Second page
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           classes: [{ id: "c2", name: "C2", schoolId: "1" }],
-          meta: { hasMore: false }
+          meta: { hasMore: false },
         }),
       });
 
@@ -233,7 +246,12 @@ describe("SchoolContext", () => {
         await result.current.addSchool(school);
       });
 
-      const newClassData = { schoolId: "1", name: "C1", shift: "Morning", academicYear: "2024" } as any;
+      const newClassData = {
+        schoolId: "1",
+        name: "C1",
+        shift: "Morning",
+        academicYear: "2024",
+      } as any;
       const savedClass = { id: "c1", ...newClassData };
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -250,12 +268,18 @@ describe("SchoolContext", () => {
     });
 
     it("should update a class", async () => {
-      const initialClass = { id: "c1", schoolId: "1", name: "Old", shift: "Morning", academicYear: "2024" };
+      const initialClass = {
+        id: "c1",
+        schoolId: "1",
+        name: "Old",
+        shift: "Morning",
+        academicYear: "2024",
+      };
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           classes: [initialClass],
-          meta: { hasMore: false }
+          meta: { hasMore: false },
         }),
       });
 
@@ -265,10 +289,10 @@ describe("SchoolContext", () => {
         await result.current.fetchClasses("1");
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({ 
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => ({ success: true })
+        json: async () => ({ success: true }),
       });
 
       await act(async () => {

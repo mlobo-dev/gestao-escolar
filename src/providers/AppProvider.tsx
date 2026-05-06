@@ -18,9 +18,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       <AuthProvider>
         <ThemeProvider>
           <SchoolProvider>
-            <GluestackUIProvider>
-              {children}
-            </GluestackUIProvider>
+            <GluestackUIProvider>{children}</GluestackUIProvider>
           </SchoolProvider>
         </ThemeProvider>
       </AuthProvider>

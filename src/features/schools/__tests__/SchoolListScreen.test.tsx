@@ -23,7 +23,6 @@ jest.mock("../../../context/ThemeContext", () => ({
   })),
 }));
 
-
 const mockPush = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -45,7 +44,6 @@ describe("SchoolListScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
 
   it("renders the list of schools and their class counts", () => {
     const { getByText } = render(<SchoolListScreen />);

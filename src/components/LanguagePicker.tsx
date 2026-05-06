@@ -1,13 +1,13 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Text } from "@gluestack-ui/nativewind";
 import { useTranslation } from "react-i18next";
-import Animated, { 
-  useAnimatedStyle, 
-  withSpring, 
-  withSequence, 
+import {
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
   withTiming,
-  useSharedValue 
+  useSharedValue,
 } from "react-native-reanimated";
 
 export const LanguagePicker = () => {
@@ -15,20 +15,12 @@ export const LanguagePicker = () => {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
-
   const changeLanguage = (lng: string) => {
     if (i18n.language === lng) return;
 
     // Animation trigger
-    scale.value = withSequence(
-      withSpring(1.2),
-      withSpring(1)
-    );
-    
+    scale.value = withSequence(withSpring(1.2), withSpring(1));
+
     opacity.value = withTiming(0.5, { duration: 100 }, () => {
       opacity.value = withTiming(1, { duration: 200 });
     });

@@ -20,17 +20,20 @@ const KEYCLOAK_URL = process.env.EXPO_PUBLIC_KEYCLOAK_URL;
 const REALM = process.env.EXPO_PUBLIC_KEYCLOAK_REALM;
 const CLIENT_ID = process.env.EXPO_PUBLIC_KEYCLOAK_CLIENT_ID;
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const discovery = AuthSession.useAutoDiscovery(`${KEYCLOAK_URL}realms/${REALM}`);
-  
+  const discovery = AuthSession.useAutoDiscovery(
+    `${KEYCLOAK_URL}realms/${REALM}`
+  );
+
   const redirectUri = AuthSession.makeRedirectUri({
     scheme: "gestao-escolar",
     path: "auth",
   });
-
 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
@@ -42,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     discovery
   );
 
-  const isSkipAuth = process.env.EXPO_PUBLIC_SKIP_AUTH === 'true';
+  const isSkipAuth = process.env.EXPO_PUBLIC_SKIP_AUTH === "true";
 
   useEffect(() => {
     if (isSkipAuth) {
@@ -71,9 +74,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, isLoading: isLoading || (!isSkipAuth && !request) }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signIn,
+        signOut,
+        isLoading: isLoading || (!isSkipAuth && !request),
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
-
