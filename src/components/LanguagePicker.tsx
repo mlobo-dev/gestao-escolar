@@ -3,7 +3,6 @@ import { TouchableOpacity } from "react-native";
 import { Text } from "@gluestack-ui/nativewind";
 import { useTranslation } from "react-i18next";
 import {
-  useAnimatedStyle,
   withSpring,
   withSequence,
   withTiming,

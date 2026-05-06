@@ -50,15 +50,19 @@ export const ClassFormScreen = () => {
       setIsSubmitting(false);
       router.back();
     } else {
-      await addClass({
-        schoolId: schoolId!,
-        name,
-        shift,
-        academicYear: year,
-      });
-      setIsSubmitting(false);
-      router.back();
+      await addSchoolClass();
     }
+  };
+
+  const addSchoolClass = async () => {
+    await addClass({
+      schoolId: schoolId!,
+      name,
+      shift,
+      academicYear: year,
+    });
+    setIsSubmitting(false);
+    router.back();
   };
 
   if (isEditing && !classData) return null;
@@ -67,6 +71,13 @@ export const ClassFormScreen = () => {
   const inputBg = isDark ? "bg-card" : "bg-slate-50";
   const inputColor = isDark ? "text-white" : "text-slate-900";
   const borderColor = isDark ? "border-white/10" : "border-slate-200";
+
+  const getButtonText = () => {
+    if (isSubmitting) {
+      return isEditing ? t("updating") : t("saving");
+    }
+    return isEditing ? t("update") : t("save");
+  };
 
   return (
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
@@ -179,13 +190,7 @@ export const ClassFormScreen = () => {
             >
               <Save size={22} color="#020617" />
               <Text className="text-[#020617] font-bold text-xl ml-3">
-                {isSubmitting
-                  ? isEditing
-                    ? t("updating")
-                    : t("saving")
-                  : isEditing
-                    ? t("update")
-                    : t("save")}
+                {getButtonText()}
               </Text>
             </TouchableOpacity>
           </View>

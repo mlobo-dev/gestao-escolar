@@ -1,11 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
 interface AuthContextType {
-  user: any | null;
+  user: { name: string; email: string } | null;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
   isLoading: boolean;
@@ -23,7 +29,9 @@ const CLIENT_ID = process.env.EXPO_PUBLIC_KEYCLOAK_CLIENT_ID;
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const discovery = AuthSession.useAutoDiscovery(
@@ -55,7 +63,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (response?.type === "success") {
-      const { code } = response.params;
       setUser({ name: "User Admin", email: "admin@escola.com" });
     }
     setIsLoading(false);
@@ -73,16 +80,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(null);
   };
 
+  const contextValue = useMemo(
+    () => ({
+      user,
+      signIn,
+      signOut,
+      isLoading: isLoading || (!isSkipAuth && !request),
+    }),
+    [user, signIn, signOut, isLoading, isSkipAuth, request]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        signIn,
-        signOut,
-        isLoading: isLoading || (!isSkipAuth && !request),
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

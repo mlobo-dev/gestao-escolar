@@ -2,7 +2,6 @@ import React from "react";
 import { View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useColorScheme } from "nativewind";
 import { useThemeContext } from "@/context/ThemeContext";
 import { useProtectedRoutes } from "@/hooks/useProtectedRoutes";
 
@@ -18,6 +17,7 @@ export const RootNavigation = () => {
 
   return (
     <View
+      testID="root-navigation-container"
       key={`theme-wrapper-${colorScheme}`}
       style={{ flex: 1 }}
       className={colorScheme === "dark" ? "dark" : ""}

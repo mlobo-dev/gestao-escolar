@@ -48,6 +48,13 @@ export const SchoolFormScreen = () => {
   const inputColor = isDark ? "text-white" : "text-slate-900";
   const borderColor = isDark ? "border-white/10" : "border-slate-200";
 
+  const getButtonText = () => {
+    if (isSubmitting) {
+      return isEditing ? t("updating") : t("saving");
+    }
+    return isEditing ? t("update") : t("save");
+  };
+
   return (
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
@@ -130,13 +137,7 @@ export const SchoolFormScreen = () => {
             >
               <Save size={22} color="#020617" />
               <Text className="text-[#020617] font-bold text-xl ml-3">
-                {isSubmitting
-                  ? isEditing
-                    ? t("updating")
-                    : t("saving")
-                  : isEditing
-                    ? t("update")
-                    : t("save")}
+                {getButtonText()}
               </Text>
             </TouchableOpacity>
           </View>

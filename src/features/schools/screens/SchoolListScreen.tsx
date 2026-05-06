@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   Image,
@@ -11,12 +10,7 @@ import {
 import { useRouter, Stack } from "expo-router";
 import LogoImg from "../../../../assets/images/logo.png";
 import { useSchools } from "../../../hooks/useSchools";
-import {
-  Search,
-  Plus,
-  School as SchoolIcon,
-  LogOut,
-} from "lucide-react-native";
+import { Plus, School as SchoolIcon, LogOut } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { LanguagePicker } from "../../../components/LanguagePicker";
 import { ThemeToggle } from "../../../components/ThemeToggle";
@@ -43,7 +37,6 @@ export const SchoolListScreen = () => {
 
   const { colorScheme } = useThemeContext();
   const isDark = colorScheme === "dark";
-  const iconColor = isDark ? "#94a3b8" : "#64748b";
 
   return (
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
