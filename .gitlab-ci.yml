@@ -4,7 +4,6 @@ include:
     ref: 'main'
 
 variables:
-  SONAR_ENABLED: "true" # Ativa a análise do SonarQube
   CLOUDFLARE_PROJECT_NAME: "edumanager-app"
   CF_CUSTOM_DOMAIN: "edumanager.facilitalabs.com.br"
   CF_OUTPUT_DIR: "dist"
