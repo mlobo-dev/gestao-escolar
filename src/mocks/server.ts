@@ -40,13 +40,10 @@ export function makeServer({ environment = "development" } = {}) {
       });
     },
 
-
-
     routes() {
       this.namespace = "api";
 
       this.passthrough(`${process.env.EXPO_PUBLIC_KEYCLOAK_URL}**`);
-
 
       this.get("/schools", (schema) => {
         const allSchools = schema.all("school").models;
@@ -57,15 +54,17 @@ export function makeServer({ environment = "development" } = {}) {
           schools: allSchools.map((school) => ({
             ...school.attrs,
             id: school.id,
-            countClasses: classes.filter((c) => String(c.schoolId || c.attrs?.schoolId) === String(school.id)).length,
+            countClasses: classes.filter(
+              (c) =>
+                String(c.schoolId || c.attrs?.schoolId) === String(school.id)
+            ).length,
           })),
           meta: {
             total,
             hasMore: false,
-          }
+          },
         };
       });
-
 
       this.post("/schools", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
@@ -86,38 +85,36 @@ export function makeServer({ environment = "development" } = {}) {
         return { success: true };
       });
 
-
       this.get("/classes", (schema, request) => {
         const schoolId = request.queryParams.schoolId;
-        const page = parseInt(request.queryParams.page || "1");
-        const limit = parseInt(request.queryParams.limit || "10");
+        const page = Number.parseInt(request.queryParams.page || "1");
+        const limit = Number.parseInt(request.queryParams.limit || "10");
         const start = (page - 1) * limit;
         const end = start + limit;
 
         let allModelClasses = schema.all("class").models;
         let filteredClasses = allModelClasses;
-        
+
         if (schoolId) {
           filteredClasses = allModelClasses.filter(
             (c) => String(c.schoolId || c.attrs?.schoolId) === String(schoolId)
           );
         }
-        
+
         const classes = filteredClasses.slice(start, end);
-        
+
         return {
-          classes: classes.map(c => ({
+          classes: classes.map((c) => ({
             ...c.attrs,
             id: c.id,
-            schoolId: c.schoolId || c.attrs?.schoolId
+            schoolId: c.schoolId || c.attrs?.schoolId,
           })),
           meta: {
             total: filteredClasses.length,
             hasMore: end < filteredClasses.length,
-          }
+          },
         };
       });
-
 
       this.post("/classes", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
@@ -140,7 +137,6 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.passthrough();
     },
-
   });
 
   return server;

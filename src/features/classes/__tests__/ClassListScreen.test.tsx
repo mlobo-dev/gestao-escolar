@@ -9,17 +9,37 @@ const mockPush = jest.fn();
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { changeLanguage: jest.fn() }
-  })
+    i18n: { changeLanguage: jest.fn() },
+  }),
 }));
 
 const mockClasses = [
-  { id: "c1", name: "Matemática A", shift: "Morning", academicYear: new Date().getFullYear().toString(), schoolId: "1" },
-  { id: "c2", name: "Português B", shift: "Afternoon", academicYear: new Date().getFullYear().toString(), schoolId: "1" },
-  { id: "c3", name: "Ciências C", shift: "Night", academicYear: (new Date().getFullYear() + 1).toString(), schoolId: "1" },
+  {
+    id: "c1",
+    name: "Matemática A",
+    shift: "Morning",
+    academicYear: new Date().getFullYear().toString(),
+    schoolId: "1",
+  },
+  {
+    id: "c2",
+    name: "Português B",
+    shift: "Afternoon",
+    academicYear: new Date().getFullYear().toString(),
+    schoolId: "1",
+  },
+  {
+    id: "c3",
+    name: "Ciências C",
+    shift: "Night",
+    academicYear: (new Date().getFullYear() + 1).toString(),
+    schoolId: "1",
+  },
 ];
 
-const mockSchools = [{ id: "1", name: "Escola Teste", address: "Rua Teste", countClasses: 3 }];
+const mockSchools = [
+  { id: "1", name: "Escola Teste", address: "Rua Teste", countClasses: 3 },
+];
 
 jest.mock("../../../hooks/useClasses", () => ({
   useClasses: jest.fn(() => ({
@@ -64,8 +84,10 @@ describe("ClassListScreen (Search)", () => {
   });
 
   it("deve filtrar turmas por nome", () => {
-    const { getByPlaceholderText, getByText, queryByText } = render(<ClassListScreen />);
-    
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <ClassListScreen />
+    );
+
     const input = getByPlaceholderText("search");
     fireEvent.changeText(input, "Matemática");
 

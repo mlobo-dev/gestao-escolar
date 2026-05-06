@@ -38,13 +38,14 @@ export class ErrorBoundary extends Component<Props, State> {
             <View className="w-20 h-20 bg-destructive/20 rounded-full items-center justify-center mb-6">
               <AlertCircle size={40} color="#ef4444" />
             </View>
-            
+
             <Text className="text-white text-2xl font-bold text-center mb-4">
               Ops! Algo deu errado
             </Text>
-            
+
             <Text className="text-slate-400 text-center mb-8 leading-6">
-              Ocorreu um erro inesperado na aplicação. Por favor, tente reiniciar.
+              Ocorreu um erro inesperado na aplicação. Por favor, tente
+              reiniciar.
             </Text>
 
             <TouchableOpacity
@@ -52,12 +53,17 @@ export class ErrorBoundary extends Component<Props, State> {
               className="bg-primary px-8 py-4 rounded-2xl flex-row items-center justify-center w-full"
             >
               <RefreshCcw size={20} color="#020617" className="mr-2" />
-              <Text className="text-slate-950 font-bold text-lg ml-2">Reiniciar App</Text>
+              <Text className="text-slate-950 font-bold text-lg ml-2">
+                Reiniciar App
+              </Text>
             </TouchableOpacity>
-            
+
             {__DEV__ && (
               <View className="mt-8 p-4 bg-black/40 rounded-xl border border-white/5 w-full">
-                <Text className="text-red-400 text-xs font-mono" numberOfLines={3}>
+                <Text
+                  className="text-red-400 text-xs font-mono"
+                  numberOfLines={3}
+                >
                   {this.state.error?.toString()}
                 </Text>
               </View>

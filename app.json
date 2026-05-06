@@ -14,11 +14,8 @@
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#0f172a"
-
     },
-    "assetBundlePatterns": [
-      "assets/**/*"
-    ],
+    "assetBundlePatterns": ["assets/**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.gestaoescolar"
@@ -27,7 +24,6 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0f172a"
-
       },
       "package": "com.anonymous.gestaoescolar"
     },
@@ -52,7 +48,6 @@
         }
       ]
     ],
-
 
     "extra": {
       "router": {

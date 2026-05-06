@@ -8,9 +8,6 @@ if (process.env.EXPO_PUBLIC_PLATFORM === "web") {
   config.resolver.resolverMainFields = ["browser", "module", "main"];
 }
 
-config.resolver.blockList = [
-  /etc\/.*/,
-  /docs\/.*/,
-];
+config.resolver.blockList = [/etc\/.*/, /docs\/.*/];
 
 module.exports = withNativeWind(config, { input: "./src/styles/global.css" });

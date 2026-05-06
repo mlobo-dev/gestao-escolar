@@ -1,7 +1,7 @@
-import { useSchoolContext } from '../context/SchoolContext';
-import { useMemo } from 'react';
+import { useSchoolContext } from "../context/SchoolContext";
+import { useMemo } from "react";
 
-export const useSchools = (searchQuery: string = '') => {
+export const useSchools = (searchQuery: string = "") => {
   const {
     schools,
     isLoading,
@@ -16,9 +16,10 @@ export const useSchools = (searchQuery: string = '') => {
 
   const filteredSchools = useMemo(() => {
     if (!searchQuery) return schools;
-    return schools.filter((school) =>
-      school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      school.address.toLowerCase().includes(searchQuery.toLowerCase())
+    return schools.filter(
+      (school) =>
+        school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        school.address.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [schools, searchQuery]);
 

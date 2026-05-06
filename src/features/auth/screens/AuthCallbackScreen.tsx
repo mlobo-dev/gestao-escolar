@@ -14,7 +14,14 @@ export const AuthCallbackScreen = () => {
   }, [user]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#020617" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#020617",
+      }}
+    >
       <ActivityIndicator size="large" color="#10b981" />
     </View>
   );

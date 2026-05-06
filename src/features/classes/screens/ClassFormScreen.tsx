@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+} from "react-native";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { ChevronLeft, Save } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
@@ -12,9 +18,12 @@ const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 export const ClassFormScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { id: schoolId, classId } = useLocalSearchParams<{ id: string; classId: string }>();
+  const { id: schoolId, classId } = useLocalSearchParams<{
+    id: string;
+    classId: string;
+  }>();
   const { allClasses, addClass, updateClass } = useClasses(schoolId!);
-  
+
   const classData = classId ? allClasses.find((c) => c.id === classId) : null;
   const isEditing = !!classId;
 
@@ -23,13 +32,15 @@ export const ClassFormScreen = () => {
 
   const [name, setName] = useState(classData?.name || "");
   const [shift, setShift] = useState<Shift>(classData?.shift || "Morning");
-  const [year, setYear] = useState(classData?.academicYear || new Date().getFullYear().toString());
+  const [year, setYear] = useState(
+    classData?.academicYear || new Date().getFullYear().toString()
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSave = async () => {
     if (!name || !shift || !year) return;
     setIsSubmitting(true);
-    
+
     if (isEditing && classId) {
       await updateClass(classId, {
         name,
@@ -64,7 +75,9 @@ export const ClassFormScreen = () => {
           title: isEditing ? t("edit_class") : t("add_class"),
           headerLeft: () => (
             <TouchableOpacity
-              onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
+              onPress={() =>
+                router.canGoBack() ? router.back() : router.replace("/")
+              }
               className="mr-4"
             >
               <ChevronLeft size={24} color="#f8fafc" />
@@ -79,14 +92,18 @@ export const ClassFormScreen = () => {
         <View className="items-center p-8">
           <View className="w-full max-w-2xl">
             <View className="mb-8">
-              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+              <Text
+                className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}
+              >
                 {t("name")}
               </Text>
               <TextInput
                 testID="class-name-input"
                 className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
                 placeholder={t("class_name_placeholder")}
-                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
+                placeholderTextColor={
+                  isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"
+                }
                 value={name}
                 onChangeText={setName}
               />
@@ -98,7 +115,9 @@ export const ClassFormScreen = () => {
             </View>
 
             <View className="mb-8">
-              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1`}>
+              <Text
+                className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-4 ml-1`}
+              >
                 {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
@@ -114,7 +133,9 @@ export const ClassFormScreen = () => {
                   >
                     <Text
                       className={`font-bold text-sm tracking-tight ${
-                        shift === s ? "text-[#020617]" : `${isDark ? "text-white" : "text-slate-600"}`
+                        shift === s
+                          ? "text-[#020617]"
+                          : `${isDark ? "text-white" : "text-slate-600"}`
                       }`}
                     >
                       {t(s.toLowerCase().replace("-", "_"))}
@@ -125,14 +146,18 @@ export const ClassFormScreen = () => {
             </View>
 
             <View className="mb-10">
-              <Text className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}>
+              <Text
+                className={`${labelColor} text-[10px] font-bold uppercase tracking-[2px] mb-3 ml-1`}
+              >
                 {t("academic_year")}
               </Text>
               <TextInput
                 testID="class-year-input"
                 className={`${inputBg} border ${borderColor} rounded-2xl px-5 py-4 text-lg ${inputColor}`}
                 placeholder={t("year_placeholder")}
-                placeholderTextColor={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"}
+                placeholderTextColor={
+                  isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"
+                }
                 keyboardType="numeric"
                 value={year}
                 onChangeText={setYear}
@@ -154,7 +179,13 @@ export const ClassFormScreen = () => {
             >
               <Save size={22} color="#020617" />
               <Text className="text-[#020617] font-bold text-xl ml-3">
-                {isSubmitting ? (isEditing ? t("updating") : t("saving")) : (isEditing ? t("update") : t("save"))}
+                {isSubmitting
+                  ? isEditing
+                    ? t("updating")
+                    : t("saving")
+                  : isEditing
+                    ? t("update")
+                    : t("save")}
               </Text>
             </TouchableOpacity>
           </View>

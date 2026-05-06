@@ -12,7 +12,11 @@ interface ClassCardProps {
   onDelete: (id: string, name: string) => void;
 }
 
-export const ClassCard: React.FC<ClassCardProps> = ({ item, onEdit, onDelete }) => {
+export const ClassCard: React.FC<ClassCardProps> = ({
+  item,
+  onEdit,
+  onDelete,
+}) => {
   const { t } = useTranslation();
   const { colorScheme } = useThemeContext();
   const isDark = colorScheme === "dark";
@@ -21,9 +25,11 @@ export const ClassCard: React.FC<ClassCardProps> = ({ item, onEdit, onDelete }) 
   return (
     <BaseCard
       leftContent={
-        <View className={`w-14 h-14 rounded-2xl items-center justify-center border ${
-          isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
-        }`}>
+        <View
+          className={`w-14 h-14 rounded-2xl items-center justify-center border ${
+            isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
+          }`}
+        >
           <Users size={26} color={iconColor} />
         </View>
       }
@@ -44,7 +50,9 @@ export const ClassCard: React.FC<ClassCardProps> = ({ item, onEdit, onDelete }) 
         </View>
       }
     >
-      <Text className={`font-bold text-lg tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+      <Text
+        className={`font-bold text-lg tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
+      >
         {item.name}
       </Text>
       <View className="flex-row items-center mt-1.5">
@@ -53,7 +61,9 @@ export const ClassCard: React.FC<ClassCardProps> = ({ item, onEdit, onDelete }) 
             {t(item.shift.toLowerCase().replace("-", "_"))}
           </Text>
         </View>
-        <Text className={`text-xs font-medium ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>
+        <Text
+          className={`text-xs font-medium ${isDark ? "text-slate-400" : "text-muted-foreground"}`}
+        >
           {t("academic_year")}: {item.academicYear}
         </Text>
       </View>

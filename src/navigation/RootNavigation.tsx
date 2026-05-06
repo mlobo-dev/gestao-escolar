@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,21 +11,15 @@ import { useProtectedRoutes } from "@/hooks/useProtectedRoutes";
  */
 export const RootNavigation = () => {
   const { colorScheme } = useThemeContext();
-  const { setColorScheme } = useColorScheme();
   const { isLoading } = useProtectedRoutes();
-
-  // Sincroniza o colorScheme do Context com o NativeWind
-  // useEffect(() => {
-  //   setColorScheme(colorScheme);
-  // }, [colorScheme, setColorScheme]);
 
   // Enquanto estiver carregando estado de auth ou navegação, não renderizamos nada
   if (isLoading) return null;
 
   return (
-    <View 
+    <View
       key={`theme-wrapper-${colorScheme}`}
-      style={{ flex: 1 }} 
+      style={{ flex: 1 }}
       className={colorScheme === "dark" ? "dark" : ""}
     >
       <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />

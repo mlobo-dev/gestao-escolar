@@ -47,11 +47,11 @@ export const SchoolListScreen = () => {
 
   return (
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
-      <Stack.Screen 
+      <Stack.Screen
         options={{
           headerTitle: () => (
-            <Image 
-              source={LogoImg} 
+            <Image
+              source={LogoImg}
               style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
               resizeMode="contain"
             />
@@ -73,13 +73,19 @@ export const SchoolListScreen = () => {
           headerShadowVisible: false,
         }}
       />
-      <View className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
+      <View
+        className={`pb-10 pt-8 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}
+      >
         <View className="flex-row justify-between items-center">
           <View className="flex-1">
-            <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+            <Text
+              className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
+            >
               {t("schools")}
             </Text>
-            <Text className={`text-sm font-medium mt-1 ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+            <Text
+              className={`text-sm font-medium mt-1 ${isDark ? "text-slate-400" : "text-slate-500"}`}
+            >
               {t("units_found", { count: totalSchools })}
             </Text>
           </View>
@@ -121,8 +127,8 @@ export const SchoolListScreen = () => {
                 </View>
               }
               renderItem={({ item }) => (
-                <SchoolCard 
-                  item={item} 
+                <SchoolCard
+                  item={item}
                   onPress={(id) => router.push(`/school/${id}`)}
                 />
               )}

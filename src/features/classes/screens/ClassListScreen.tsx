@@ -32,13 +32,13 @@ export const ClassListScreen = () => {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const [searchQuery, setSearchQuery] = useState("");
-  const { 
-    classes, 
-    fetchClasses, 
-    deleteClass, 
-    isLoading, 
-    isLoadingMore, 
-    hasMoreClasses 
+  const {
+    classes,
+    fetchClasses,
+    deleteClass,
+    isLoading,
+    isLoadingMore,
+    hasMoreClasses,
   } = useClasses(id!, searchQuery);
 
   const { allSchools, deleteSchool } = useSchools();
@@ -113,7 +113,7 @@ export const ClassListScreen = () => {
               >
                 <Pencil size={18} color="#f8fafc" />
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={handleDeleteSchool}
                 className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
               >
@@ -128,27 +128,38 @@ export const ClassListScreen = () => {
         }}
       />
 
-      <View className={`pb-8 pt-6 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}>
+      <View
+        className={`pb-8 pt-6 px-6 rounded-b-[48px] border-b ${isDark ? "bg-card border-white/5" : "bg-slate-100 border-slate-200"}`}
+      >
         <View className="flex-row items-center">
           <View className="w-20 h-20 bg-primary rounded-3xl items-center justify-center shadow-md">
             <SchoolIcon size={40} color="#020617" />
           </View>
           <View className="flex-1 ml-5">
-            <Text className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
-               {school.name}
-             </Text>
-             <View className="flex-row items-center mt-2">
-               <MapPin size={16} color={iconColor} />
-               <Text className={`text-sm ml-1.5 flex-1 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`} numberOfLines={1}>
-                 {school.address}
-               </Text>
-             </View>
+            <Text
+              className={`text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
+            >
+              {school.name}
+            </Text>
+            <View className="flex-row items-center mt-2">
+              <MapPin size={16} color={iconColor} />
+              <Text
+                className={`text-sm ml-1.5 flex-1 font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}
+                numberOfLines={1}
+              >
+                {school.address}
+              </Text>
+            </View>
           </View>
         </View>
 
         <View className="flex-row justify-between items-center mt-10">
           <View>
-            <Text className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}>{t("classes")}</Text>
+            <Text
+              className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}
+            >
+              {t("classes")}
+            </Text>
             <Text className="text-primary text-sm font-medium mt-1">
               {t("units_found", { count: classes.length })}
             </Text>
@@ -187,15 +198,19 @@ export const ClassListScreen = () => {
                   ) : (
                     <Users size={48} color="#cbd5e1" />
                   )}
-                  <Text className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}>
+                  <Text
+                    className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}
+                  >
                     {searchQuery ? t("no_results_found") : t("no_classes")}
                   </Text>
                 </View>
               }
               renderItem={({ item }) => (
-                <ClassCard 
+                <ClassCard
                   item={item}
-                  onEdit={(classId) => router.push(`/school/${id}/class/${classId}/edit`)}
+                  onEdit={(classId) =>
+                    router.push(`/school/${id}/class/${classId}/edit`)
+                  }
                   onDelete={handleDeleteClass}
                 />
               )}

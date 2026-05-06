@@ -24,13 +24,15 @@ NativeModules.UIManager = {
 };
 
 // Mock react-native-safe-area-context
-jest.mock('react-native-safe-area-context', () => {
-  const React = require('react');
-  const View = require('react-native').View;
-  const SafeAreaProvider = ({ children }) => React.createElement(View, {}, children);
-  SafeAreaProvider.displayName = 'SafeAreaProvider';
-  const SafeAreaView = ({ children }) => React.createElement(View, {}, children);
-  SafeAreaView.displayName = 'SafeAreaView';
+jest.mock("react-native-safe-area-context", () => {
+  const React = require("react");
+  const View = require("react-native").View;
+  const SafeAreaProvider = ({ children }) =>
+    React.createElement(View, {}, children);
+  SafeAreaProvider.displayName = "SafeAreaProvider";
+  const SafeAreaView = ({ children }) =>
+    React.createElement(View, {}, children);
+  SafeAreaView.displayName = "SafeAreaView";
 
   return {
     SafeAreaProvider,
@@ -44,18 +46,21 @@ jest.mock('react-native-safe-area-context', () => {
 });
 
 // Mock react-native-screens
-jest.mock('react-native-screens', () => {
-  const React = require('react');
-  const View = require('react-native').View;
+jest.mock("react-native-screens", () => {
+  const React = require("react");
+  const View = require("react-native").View;
   return {
     enableScreens: jest.fn(),
     ScreenContainer: ({ children }) => React.createElement(View, {}, children),
     Screen: ({ children }) => React.createElement(View, {}, children),
     NativeScreen: ({ children }) => React.createElement(View, {}, children),
-    NativeScreenContainer: ({ children }) => React.createElement(View, {}, children),
+    NativeScreenContainer: ({ children }) =>
+      React.createElement(View, {}, children),
     ScreenStack: ({ children }) => React.createElement(View, {}, children),
-    ScreenStackHeaderConfig: ({ children }) => React.createElement(View, {}, children),
-    ScreenStackHeaderSubview: ({ children }) => React.createElement(View, {}, children),
+    ScreenStackHeaderConfig: ({ children }) =>
+      React.createElement(View, {}, children),
+    ScreenStackHeaderSubview: ({ children }) =>
+      React.createElement(View, {}, children),
     SearchBar: ({ children }) => React.createElement(View, {}, children),
   };
 });
@@ -96,7 +101,6 @@ jest.mock("@gluestack-ui/nativewind", () => {
   };
 });
 
-
 // Mock AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
@@ -109,7 +113,6 @@ jest.mock("./src/mocks/server", () => ({
   })),
 }));
 
-
 // Mock react-i18next
 jest.mock("react-i18next", () => ({
   useTranslation: () => {
@@ -121,11 +124,10 @@ jest.mock("react-i18next", () => ({
     };
   },
   initReactI18next: {
-    type: '3rdParty',
+    type: "3rdParty",
     init: jest.fn(),
-  }
+  },
 }));
-
 
 // Mock AuthContext
 jest.mock("./src/context/AuthContext", () => ({
@@ -162,8 +164,3 @@ jest.mock("@expo-google-fonts/outfit", () => ({
 jest.mock("./src/components/LanguagePicker", () => ({
   LanguagePicker: () => null,
 }));
-
-
-
-
-

@@ -1,8 +1,12 @@
 import { Alert, Platform } from "react-native";
 
-export const confirmDelete = (title: string, message: string, onConfirm: () => void) => {
+export const confirmDelete = (
+  title: string,
+  message: string,
+  onConfirm: () => void
+) => {
   if (Platform.OS === "web") {
-    const confirmed = window.confirm(`${title}\n\n${message}`);
+    const confirmed = globalThis.confirm(`${title}\n\n${message}`);
     if (confirmed) {
       onConfirm();
     }

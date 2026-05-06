@@ -29,27 +29,17 @@ export const BaseCard: React.FC<BaseCardProps> = ({
     <Container
       {...containerProps}
       className={`p-6 rounded-[32px] mb-4 flex-row items-center border shadow-sm ${
-        isDark 
-          ? "bg-card border-white/10 shadow-black/40" 
+        isDark
+          ? "bg-card border-white/10 shadow-black/40"
           : "bg-white border-slate-100 shadow-slate-200/50"
       } ${className}`}
       style={style}
     >
-      {leftContent && (
-        <View className="mr-5">
-          {leftContent}
-        </View>
-      )}
-      
-      <View className="flex-1">
-        {children}
-      </View>
-      
-      {rightContent && (
-        <View className="ml-2">
-          {rightContent}
-        </View>
-      )}
+      {leftContent && <View className="mr-5">{leftContent}</View>}
+
+      <View className="flex-1">{children}</View>
+
+      {rightContent && <View className="ml-2">{rightContent}</View>}
     </Container>
   );
 };

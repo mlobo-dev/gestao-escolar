@@ -20,7 +20,7 @@ describe("ThemeContext", () => {
 
   it("should have initial state light", async () => {
     const { result } = renderHook(() => useThemeContext(), { wrapper });
-    
+
     expect(result.current.colorScheme).toBe("light");
   });
 
@@ -57,7 +57,7 @@ describe("ThemeContext", () => {
       result.current.setTheme("dark");
     });
     expect(result.current.colorScheme).toBe("dark");
-    
+
     await act(async () => {
       result.current.setTheme("light");
     });

@@ -27,15 +27,15 @@ Uma aplicação robusta de gestão de escolas públicas, desenvolvida para o des
 
 ## 🚀 Tecnologias Utilizadas
 
-| Camada | Ferramentas |
-| :--- | :--- |
-| **Framework** | Expo SDK 55 + React Native 0.83 |
-| **Linguagem** | TypeScript (Estrito) |
-| **UI/UX** | Gluestack UI + NativeWind (Tailwind) |
-| **Estado** | Zustand + Persist Middleware |
-| **Backend Mock** | MirageJS |
-| **Autenticação** | Keycloak (expo-auth-session) |
-| **Testes** | Jest + React Testing Library |
+| Camada           | Ferramentas                          |
+| :--------------- | :----------------------------------- |
+| **Framework**    | Expo SDK 55 + React Native 0.83      |
+| **Linguagem**    | TypeScript (Estrito)                 |
+| **UI/UX**        | Gluestack UI + NativeWind (Tailwind) |
+| **Estado**       | Zustand + Persist Middleware         |
+| **Backend Mock** | MirageJS                             |
+| **Autenticação** | Keycloak (expo-auth-session)         |
+| **Testes**       | Jest + React Testing Library         |
 
 ---
 
@@ -56,20 +56,25 @@ Antes de iniciar, certifique-se de ter o ambiente de desenvolvimento React Nativ
 Siga os passos abaixo para preparar e rodar o projeto localmente.
 
 ### 1. Instalação de Dependências
+
 ```bash
 npm install
 ```
 
 ### 2. Execução (Development Client)
+
 Como este projeto utiliza módulos nativos customizados e suporte ao Keycloak, ele requer a geração de um **Development Build**.
 
 **Para Android:**
+
 ```bash
 npx expo run:android
 ```
+
 Este comando irá compilar o código nativo, instalar o APK de desenvolvimento no seu dispositivo e iniciar o Metro Bundler automaticamente.
 
 **Para Web (Preview):**
+
 ```bash
 npx expo start --web
 ```
@@ -80,16 +85,17 @@ npx expo start --web
 
 O projeto utiliza variáveis de ambiente para gerenciar a integração com o Keycloak e comportamentos de desenvolvimento. Crie um arquivo `.env` na raiz da pasta `gestao-escolar` (baseado no `.env.example`):
 
-| Variável | Descrição |
-| :--- | :--- |
-| `EXPO_PUBLIC_KEYCLOAK_URL` | URL base do servidor Keycloak. |
-| `EXPO_PUBLIC_KEYCLOAK_REALM` | Nome do Realm no Keycloak. |
-| `EXPO_PUBLIC_KEYCLOAK_CLIENT_ID` | Client ID da aplicação. |
-| `EXPO_PUBLIC_SKIP_AUTH` | Se `true` (padrão), ignora o fluxo de OIDC e utiliza um usuário mock. |
+| Variável                         | Descrição                                                             |
+| :------------------------------- | :-------------------------------------------------------------------- |
+| `EXPO_PUBLIC_KEYCLOAK_URL`       | URL base do servidor Keycloak.                                        |
+| `EXPO_PUBLIC_KEYCLOAK_REALM`     | Nome do Realm no Keycloak.                                            |
+| `EXPO_PUBLIC_KEYCLOAK_CLIENT_ID` | Client ID da aplicação.                                               |
+| `EXPO_PUBLIC_SKIP_AUTH`          | Se `true` (padrão), ignora o fluxo de OIDC e utiliza um usuário mock. |
 
 > **💡 Dica de Avaliação**: Por padrão, a aplicação está configurada com `EXPO_PUBLIC_SKIP_AUTH=true` para permitir o teste imediato de todas as funcionalidades sem a necessidade de um servidor Keycloak ativo. Caso deseje testar o fluxo real de OIDC, altere esta variável para `false`.
 
 ### 🔑 Provisionamento do Keycloak
+
 Caso deseje configurar um ambiente local ou de staging do Keycloak para testar a integração real, os arquivos de configuração do Realm (usuários, clientes e escopos) estão disponíveis em:
 👉 [**etc/keycloak/realm-export.json**](./etc/keycloak/realm-export.json)
 
@@ -100,15 +106,18 @@ Caso deseje configurar um ambiente local ou de staging do Keycloak para testar a
 O projeto possui uma suíte de testes abrangente para garantir a estabilidade das regras de negócio.
 
 ### Executar Testes Unitários
+
 ```bash
 npm test
 ```
 
 ### Relatório de Cobertura
+
 ```bash
 npm test -- --coverage --coverageReporters="text-summary"
 ```
-*Atualmente com **84% de cobertura** nas funções críticas.*
+
+_Atualmente com **84% de cobertura** nas funções críticas._
 
 ---
 
@@ -155,12 +164,15 @@ O projeto segue princípios de **Clean Architecture** e **S.O.L.I.D.**, garantin
 ```
 
 ### Development Client vs Expo Go
+
 A escolha pelo **Development Client** em detrimento ao Expo Go tradicional reflete uma abordagem profissional e alinhada com padrões de mercado para ambientes de produção. Esta estratégia permite lidar com requisitos customizados (como a integração nativa com Keycloak e SDKs bleeding-edge) que excedem as capacidades padrão do Expo Go, garantindo que o ambiente de desenvolvimento seja uma réplica fiel do comportamento nativo final do aplicativo.
 
 ### Mock API (MirageJS)
+
 Utilizamos o **MirageJS** para simular um backend completo com suporte a persistência, relacionamentos entre entidades e paginação real (limit/offset), permitindo o desenvolvimento e avaliação sem dependência de uma API externa.
 
 ### Persistência Offline
+
 O estado global é gerenciado pelo **Zustand** com persistência em **AsyncStorage**, garantindo que as alterações feitas no mock persistam mesmo após o fechamento do aplicativo.
 
 ---

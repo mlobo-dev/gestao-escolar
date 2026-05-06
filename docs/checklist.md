@@ -9,18 +9,20 @@ Este relatório detalha a implementação do projeto de Gestão Escolar, organiz
 O projeto foi construído sobre uma base moderna e resiliente, atendendo integralmente às versões e ferramentas solicitadas.
 
 ### **1.1. Core Tecnológico**
+
 - **Expo SDK 55.0.19**: Versão superior à mínima exigida (SDK 54).
 - **React 19 / RN 0.83.6**: Utilização das versões mais estáveis para o novo Codegen e performance otimizada.
 - **TypeScript**: Tipagem rigorosa de entidades, hooks e componentes (Ref: `src/types/`).
 - **Navegação (Expo Router)**: Implementação baseada em arquivos na pasta `app/`.
 - **UI & Styling**: **Gluestack UI** e **NativeWind v4** (Tailwind CSS).
   - **Design System Engine**: Adoção da arquitetura moderna onde o `GluestackUIProvider` (Ref: `app/_layout.tsx`) atua como o motor de orquestração de temas.
-  - **Consumo de Tokens**: Em vez de componentes pesados, utiliza-se a abordagem *performance-first* com tokens de design (ex: `bg-primary`, `text-destructive`) orquestrados pelo Gluestack.
+  - **Consumo de Tokens**: Em vez de componentes pesados, utiliza-se a abordagem _performance-first_ com tokens de design (ex: `bg-primary`, `text-destructive`) orquestrados pelo Gluestack.
   - **Exemplo de Componente**: Uso de tipografia específica do Gluestack no componente `LanguagePicker.tsx` (Ref: `import { Text } from "@gluestack-ui/nativewind"`).
-  - **Motivação (Anti-Lock-in)**: Esta arquitetura desacoplada evita que o projeto fique preso a uma biblioteca de componentes específica. A UI depende de *tokens* (abstrações) e não de implementações, permitindo trocar o motor de design no futuro sem refatoração massiva da interface.
+  - **Motivação (Anti-Lock-in)**: Esta arquitetura desacoplada evita que o projeto fique preso a uma biblioteca de componentes específica. A UI depende de _tokens_ (abstrações) e não de implementações, permitindo trocar o motor de design no futuro sem refatoração massiva da interface.
 - **Gerenciamento de Estado**: **Zustand** com persistência (Ref: `src/store/useSchoolStore.ts`).
 
 ### **1.2. Simulação de Back-end**
+
 - **MirageJS**: Configuração de servidor de mock em `src/mocks/server.ts`.
 - **Endpoints**: Implementação de rotas CRUD para `/schools` e `/classes`.
 - **Modelagem**: Relacionamento de associação onde cada escola possui múltiplas turmas vinculadas (Ref: `src/mocks/server.ts` -> `models`).
@@ -30,11 +32,13 @@ O projeto foi construído sobre uma base moderna e resiliente, atendendo integra
 ## ⚙️ 2. Funcionalidades Entregues (Requisitos Mínimos)
 
 ### **2.1. Módulo de Escolas**
+
 - **Listagem**: Visualização completa com nome, endereço e contagem dinâmica de turmas (Ref: `app/index.tsx`).
 - **Cadastro e Edição**: Formulários validados com campos obrigatórios (Ref: `app/school/new.tsx` e `app/school/[id]/edit.tsx`).
 - **Exclusão**: Remoção segura de registros através de modais adaptativos (Ref: `src/components/ConfirmationModal.tsx`).
 
 ### **2.2. Módulo de Turmas**
+
 - **Listagem Contextual**: Filtragem automática baseada na escola selecionada (Ref: `app/school/[id]/index.tsx`).
 - **Cadastro e Gestão**: Controle total de turnos, nome da turma e ano letivo (Ref: `app/school/[id]/class/new.tsx`).
 
@@ -43,51 +47,59 @@ O projeto foi construído sobre uma base moderna e resiliente, atendendo integra
 ## 🔍 3. Extras (Diferenciais)
 
 ### **3.1. Busca e Filtro**
+
 - Implementação de filtros em tempo real nas listagens (Ref: `src/hooks/useSchools.ts` -> lógica de `setSearchQuery`).
 
 ### **3.2. Layout Responsivo**
+
 - Interface adaptativa para Mobile e Tablet, utilizando as capacidades do NativeWind (Ref: `tailwind.config.js`).
 
 ### **3.3. Componentização e Hooks**
+
 - **Abstração de Lógica**: Uso de hooks personalizados para separar a lógica de negócio da interface (Ref: `src/hooks/useSchools.ts` e `src/hooks/useClasses.ts`).
 
 ### **3.4. Armazenamento Offline**
+
 - Uso de **AsyncStorage** integrado ao Zustand para garantir que os dados do mock persistam entre sessões (Ref: `src/store/useSchoolStore.ts` -> middleware `persist`).
 
 ### **3.5. Testes Unitários**
+
 - ✅ **35 Testes Unitários Passando** (Jest + RTL), cobrindo stores, componentes, telas e funcionalidades de busca com excelência.
 - 📊 **Cobertura de Código > 85%**: O projeto atinge um alto nível de maturidade técnica, superando a recomendação de mercado de 80%.
-  
+
 ![Relatório de Cobertura de Testes](./assets/images/coverage.png)
 
-
-| Métrica | Cobertura |
-| :--- | :--- |
-| **Statements** | 84.78% |
-| **Lines** | 85.53% |
-| **Functions** | 72.89% |
-| **Branches** | 60.83% |
+| Métrica        | Cobertura |
+| :------------- | :-------- |
+| **Statements** | 84.78%    |
+| **Lines**      | 85.53%    |
+| **Functions**  | 72.89%    |
+| **Branches**   | 60.83%    |
 
 ---
 
 ## 💡 4. Critérios de Avaliação
 
 ### **4.1. Organização e Qualidade (SOLID / Clean Code)**
+
 - **SRP (Single Responsibility)**: Hooks com responsabilidades únicas (Ex: `useSchools.ts`).
 - **DIP (Dependency Inversion)**: Telas dependem de abstrações (hooks), não de implementações de rede (Ref: `app/index.tsx` consumindo `useSchools`).
 - **Clean Code**: Nomenclatura semântica e funções modulares (Ex: `handleDeleteSchool` em `app/index.tsx`).
 
 > **Nota Técnica (UI Decoupling)**: A interface foi construída seguindo o princípio de **Inversão de Dependência**. Ao consumir o Gluestack como um motor de tokens via NativeWind, garantimos que a lógica visual não esteja acoplada a componentes proprietários, permitindo uma evolução tecnológica fluida e performante.
 
-> **Nota Técnica (Hooks-as-a-Service)**: O projeto adota o padrão de *Custom Hooks* como a camada primária de serviço e orquestração. Esta é uma decisão de design consciente e coerente com o escopo do desafio proposto. Embora em projetos de médio/grande porte a utilização de uma *Service Layer* tradicional seja o padrão recomendado para desacoplamento extremo, para este contexto, a estratégia atual simplifica a arquitetura sem sacrificar a testabilidade ou a reatividade.
+> **Nota Técnica (Hooks-as-a-Service)**: O projeto adota o padrão de _Custom Hooks_ como a camada primária de serviço e orquestração. Esta é uma decisão de design consciente e coerente com o escopo do desafio proposto. Embora em projetos de médio/grande porte a utilização de uma _Service Layer_ tradicional seja o padrão recomendado para desacoplamento extremo, para este contexto, a estratégia atual simplifica a arquitetura sem sacrificar a testabilidade ou a reatividade.
 
 ### **4.2. Usabilidade e Design**
+
 - Interface fluida e responsiva com suporte completo a **temas Light e Dark**, estabilizados via controle de estado manual (Ref: `src/store/useThemeStore.ts`).
 
 ### **4.3. Versionamento (Git)**
+
 - Uso do padrão [**Conventional Commits**](https://www.conventionalcommits.org/en/v1.0.0/) (feat, fix, docs, chore) para um histórico de projeto profissional e semântico.
 
 ### **4.4. Instruções (README)**
+
 - Documentação completa na raiz do projeto, detalhando instalação, execução e testes (Ref: `README.md`).
 
 ---
@@ -118,6 +130,7 @@ Funcionalidades extras implementadas para demonstrar escalabilidade, segurança 
 Esta seção detalha a escolha da arquitetura de interface, que prioriza o desacoplamento e a manutenibilidade a longo prazo.
 
 ### **7.1. O Problema: Acoplamento (Vendor Lock-in)**
+
 Em abordagens tradicionais (como Gluestack v1 ou NativeBase), o desenvolvedor utiliza componentes proprietários que "prendem" o projeto à biblioteca:
 
 ```tsx
@@ -128,12 +141,14 @@ import { Button, ButtonText, Box } from "@gluestack-ui/themed";
   <Button action="primary" size="lg">
     <ButtonText>Salvar Escola</ButtonText>
   </Button>
-</Box>
+</Box>;
 ```
-*Risco*: Qualquer mudança drástica na biblioteca exige uma refatoração completa de todas as telas da aplicação.
+
+_Risco_: Qualquer mudança drástica na biblioteca exige uma refatoração completa de todas as telas da aplicação.
 
 ### **7.2. A Solução: Gluestack + NativeWind (Headless UI)**
-Optamos pela abordagem de **Headless UI**, onde o Gluestack atua exclusivamente como o motor do *Design System* (Tokens), e a aplicação ocorre via Tailwind CSS (NativeWind):
+
+Optamos pela abordagem de **Headless UI**, onde o Gluestack atua exclusivamente como o motor do _Design System_ (Tokens), e a aplicação ocorre via Tailwind CSS (NativeWind):
 
 ```tsx
 // Exemplo de Abordagem Utilizada (Desacoplada)
@@ -143,14 +158,13 @@ import { View, TouchableOpacity, Text } from "react-native";
   <TouchableOpacity className="bg-primary p-4 rounded-2xl items-center">
     <Text className="text-white font-bold text-lg">Salvar Escola</Text>
   </TouchableOpacity>
-</View>
+</View>;
 ```
 
 ### **7.3. Vantagens Estratégicas**
+
 1.  **Independência de Engine**: Caso seja necessário trocar o motor de design no futuro (ex: migrar para **Tamagui**, **Shopify Restyle**, **Unistyles**, ou bibliotecas clássicas como **React Native Paper** e **NativeBase**), basta remapear os tokens no `tailwind.config.js` ou no Provider, sem tocar no código das telas.
 2.  **Performance Máxima**: Menos camadas de abstração na árvore de renderização do React Native.
 3.  **Consistência via Tokens**: A consistência visual é garantida por contratos (tokens como `primary`, `card`, `destructive`) e não por componentes rígidos.
 
 ---
-
-

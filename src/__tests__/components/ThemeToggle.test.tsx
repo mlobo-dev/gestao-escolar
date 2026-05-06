@@ -37,7 +37,7 @@ describe("ThemeToggle", () => {
   it("calls toggleTheme when pressed", () => {
     const { getByTestId } = render(<ThemeToggle />);
     const button = getByTestId("theme-toggle-button");
-    
+
     fireEvent.press(button);
     expect(mockToggleTheme).toHaveBeenCalledTimes(1);
   });
