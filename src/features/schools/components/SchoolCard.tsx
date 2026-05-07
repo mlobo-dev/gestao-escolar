@@ -62,7 +62,7 @@ export const SchoolCard: React.FC<SchoolCardProps> = ({ item, onPress }) => {
         className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
           isDark
             ? "bg-primary/10 border-primary/25"
-            : "bg-primary/10 border-primary/25"
+            : "bg-slate-50 border-slate-100"
         }`}
       >
         <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">

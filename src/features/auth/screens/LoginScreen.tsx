@@ -44,6 +44,7 @@ export const LoginScreen = () => {
       </View>
 
       <TouchableOpacity
+        testID="login-button"
         onPress={() => !isLoading && signIn()}
         disabled={isLoading}
         className={`bg-primary w-64 h-14 rounded-2xl flex-row items-center justify-center shadow-xl shadow-primary/20 ${
