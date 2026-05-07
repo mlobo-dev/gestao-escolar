@@ -6,18 +6,14 @@ stages:
   - deploy
   - sync
 
-include:
-  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
-    inputs:
-      node_version: 20
-      build_command: npm run build:web
-      output_dir: dist
-      production_branch: main
-
-  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/sonarqube@main
-
 variables:
   CLOUDFLARE_PROJECT_NAME: "edumanager-app"
   CF_CUSTOM_DOMAIN: "edumanager.facilitalabs.com.br"
+  CF_BUILD_COMMAND: "npm run build:web"
+  CF_OUTPUT_DIR: "dist"
+  NODE_VERSION: "20"
+  CF_PRODUCTION_BRANCH: "main"
 
-
+include:
+  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
+  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/sonarqube@main
