@@ -9,6 +9,7 @@ interface BaseCardProps {
   onPress?: () => void;
   className?: string;
   style?: ViewStyle;
+  testID?: string;
 }
 
 export const BaseCard: React.FC<BaseCardProps> = ({
@@ -18,6 +19,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
   onPress,
   className = "",
   style,
+  testID,
 }) => {
   const { colorScheme } = useThemeContext();
   const isDark = colorScheme === "dark";
@@ -28,6 +30,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
   return (
     <Container
       {...containerProps}
+      testID={testID}
       className={`p-6 rounded-[32px] mb-4 flex-row items-center border shadow-sm ${
         isDark
           ? "bg-card border-white/10 shadow-black/40"

@@ -1,6 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { useTranslation } from "react-i18next";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Force use of actual component despite global mock in jest.setup.js
 const { LanguagePicker } = jest.requireActual("../LanguagePicker");
@@ -11,7 +12,13 @@ jest.mock("react-i18next", () => ({
 
 // Manual mock for reanimated to avoid worklets initialization error
 jest.mock("react-native-reanimated", () => {
-  return {
+  const React = require("react");
+  const View = require("react-native").View;
+  
+  const MockView = ({ children, style, ...props }: any) => React.createElement(View, { ...props, style }, children);
+  MockView.displayName = "Animated.View";
+
+  const Reanimated = {
     useSharedValue: (val: any) => ({ value: val }),
     useAnimatedStyle: (cb: any) => cb(),
     withSpring: (val: any) => val,
@@ -20,9 +27,12 @@ jest.mock("react-native-reanimated", () => {
       if (cb) cb(true);
       return val;
     },
-    default: {
-      View: "View",
-    },
+    View: MockView,
+  };
+
+  return {
+    ...Reanimated,
+    default: Reanimated,
   };
 });
 
@@ -38,8 +48,15 @@ describe("LanguagePicker component", () => {
     });
   });
 
+  const renderComponent = () => 
+    render(
+      <SafeAreaProvider>
+        <LanguagePicker />
+      </SafeAreaProvider>
+    );
+
   it("should render correctly with PT flag", () => {
-    const { getByText } = render(<LanguagePicker />);
+    const { getByText } = renderComponent();
     expect(getByText("🇧🇷")).toBeTruthy();
   });
 
@@ -50,12 +67,12 @@ describe("LanguagePicker component", () => {
         changeLanguage: mockChangeLanguage,
       },
     });
-    const { getByText } = render(<LanguagePicker />);
+    const { getByText } = renderComponent();
     expect(getByText("🇺🇸")).toBeTruthy();
   });
 
   it("should call changeLanguage when pressed", () => {
-    const { getByText } = render(<LanguagePicker />);
+    const { getByText } = renderComponent();
     fireEvent.press(getByText("🇧🇷"));
     expect(mockChangeLanguage).toHaveBeenCalledWith("en");
   });

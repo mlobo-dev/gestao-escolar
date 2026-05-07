@@ -26,9 +26,8 @@ export const ClassCard: React.FC<ClassCardProps> = ({
     <BaseCard
       leftContent={
         <View
-          className={`w-14 h-14 rounded-2xl items-center justify-center border ${
-            isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
-          }`}
+          className={`w-14 h-14 rounded-2xl items-center justify-center border ${isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
+            }`}
         >
           <Users size={26} color={iconColor} />
         </View>

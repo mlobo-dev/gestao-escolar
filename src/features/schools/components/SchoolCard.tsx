@@ -26,20 +26,18 @@ export const SchoolCard: React.FC<SchoolCardProps> = ({ item, onPress }) => {
       onPress={() => onPress(item.id)}
       leftContent={
         <View
-          className={`w-16 h-16 rounded-2xl items-center justify-center border ${
-            isDark
-              ? "bg-white/5 border-white/10"
-              : "bg-primary/10 border-primary/20"
-          }`}
+          className={`w-16 h-16 rounded-2xl items-center justify-center border ${isDark
+            ? "bg-white/5 border-white/10"
+            : "bg-primary/10 border-primary/20"
+            }`}
         >
           <SchoolIcon size={28} color={isDark ? "#10b981" : "#1a56db"} />
         </View>
       }
       rightContent={
         <View
-          className={`w-10 h-10 rounded-full items-center justify-center ${
-            isDark ? "bg-white/5" : "bg-slate-50"
-          }`}
+          className={`w-10 h-10 rounded-full items-center justify-center ${isDark ? "bg-white/5" : "bg-slate-50"
+            }`}
         >
           <ChevronRight size={20} color={iconColor} />
         </View>
@@ -59,11 +57,10 @@ export const SchoolCard: React.FC<SchoolCardProps> = ({ item, onPress }) => {
         </Text>
       </View>
       <View
-        className={`self-start px-4 py-1.5 rounded-full mt-4 border ${
-          isDark
-            ? "bg-primary/10 border-primary/25"
-            : "bg-slate-50 border-slate-100"
-        }`}
+        className={`self-start px-4 py-1.5 rounded-full mt-4 border ${isDark
+          ? "bg-primary/10 border-primary/25"
+          : "bg-slate-50 border-slate-100"
+          }`}
       >
         <Text className="text-primary text-[11px] font-bold uppercase tracking-widest">
           {item.countClasses || 0}{" "}
