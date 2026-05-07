@@ -1,8 +1,4 @@
-# CI/CD Configuration for Gestao Escolar - V2.2 (Consolidated Catalog)
 stages:
-
-
-
   - pre-check
   - build
   - quality
