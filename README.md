@@ -119,6 +119,10 @@ npm test -- --coverage --coverageReporters="text-summary"
 
 _Atualmente com **84% de cobertura** nas funções críticas._
 
+### Testes End-to-End (E2E)
+Além dos testes unitários, o projeto conta com uma infraestrutura completa de testes E2E para Web (Playwright) e Mobile (Maestro).
+👉 [**Ver documentação de Testes E2E**](../e2e/README.md)
+
 ---
 
 ## 🏗️ Arquitetura e Decisões Técnicas

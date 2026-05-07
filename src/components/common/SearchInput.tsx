@@ -5,11 +5,13 @@ import { useThemeContext } from "../../context/ThemeContext";
 
 interface SearchInputProps extends TextInputProps {
   containerClassName?: string;
+  testID?: string;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   containerClassName = "",
   className: inputClassName = "",
+  testID,
   ...props
 }) => {
   const { colorScheme } = useThemeContext();
@@ -18,6 +20,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <View
+      testID={testID}
       className={`flex-row items-center px-5 py-4 rounded-2xl border ${
         isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-200"
       } ${containerClassName}`}
