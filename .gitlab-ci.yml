@@ -10,10 +10,11 @@ stages:
 include:
   - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
     inputs:
-      node_version: "20"
-      build_command: "npm run build:web"
-      output_dir: "dist"
-      production_branch: "master"
+      node_version: 20
+      build_command: npm run build:web
+      output_dir: dist
+      production_branch: master
+
   - component: $CI_SERVER_HOST/platform/ci-cd/catalog/sonarqube@main
 
 variables:
