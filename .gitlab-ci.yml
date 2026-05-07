@@ -1,12 +1,21 @@
+stages:
+  - pre-check
+  - build
+  - quality
+  - compliance
+  - deploy
+
 include:
-  - project: "platform/ci-cd/templates/pipelines/cloudflare-pages"
-    file: "cloudflare-pages.yml"
-    ref: "main"
+  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
+    inputs:
+      node_version: "20"
+      build_command: "npm run build:web"
+      output_dir: "dist"
+      production_branch: "master"
+  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/sonarqube@main
 
 variables:
   CLOUDFLARE_PROJECT_NAME: "edumanager-app"
   CF_CUSTOM_DOMAIN: "edumanager.facilitalabs.com.br"
-  CF_OUTPUT_DIR: "dist"
-  CF_BUILD_COMMAND: "npm run build:web"
-  CF_PRODUCTION_BRANCH: "master"
-  NODE_VERSION: "20"
+
+
