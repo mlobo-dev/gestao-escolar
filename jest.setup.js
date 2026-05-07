@@ -26,18 +26,23 @@ NativeModules.UIManager = {
 // Mock react-native-safe-area-context
 jest.mock("react-native-safe-area-context", () => {
   const React = require("react");
-  const View = require("react-native").View;
-  const SafeAreaProvider = ({ children }) =>
-    React.createElement(View, {}, children);
+  const { View } = require("react-native");
+  
+  const SafeAreaProvider = ({ children }: any) => React.createElement(View, {}, children);
   SafeAreaProvider.displayName = "SafeAreaProvider";
-  const SafeAreaView = ({ children }) =>
-    React.createElement(View, {}, children);
+  
+  const SafeAreaView = ({ children }: any) => React.createElement(View, {}, children);
   SafeAreaView.displayName = "SafeAreaView";
+
+  const SafeAreaConsumer = ({ children }: any) => children({ top: 0, left: 0, right: 0, bottom: 0 });
+  SafeAreaConsumer.displayName = "SafeAreaConsumer";
 
   return {
     SafeAreaProvider,
     SafeAreaView,
+    SafeAreaConsumer,
     useSafeAreaInsets: () => ({ top: 0, right: 0, bottom: 0, left: 0 }),
+    useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
     initialWindowMetrics: {
       frame: { x: 0, y: 0, width: 0, height: 0 },
       insets: { top: 0, left: 0, right: 0, bottom: 0 },
@@ -159,6 +164,32 @@ jest.mock("@expo-google-fonts/outfit", () => ({
   Outfit_600SemiBold: "Outfit_600SemiBold",
   Outfit_700Bold: "Outfit_700Bold",
 }));
+
+// Mock react-native-reanimated
+jest.mock("react-native-reanimated", () => {
+  const React = require("react");
+  const View = require("react-native").View;
+  
+  const MockView = ({ children, style, ...props }: any) => React.createElement(View, { ...props, style }, children);
+  MockView.displayName = "Animated.View";
+
+  const Reanimated = {
+    useSharedValue: (val: any) => ({ value: val }),
+    useAnimatedStyle: (cb: any) => cb(),
+    withSpring: (val: any) => val,
+    withSequence: (...args: any[]) => args[0],
+    withTiming: (val: any, config: any, cb: any) => {
+      if (cb) cb(true);
+      return val;
+    },
+    View: MockView,
+  };
+
+  return {
+    ...Reanimated,
+    default: Reanimated,
+  };
+});
 
 // Mock LanguagePicker to avoid Reanimated issues in other tests
 jest.mock("./src/components/LanguagePicker", () => ({
