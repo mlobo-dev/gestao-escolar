@@ -8,6 +8,7 @@ stages:
   - quality
   - compliance
   - deploy
+  - sync
 
 include:
   - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
