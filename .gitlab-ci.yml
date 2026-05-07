@@ -1,4 +1,6 @@
+# CI/CD Configuration for Gestao Escolar - Using Catalog Components V2
 stages:
+
   - pre-check
   - build
   - quality
