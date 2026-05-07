@@ -1,5 +1,6 @@
-# CI/CD Configuration for Gestao Escolar - V2.1 (Fixed Quoting)
+# CI/CD Configuration for Gestao Escolar - V2.2 (Consolidated Catalog)
 stages:
+
 
 
   - pre-check
