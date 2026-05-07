@@ -1,3 +1,10 @@
+stages:
+  - .pre
+  - build
+  - test
+  - compliance
+  - deploy
+  - .post
+
 include:
   - component: $CI_SERVER_HOST/platform/ci-cd/catalog/cloudflare-pages@main
-  - component: $CI_SERVER_HOST/platform/ci-cd/catalog/sonarqube@main
