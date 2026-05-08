@@ -12,13 +12,17 @@ import { useTranslation } from "react-i18next";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useSchools } from "../../../hooks/useSchools";
 
-const SchoolFormHeaderLeft = () => {
+export const SchoolFormHeaderLeft = () => {
   const router = useRouter();
   const handleBack = () => {
     router.canGoBack() ? router.back() : router.replace("/");
   };
   return (
-    <TouchableOpacity onPress={handleBack} className="mr-4">
+    <TouchableOpacity 
+      testID="back-button"
+      onPress={handleBack} 
+      className="mr-4"
+    >
       <ChevronLeft size={24} color="#f8fafc" />
     </TouchableOpacity>
   );

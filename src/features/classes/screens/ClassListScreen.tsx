@@ -26,19 +26,23 @@ import { ClassCard } from "../components/ClassCard";
 import { SearchInput } from "../../../components/common/SearchInput";
 import { SchoolClass } from "../../../types";
 
-const ClassListHeaderLeft = () => {
+export const ClassListHeaderLeft = () => {
   const router = useRouter();
   const handleBack = () => {
     router.canGoBack() ? router.back() : router.replace("/");
   };
   return (
-    <TouchableOpacity onPress={handleBack} className="mr-4">
+    <TouchableOpacity
+      testID="back-button"
+      onPress={handleBack}
+      className="mr-4"
+    >
       <ChevronLeft size={24} color="#f8fafc" />
     </TouchableOpacity>
   );
 };
 
-const ClassListHeaderRight = () => {
+export const ClassListHeaderRight = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { allSchools, deleteSchool } = useSchools();
@@ -62,12 +66,14 @@ const ClassListHeaderRight = () => {
     <>
       <View className="flex-row">
         <TouchableOpacity
+          testID="edit-school-button"
           onPress={() => router.push(`/school/${id}/edit`)}
           className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
         >
           <Pencil size={18} color="#f8fafc" />
         </TouchableOpacity>
         <TouchableOpacity
+          testID="delete-school-button"
           onPress={handleDeleteSchool}
           className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
         >
@@ -80,12 +86,13 @@ const ClassListHeaderRight = () => {
         onConfirm={confirmDelete}
         title={t("delete_school_title")}
         message={t("delete_school_message", { name: school?.name })}
+        confirmTestID="confirm-delete-school"
       />
     </>
   );
 };
 
-const EmptyList = ({
+export const EmptyList = ({
   searchQuery,
   isDark,
   t,
@@ -94,11 +101,11 @@ const EmptyList = ({
   isDark: boolean;
   t: any;
 }) => (
-  <View className="items-center justify-center pt-16">
+  <View className="items-center justify-center pt-16" testID="empty-list-container">
     {searchQuery ? (
-      <Search size={48} color="#cbd5e1" />
+      <Search size={48} color="#cbd5e1" testID="search-icon" />
     ) : (
-      <Users size={48} color="#cbd5e1" />
+      <Users size={48} color="#cbd5e1" testID="users-icon" />
     )}
     <Text
       className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}
@@ -108,10 +115,10 @@ const EmptyList = ({
   </View>
 );
 
-const ListFooter = ({ isLoadingMore }: { isLoadingMore: boolean }) => {
+export const ListFooter = ({ isLoadingMore }: { isLoadingMore: boolean }) => {
   if (!isLoadingMore) return null;
   return (
-    <View className="py-6">
+    <View className="py-6" testID="list-footer-loading">
       <ActivityIndicator color="#1a56db" />
     </View>
   );
@@ -248,9 +255,10 @@ export const ClassListScreen = () => {
       <View className="flex-1 items-center px-4 mt-4">
         <View className="w-full max-w-4xl flex-1">
           {isLoading && classes.length === 0 ? (
-            <ActivityIndicator size="large" color="#1a56db" className="mt-10" />
+            <ActivityIndicator testID="loading-indicator" size="large" color="#1a56db" className="mt-10" />
           ) : (
             <FlatList
+              testID="classes-list"
               data={classes}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: 40 }}
@@ -276,6 +284,7 @@ export const ClassListScreen = () => {
         onConfirm={confirmDeleteClass}
         title={t("delete_class_title")}
         message={t("delete_class_message", { name: deleteClassModal.className })}
+        confirmTestID="confirm-delete-class"
       />
     </View>
   );

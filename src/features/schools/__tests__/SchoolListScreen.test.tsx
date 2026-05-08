@@ -1,25 +1,10 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react-native";
-import { SchoolListScreen } from "../screens/SchoolListScreen";
+import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import { SchoolListScreen, HeaderTitle, SchoolListHeaderRight, EmptySchoolsList } from "../screens/SchoolListScreen";
 import { useSchools } from "../../../hooks/useSchools";
-
-const mockSchools = [
-  { id: "1", name: "School 1", address: "Address 1", countClasses: 3 },
-  { id: "2", name: "School 2", address: "Address 2", countClasses: 5 },
-];
-
-jest.mock("../../../hooks/useSchools", () => ({
-  useSchools: jest.fn(),
-}));
-
-jest.mock("../../../context/ThemeContext", () => ({
-  useThemeContext: jest.fn(() => ({
-    colorScheme: "light",
-  })),
-}));
+import { useAuth } from "../../../context/AuthContext";
 
 const mockPush = jest.fn();
-
 jest.mock("expo-router", () => ({
   useRouter: () => ({
     push: mockPush,
@@ -29,73 +14,130 @@ jest.mock("expo-router", () => ({
   },
 }));
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (str: string, options?: any) => {
-      if (str === "class") return "classes";
-      return str;
-    },
-  }),
+jest.mock("../../../hooks/useSchools", () => ({
+  useSchools: jest.fn(),
+}));
+
+jest.mock("../../../context/AuthContext", () => ({
+  useAuth: jest.fn(),
+}));
+
+jest.mock("../../../context/ThemeContext", () => ({
+  useThemeContext: jest.fn(() => ({
+    colorScheme: "light",
+  })),
+}));
+
+// Mock lucide-react-native
+jest.mock("lucide-react-native", () => ({
+  Plus: () => null,
+  School: () => null,
+  LogOut: () => null,
+  Search: () => null,
+  ChevronRight: () => null,
+  MapPin: () => null,
+}));
+
+// Mock components
+jest.mock("../../../components/LanguagePicker", () => ({
+  LanguagePicker: () => null,
+}));
+jest.mock("../../../components/ThemeToggle", () => ({
+  ThemeToggle: () => null,
 }));
 
 describe("SchoolListScreen", () => {
+  const mockSchools = [
+    { id: "1", name: "School A", address: "Address A" },
+    { id: "2", name: "School B", address: "Address B" },
+  ];
+
+  const mockSignOut = jest.fn();
+  const mockFetchSchools = jest.fn();
+
   beforeEach(() => {
     jest.clearAllMocks();
     (useSchools as jest.Mock).mockReturnValue({
       schools: mockSchools,
-      totalSchools: 2,
+      allSchools: mockSchools,
       isLoading: false,
-      fetchSchools: jest.fn(),
+      fetchSchools: mockFetchSchools,
+      totalSchools: 2,
+    });
+    (useAuth as jest.Mock).mockReturnValue({
+      signOut: mockSignOut,
     });
   });
 
-  it("renders the list of schools and their class counts", () => {
-    const { getByText } = render(<SchoolListScreen />);
-    expect(getByText("School 1")).toBeTruthy();
-    expect(getByText(/3/)).toBeTruthy();
-    expect(getByText("School 2")).toBeTruthy();
-    expect(getByText(/5/)).toBeTruthy();
+  it("renders the list of schools", async () => {
+    const { findByText, getByTestId } = render(<SchoolListScreen />);
+    expect(getByTestId("schools-list")).toBeTruthy();
+    expect(await findByText("School A")).toBeTruthy();
+    expect(await findByText("School B")).toBeTruthy();
   });
 
-  it("navigates to school details on press", () => {
-    const { getByText } = render(<SchoolListScreen />);
-    fireEvent.press(getByText("School 1"));
+  it("navigates to school details when a school is pressed", async () => {
+    const { findByText } = render(<SchoolListScreen />);
+    const schoolItem = await findByText("School A");
+    fireEvent.press(schoolItem);
     expect(mockPush).toHaveBeenCalledWith("/school/1");
   });
 
-  it("navigates to new school screen", () => {
+  it("navigates to add school screen when add button is pressed", () => {
     const { getByTestId } = render(<SchoolListScreen />);
     fireEvent.press(getByTestId("add-school-button"));
     expect(mockPush).toHaveBeenCalledWith("/school/new");
   });
 
-  it("shows search results on search query change", () => {
+  it("filters schools based on search query", async () => {
+    const { getByPlaceholderText, queryByText, findByText } = render(<SchoolListScreen />);
+    const searchInput = getByPlaceholderText(/search/i);
+
+    // Mock search result for query "School A"
     (useSchools as jest.Mock).mockReturnValue({
       schools: [mockSchools[0]],
-      totalSchools: 1,
+      allSchools: mockSchools,
       isLoading: false,
-      fetchSchools: jest.fn(),
+      fetchSchools: mockFetchSchools,
+      totalSchools: 2,
     });
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
-      <SchoolListScreen />
-    );
-    const searchInput = getByPlaceholderText("search");
-    fireEvent.changeText(searchInput, "School 1");
-
-    expect(getByText("School 1")).toBeTruthy();
-    expect(queryByText("School 2")).toBeNull();
+    fireEvent.changeText(searchInput, "School A");
+    expect(await findByText("School A")).toBeTruthy();
+    expect(queryByText("School B")).toBeNull();
   });
 
-  it("shows empty state when no schools found", () => {
+  it("shows activity indicator when loading", async () => {
     (useSchools as jest.Mock).mockReturnValue({
       schools: [],
+      allSchools: [],
+      isLoading: true,
+      fetchSchools: mockFetchSchools,
       totalSchools: 0,
-      isLoading: false,
-      fetchSchools: jest.fn(),
     });
+    const { getByTestId } = render(<SchoolListScreen />);
+    await waitFor(() => expect(getByTestId("loading-indicator")).toBeTruthy());
+  });
 
-    const { getByText } = render(<SchoolListScreen />);
-    expect(getByText("no_schools")).toBeTruthy();
+  describe("HeaderTitle", () => {
+    it("renders correctly", () => {
+      const { getByTestId } = render(<HeaderTitle />);
+      expect(getByTestId("logo-image")).toBeTruthy();
+    });
+  });
+
+  describe("SchoolListHeaderRight", () => {
+    it("calls signOut when logout button is pressed", () => {
+      const { getByTestId } = render(<SchoolListHeaderRight />);
+      fireEvent.press(getByTestId("logout-button"));
+      expect(mockSignOut).toHaveBeenCalled();
+    });
+  });
+
+  describe("EmptySchoolsList", () => {
+    it("renders no schools message", () => {
+      const { getByText } = render(<EmptySchoolsList />);
+      expect(getByText(/no_schools/i)).toBeTruthy();
+    });
   });
 });

@@ -33,12 +33,14 @@ export const ClassCard: React.FC<ClassCardProps> = ({
       rightContent={
         <View className="flex-row">
           <TouchableOpacity
+            testID="edit-class-button"
             className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/10 mr-2"
             onPress={() => onEdit(item.id)}
           >
             <Pencil size={16} color="#94a3b8" />
           </TouchableOpacity>
           <TouchableOpacity
+            testID="delete-class-button"
             className="w-10 h-10 bg-destructive/10 rounded-xl items-center justify-center border border-destructive/20"
             onPress={() => onDelete(item.id, item.name)}
           >

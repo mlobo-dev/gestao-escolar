@@ -15,13 +15,17 @@ import { Shift } from "../../../types";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
-const ClassFormHeaderLeft = () => {
+export const ClassFormHeaderLeft = () => {
   const router = useRouter();
   const handleBack = () => {
     router.canGoBack() ? router.back() : router.replace("/");
   };
   return (
-    <TouchableOpacity onPress={handleBack} className="mr-4">
+    <TouchableOpacity
+      testID="back-button"
+      onPress={handleBack}
+      className="mr-4"
+    >
       <ChevronLeft size={24} color="#f8fafc" />
     </TouchableOpacity>
   );
