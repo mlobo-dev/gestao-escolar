@@ -10,8 +10,20 @@ import {
 import { useRouter, Stack } from "expo-router";
 import LogoImg from "../../../../assets/images/logo.png";
 import { useSchools } from "../../../hooks/useSchools";
-import { Plus, School as SchoolIcon, LogOut } from "lucide-react-native";
+import { Plus, School as SchoolIcon, LogOut, Search } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
+
+export const EmptySchoolsList = () => {
+  const { t } = useTranslation();
+  return (
+    <View className="items-center justify-center pt-20">
+      <SchoolIcon size={64} color="#cbd5e1" />
+      <Text className="text-slate-400 mt-4 text-lg font-medium">
+        {t("no_schools")}
+      </Text>
+    </View>
+  );
+};
 import { LanguagePicker } from "../../../components/LanguagePicker";
 import { ThemeToggle } from "../../../components/ThemeToggle";
 import { useAuth } from "../../../context/AuthContext";
@@ -19,21 +31,23 @@ import { useThemeContext } from "../../../context/ThemeContext";
 import { SchoolCard } from "../components/SchoolCard";
 import { SearchInput } from "../../../components/common/SearchInput";
 
-const HeaderTitle = () => (
-  <Image
-    source={LogoImg}
-    style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
-    resizeMode="contain"
-  />
+export const HeaderTitle = () => (
+    <Image
+      testID="logo-image"
+      source={LogoImg}
+      style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
+      resizeMode="contain"
+    />
 );
 
-const SchoolListHeaderRight = () => {
+export const SchoolListHeaderRight = () => {
   const { signOut } = useAuth();
   return (
     <View className="flex-row items-center gap-3 pr-2">
       <ThemeToggle />
       <LanguagePicker />
       <TouchableOpacity
+        testID="logout-button"
         onPress={signOut}
         className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
       >
@@ -108,23 +122,17 @@ export const SchoolListScreen = () => {
 
       <View className="flex-1 items-center">
         <View className="w-full max-w-4xl flex-1">
-          {isLoading && filteredSchools.length === 0 ? (
+          {isLoading && filteredSchools?.length === 0 ? (
             <View className="flex-1 justify-center items-center">
-              <ActivityIndicator size="large" color="#1a56db" />
+              <ActivityIndicator testID="loading-indicator" size="large" color="#1a56db" />
             </View>
           ) : (
             <FlatList
+              testID="schools-list"
               data={filteredSchools}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
-              ListEmptyComponent={
-                <View className="items-center justify-center pt-20">
-                  <SchoolIcon size={64} color="#cbd5e1" />
-                  <Text className="text-slate-400 mt-4 text-lg font-medium">
-                    {t("no_schools")}
-                  </Text>
-                </View>
-              }
+              ListEmptyComponent={<EmptySchoolsList />}
               renderItem={({ item }) => (
                 <SchoolCard
                   item={item}
