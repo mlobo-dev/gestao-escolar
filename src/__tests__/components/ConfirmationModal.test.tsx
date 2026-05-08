@@ -14,7 +14,7 @@ describe("ConfirmationModal", () => {
   const mockOnConfirm = jest.fn();
 
   it("renders correctly and handles actions", () => {
-    const { getByText, queryByText } = render(
+    const { getByText } = render(
       <ConfirmationModal
         isOpen={true}
         onClose={mockOnClose}

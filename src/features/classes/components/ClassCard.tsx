@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SchoolClass } from "../../../types";
 import { BaseCard } from "../../../components/common/BaseCard";
 import { useThemeContext } from "../../../context/ThemeContext";
+import { IconContainer } from "../../../components/common/IconContainer";
 
 interface ClassCardProps {
   item: SchoolClass;
@@ -25,12 +26,9 @@ export const ClassCard: React.FC<ClassCardProps> = ({
   return (
     <BaseCard
       leftContent={
-        <View
-          className={`w-14 h-14 rounded-2xl items-center justify-center border ${isDark ? "bg-white/5 border-white/10" : "bg-muted border-border"
-            }`}
-        >
+        <IconContainer>
           <Users size={26} color={iconColor} />
-        </View>
+        </IconContainer>
       }
       rightContent={
         <View className="flex-row">

@@ -64,14 +64,14 @@ describe("ClassListScreen", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useClasses as jest.Mock).mockReturnValue({
-      classes: mockClasses,
+    (useClasses as jest.Mock).mockImplementation((id, query) => ({
+      classes: query ? mockClasses.filter(c => c.name.includes(query)) : mockClasses,
       fetchClasses,
       deleteClass,
       isLoading: false,
       isLoadingMore: false,
       hasMoreClasses: false,
-    });
+    }));
     (useSchools as jest.Mock).mockReturnValue({
       allSchools: mockSchools,
       deleteSchool,
@@ -102,5 +102,19 @@ describe("ClassListScreen", () => {
     });
     const { getByText } = render(<ClassListScreen />);
     expect(getByText("no_classes")).toBeTruthy();
+  });
+
+  it("filters classes based on search query", () => {
+    const { getByPlaceholderText, getByText, queryByText } = render(<ClassListScreen />);
+    
+    const searchInput = getByPlaceholderText("search");
+    
+    // Test with matching query
+    fireEvent.changeText(searchInput, "Math");
+    expect(getByText("Math A")).toBeTruthy();
+    
+    // Test with non-matching query
+    fireEvent.changeText(searchInput, "Physics");
+    expect(queryByText("Math A")).toBeNull();
   });
 });

@@ -10,32 +10,6 @@ jest.mock("react-i18next", () => ({
   useTranslation: jest.fn(),
 }));
 
-// Manual mock for reanimated to avoid worklets initialization error
-jest.mock("react-native-reanimated", () => {
-  const React = require("react");
-  const View = require("react-native").View;
-  
-  const MockView = ({ children, style, ...props }: any) => React.createElement(View, { ...props, style }, children);
-  MockView.displayName = "Animated.View";
-
-  const Reanimated = {
-    useSharedValue: (val: any) => ({ value: val }),
-    useAnimatedStyle: (cb: any) => cb(),
-    withSpring: (val: any) => val,
-    withSequence: (...args: any[]) => args[0],
-    withTiming: (val: any, config: any, cb: any) => {
-      if (cb) cb(true);
-      return val;
-    },
-    View: MockView,
-  };
-
-  return {
-    ...Reanimated,
-    default: Reanimated,
-  };
-});
-
 describe("LanguagePicker component", () => {
   const mockChangeLanguage = jest.fn();
 

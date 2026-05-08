@@ -9,7 +9,7 @@ jest.mock("@react-native-async-storage/async-storage", () =>
 );
 
 // Mock the API calls
-global.fetch = jest.fn();
+globalThis.fetch = jest.fn();
 
 describe("SchoolContext", () => {
   beforeEach(async () => {
@@ -27,7 +27,7 @@ describe("SchoolContext", () => {
         { id: "1", name: "School 1", address: "Address 1", countClasses: 0 },
       ];
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           schools: mockSchools,
@@ -46,7 +46,7 @@ describe("SchoolContext", () => {
     });
 
     it("should handle fetch schools error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(
         new Error("Network error")
       );
 
@@ -63,7 +63,7 @@ describe("SchoolContext", () => {
       const newSchoolData = { name: "New School", address: "New Address" };
       const savedSchool = { id: "2", ...newSchoolData, countClasses: 0 };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({ school: savedSchool }),
       });
@@ -79,7 +79,7 @@ describe("SchoolContext", () => {
     });
 
     it("should handle add school error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
       await act(async () => {
@@ -98,7 +98,7 @@ describe("SchoolContext", () => {
       };
 
       // Setup state through addSchool mock to ensure it's in the state
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({ school: initialSchool }),
       });
@@ -109,7 +109,7 @@ describe("SchoolContext", () => {
         await result.current.addSchool({ name: "Old Name", address: "A1" });
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         json: async () => ({ success: true }),
@@ -123,7 +123,7 @@ describe("SchoolContext", () => {
     });
 
     it("should handle update school error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
       await act(async () => {
@@ -135,7 +135,7 @@ describe("SchoolContext", () => {
 
     it("should delete a school and its associated classes", async () => {
       const school = { id: "1", name: "S1", address: "A1", countClasses: 0 };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({ school }),
       });
@@ -146,7 +146,7 @@ describe("SchoolContext", () => {
         await result.current.addSchool(school);
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         json: async () => ({ success: true }),
@@ -173,7 +173,7 @@ describe("SchoolContext", () => {
         },
       ];
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           classes: mockClasses,
@@ -194,7 +194,7 @@ describe("SchoolContext", () => {
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
       // First page
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           classes: [{ id: "c1", name: "C1", schoolId: "1" }],
@@ -207,7 +207,7 @@ describe("SchoolContext", () => {
       });
 
       // Second page
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           classes: [{ id: "c2", name: "C2", schoolId: "1" }],
@@ -223,7 +223,7 @@ describe("SchoolContext", () => {
     });
 
     it("should handle fetch classes error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
       await act(async () => {
@@ -235,7 +235,7 @@ describe("SchoolContext", () => {
 
     it("should add a new class and update school class count", async () => {
       const school = { id: "1", name: "S1", address: "A1", countClasses: 0 };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({ school }),
       });
@@ -254,7 +254,7 @@ describe("SchoolContext", () => {
       } as any;
       const savedClass = { id: "c1", ...newClassData };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({ class: savedClass }),
       });
@@ -275,7 +275,7 @@ describe("SchoolContext", () => {
         shift: "Morning",
         academicYear: "2024",
       };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           classes: [initialClass],
@@ -289,7 +289,7 @@ describe("SchoolContext", () => {
         await result.current.fetchClasses("1");
       });
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         json: async () => ({ success: true }),
@@ -303,7 +303,7 @@ describe("SchoolContext", () => {
     });
 
     it("should handle delete class error", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error("Fail"));
       const { result } = renderHook(() => useSchoolContext(), { wrapper });
 
       await act(async () => {

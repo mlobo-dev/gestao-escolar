@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { School } from "../../../types";
 import { BaseCard } from "../../../components/common/BaseCard";
 import { useThemeContext } from "../../../context/ThemeContext";
+import { IconContainer } from "../../../components/common/IconContainer";
 
 interface SchoolCardProps {
   item: School;
@@ -25,14 +26,9 @@ export const SchoolCard: React.FC<SchoolCardProps> = ({ item, onPress }) => {
     <BaseCard
       onPress={() => onPress(item.id)}
       leftContent={
-        <View
-          className={`w-16 h-16 rounded-2xl items-center justify-center border ${isDark
-            ? "bg-white/5 border-white/10"
-            : "bg-primary/10 border-primary/20"
-            }`}
-        >
+        <IconContainer containerClassName={isDark ? "" : "bg-primary/10 border-primary/20"}>
           <SchoolIcon size={28} color={isDark ? "#10b981" : "#1a56db"} />
-        </View>
+        </IconContainer>
       }
       rightContent={
         <View

@@ -19,6 +19,27 @@ import { useThemeContext } from "../../../context/ThemeContext";
 import { SchoolCard } from "../components/SchoolCard";
 import { SearchInput } from "../../../components/common/SearchInput";
 
+const HeaderTitle = () => (
+  <Image
+    source={LogoImg}
+    style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
+    resizeMode="contain"
+  />
+);
+
+const HeaderRight = ({ onSignOut }: { onSignOut: () => void }) => (
+  <View className="flex-row items-center gap-3 pr-2">
+    <ThemeToggle />
+    <LanguagePicker />
+    <TouchableOpacity
+      onPress={onSignOut}
+      className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
+    >
+      <LogOut size={18} color="#ef4444" />
+    </TouchableOpacity>
+  </View>
+);
+
 export const SchoolListScreen = () => {
   const { t } = useTranslation();
   const { signOut } = useAuth();
@@ -42,25 +63,8 @@ export const SchoolListScreen = () => {
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
-          headerTitle: () => (
-            <Image
-              source={LogoImg}
-              style={{ width: 160, height: 40, tintColor: "#f8fafc" }}
-              resizeMode="contain"
-            />
-          ),
-          headerRight: () => (
-            <View className="flex-row items-center gap-3 pr-2">
-              <ThemeToggle />
-              <LanguagePicker />
-              <TouchableOpacity
-                onPress={signOut}
-                className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
-              >
-                <LogOut size={18} color="#ef4444" />
-              </TouchableOpacity>
-            </View>
-          ),
+          headerTitle: () => <HeaderTitle />,
+          headerRight: () => <HeaderRight onSignOut={signOut} />,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerShadowVisible: false,

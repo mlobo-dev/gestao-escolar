@@ -12,6 +12,12 @@ import { useTranslation } from "react-i18next";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useSchools } from "../../../hooks/useSchools";
 
+const HeaderLeft = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity onPress={onPress} className="mr-4">
+    <ChevronLeft size={24} color="#f8fafc" />
+  </TouchableOpacity>
+);
+
 export const SchoolFormScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -41,6 +47,10 @@ export const SchoolFormScreen = () => {
     }
   };
 
+  const handleBack = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+
   if (isEditing && !school) return null;
 
   const labelColor = isDark ? "text-slate-400" : "text-slate-500";
@@ -60,16 +70,7 @@ export const SchoolFormScreen = () => {
       <Stack.Screen
         options={{
           title: isEditing ? t("edit_school") : t("add_school"),
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() =>
-                router.canGoBack() ? router.back() : router.replace("/")
-              }
-              className="mr-4"
-            >
-              <ChevronLeft size={24} color="#f8fafc" />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <HeaderLeft onPress={handleBack} />,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerShadowVisible: false,
