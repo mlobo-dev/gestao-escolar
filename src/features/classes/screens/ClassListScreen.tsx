@@ -25,6 +25,35 @@ import { useTranslation } from "react-i18next";
 import { ClassCard } from "../components/ClassCard";
 import { SearchInput } from "../../../components/common/SearchInput";
 
+const HeaderLeft = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity onPress={onPress} className="mr-4">
+    <ChevronLeft size={24} color="#f8fafc" />
+  </TouchableOpacity>
+);
+
+const HeaderRight = ({
+  onEdit,
+  onDelete,
+}: {
+  onEdit: () => void;
+  onDelete: () => void;
+}) => (
+  <View className="flex-row">
+    <TouchableOpacity
+      onPress={onEdit}
+      className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
+    >
+      <Pencil size={18} color="#f8fafc" />
+    </TouchableOpacity>
+    <TouchableOpacity
+      onPress={onDelete}
+      className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
+    >
+      <Trash2 size={18} color="#ef4444" />
+    </TouchableOpacity>
+  </View>
+);
+
 export const ClassListScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -38,7 +67,7 @@ export const ClassListScreen = () => {
     isLoading,
     isLoadingMore,
     hasMoreClasses,
-  } = useClasses(id!, searchQuery);
+  } = useClasses(id || "", searchQuery);
 
   const { allSchools, deleteSchool } = useSchools();
 
@@ -66,8 +95,10 @@ export const ClassListScreen = () => {
       title: t("delete_school_title"),
       message: t("delete_school_message", { name: school?.name }),
       onConfirm: async () => {
-        await deleteSchool(id!);
-        router.replace("/");
+        if (id) {
+          await deleteSchool(id);
+          router.replace("/");
+        }
       },
     });
   };
@@ -87,6 +118,10 @@ export const ClassListScreen = () => {
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 
+  const handleBack = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+
   if (!school) return null;
 
   return (
@@ -94,31 +129,12 @@ export const ClassListScreen = () => {
       <Stack.Screen
         options={{
           headerTitle: t("school_unit"),
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() =>
-                router.canGoBack() ? router.back() : router.replace("/")
-              }
-              className="mr-4"
-            >
-              <ChevronLeft size={24} color="#f8fafc" />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <HeaderLeft onPress={handleBack} />,
           headerRight: () => (
-            <View className="flex-row">
-              <TouchableOpacity
-                onPress={() => router.push(`/school/${id}/edit`)}
-                className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
-              >
-                <Pencil size={18} color="#f8fafc" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleDeleteSchool}
-                className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
-              >
-                <Trash2 size={18} color="#ef4444" />
-              </TouchableOpacity>
-            </View>
+            <HeaderRight
+              onEdit={() => router.push(`/school/${id}/edit`)}
+              onDelete={handleDeleteSchool}
+            />
           ),
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
@@ -215,7 +231,7 @@ export const ClassListScreen = () => {
               )}
               onEndReached={() => {
                 if (hasMoreClasses && !isLoadingMore) {
-                  fetchClasses(id!);
+                  fetchClasses(id || "");
                 }
               }}
               onEndReachedThreshold={0.5}

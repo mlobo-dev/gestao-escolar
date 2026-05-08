@@ -15,6 +15,12 @@ import { Shift } from "../../../types";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
+const HeaderLeft = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity onPress={onPress} className="mr-4">
+    <ChevronLeft size={24} color="#f8fafc" />
+  </TouchableOpacity>
+);
+
 export const ClassFormScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -65,6 +71,10 @@ export const ClassFormScreen = () => {
     router.back();
   };
 
+  const handleBack = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+
   if (isEditing && !classData) return null;
 
   const labelColor = isDark ? "text-slate-400" : "text-slate-500";
@@ -84,16 +94,7 @@ export const ClassFormScreen = () => {
       <Stack.Screen
         options={{
           title: isEditing ? t("edit_class") : t("add_class"),
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() =>
-                router.canGoBack() ? router.back() : router.replace("/")
-              }
-              className="mr-4"
-            >
-              <ChevronLeft size={24} color="#f8fafc" />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <HeaderLeft onPress={handleBack} />,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerShadowVisible: false,

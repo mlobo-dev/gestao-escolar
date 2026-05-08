@@ -35,7 +35,7 @@ export function makeServer({ environment = "development" } = {}) {
 
     seeds(server) {
       server.createList("school", 5).forEach((school) => {
-        const randomCount = Math.floor(Math.random() * 4) + 1;
+        const randomCount = (school.id.length % 4) + 1;
         server.createList("class", randomCount, { schoolId: school.id });
       });
     },
