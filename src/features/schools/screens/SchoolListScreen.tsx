@@ -10,7 +10,7 @@ import {
 import { useRouter, Stack } from "expo-router";
 import LogoImg from "../../../../assets/images/logo.png";
 import { useSchools } from "../../../hooks/useSchools";
-import { Plus, School as SchoolIcon, LogOut, Search } from "lucide-react-native";
+import { Plus, School as SchoolIcon, LogOut } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
 export const EmptySchoolsList = () => {
