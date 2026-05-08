@@ -24,35 +24,98 @@ import { ConfirmationModal } from "../../../components/ConfirmationModal";
 import { useTranslation } from "react-i18next";
 import { ClassCard } from "../components/ClassCard";
 import { SearchInput } from "../../../components/common/SearchInput";
+import { SchoolClass } from "../../../types";
 
-const HeaderLeft = ({ onPress }: { onPress: () => void }) => (
-  <TouchableOpacity onPress={onPress} className="mr-4">
-    <ChevronLeft size={24} color="#f8fafc" />
-  </TouchableOpacity>
-);
+const ClassListHeaderLeft = () => {
+  const router = useRouter();
+  const handleBack = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+  return (
+    <TouchableOpacity onPress={handleBack} className="mr-4">
+      <ChevronLeft size={24} color="#f8fafc" />
+    </TouchableOpacity>
+  );
+};
 
-const HeaderRight = ({
-  onEdit,
-  onDelete,
+const ClassListHeaderRight = () => {
+  const router = useRouter();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { allSchools, deleteSchool } = useSchools();
+  const school = allSchools.find((s) => s.id === id);
+  const { t } = useTranslation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteSchool = () => {
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (id) {
+      await deleteSchool(id);
+      router.replace("/");
+    }
+  };
+
+  return (
+    <>
+      <View className="flex-row">
+        <TouchableOpacity
+          onPress={() => router.push(`/school/${id}/edit`)}
+          className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
+        >
+          <Pencil size={18} color="#f8fafc" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleDeleteSchool}
+          className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
+        >
+          <Trash2 size={18} color="#ef4444" />
+        </TouchableOpacity>
+      </View>
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        title={t("delete_school_title")}
+        message={t("delete_school_message", { name: school?.name })}
+      />
+    </>
+  );
+};
+
+const EmptyList = ({
+  searchQuery,
+  isDark,
+  t,
 }: {
-  onEdit: () => void;
-  onDelete: () => void;
+  searchQuery: string;
+  isDark: boolean;
+  t: any;
 }) => (
-  <View className="flex-row">
-    <TouchableOpacity
-      onPress={onEdit}
-      className="mr-4 w-10 h-10 bg-white/10 border border-white/10 rounded-full items-center justify-center"
+  <View className="items-center justify-center pt-16">
+    {searchQuery ? (
+      <Search size={48} color="#cbd5e1" />
+    ) : (
+      <Users size={48} color="#cbd5e1" />
+    )}
+    <Text
+      className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}
     >
-      <Pencil size={18} color="#f8fafc" />
-    </TouchableOpacity>
-    <TouchableOpacity
-      onPress={onDelete}
-      className="w-10 h-10 bg-destructive/20 rounded-full items-center justify-center border border-destructive/20"
-    >
-      <Trash2 size={18} color="#ef4444" />
-    </TouchableOpacity>
+      {searchQuery ? t("no_results_found") : t("no_classes")}
+    </Text>
   </View>
 );
+
+const ListFooter = ({ isLoadingMore }: { isLoadingMore: boolean }) => {
+  if (!isLoadingMore) return null;
+  return (
+    <View className="py-6">
+      <ActivityIndicator color="#1a56db" />
+    </View>
+  );
+};
 
 export const ClassListScreen = () => {
   const { t } = useTranslation();
@@ -69,18 +132,16 @@ export const ClassListScreen = () => {
     hasMoreClasses,
   } = useClasses(id || "", searchQuery);
 
-  const { allSchools, deleteSchool } = useSchools();
+  const { allSchools } = useSchools();
 
-  const [modalConfig, setModalConfig] = useState<{
+  const [deleteClassModal, setDeleteClassModal] = useState<{
     isOpen: boolean;
-    title: string;
-    message: string;
-    onConfirm: () => void;
+    classId: string;
+    className: string;
   }>({
     isOpen: false,
-    title: "",
-    message: "",
-    onConfirm: () => {},
+    classId: "",
+    className: "",
   });
 
   const school = allSchools.find((s) => s.id === id);
@@ -89,38 +150,30 @@ export const ClassListScreen = () => {
     if (id) fetchClasses(id, true);
   }, [id]);
 
-  const handleDeleteSchool = () => {
-    setModalConfig({
+  const handleDeleteClass = (classId: string, className: string) => {
+    setDeleteClassModal({
       isOpen: true,
-      title: t("delete_school_title"),
-      message: t("delete_school_message", { name: school?.name }),
-      onConfirm: async () => {
-        if (id) {
-          await deleteSchool(id);
-          router.replace("/");
-        }
-      },
+      classId,
+      className,
     });
   };
 
-  const handleDeleteClass = (classId: string, className: string) => {
-    setModalConfig({
-      isOpen: true,
-      title: t("delete_class_title"),
-      message: t("delete_class_message", { name: className }),
-      onConfirm: async () => {
-        await deleteClass(classId);
-      },
-    });
+  const confirmDeleteClass = async () => {
+    await deleteClass(deleteClassModal.classId);
+    setDeleteClassModal({ ...deleteClassModal, isOpen: false });
   };
 
   const { colorScheme } = useThemeContext();
   const isDark = colorScheme === "dark";
   const iconColor = isDark ? "#94a3b8" : "#64748b";
 
-  const handleBack = () => {
-    router.canGoBack() ? router.back() : router.replace("/");
-  };
+  const renderItem = ({ item }: { item: SchoolClass }) => (
+    <ClassCard
+      item={item}
+      onEdit={(classId) => router.push(`/school/${id}/class/${classId}/edit`)}
+      onDelete={handleDeleteClass}
+    />
+  );
 
   if (!school) return null;
 
@@ -129,13 +182,8 @@ export const ClassListScreen = () => {
       <Stack.Screen
         options={{
           headerTitle: t("school_unit"),
-          headerLeft: () => <HeaderLeft onPress={handleBack} />,
-          headerRight: () => (
-            <HeaderRight
-              onEdit={() => router.push(`/school/${id}/edit`)}
-              onDelete={handleDeleteSchool}
-            />
-          ),
+          headerLeft: ClassListHeaderLeft,
+          headerRight: ClassListHeaderRight,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerTitleStyle: { fontWeight: "bold" },
@@ -207,52 +255,27 @@ export const ClassListScreen = () => {
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: 40 }}
               ListEmptyComponent={
-                <View className="items-center justify-center pt-16">
-                  {searchQuery ? (
-                    <Search size={48} color="#cbd5e1" />
-                  ) : (
-                    <Users size={48} color="#cbd5e1" />
-                  )}
-                  <Text
-                    className={`mt-4 text-center font-medium ${isDark ? "text-slate-500" : "text-slate-400"}`}
-                  >
-                    {searchQuery ? t("no_results_found") : t("no_classes")}
-                  </Text>
-                </View>
+                <EmptyList searchQuery={searchQuery} isDark={isDark} t={t} />
               }
-              renderItem={({ item }) => (
-                <ClassCard
-                  item={item}
-                  onEdit={(classId) =>
-                    router.push(`/school/${id}/class/${classId}/edit`)
-                  }
-                  onDelete={handleDeleteClass}
-                />
-              )}
+              renderItem={renderItem}
               onEndReached={() => {
                 if (hasMoreClasses && !isLoadingMore) {
                   fetchClasses(id || "");
                 }
               }}
               onEndReachedThreshold={0.5}
-              ListFooterComponent={
-                isLoadingMore ? (
-                  <View className="py-6">
-                    <ActivityIndicator color="#1a56db" />
-                  </View>
-                ) : null
-              }
+              ListFooterComponent={<ListFooter isLoadingMore={isLoadingMore} />}
             />
           )}
         </View>
       </View>
 
       <ConfirmationModal
-        isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
-        onConfirm={modalConfig.onConfirm}
-        title={modalConfig.title}
-        message={modalConfig.message}
+        isOpen={deleteClassModal.isOpen}
+        onClose={() => setDeleteClassModal({ ...deleteClassModal, isOpen: false })}
+        onConfirm={confirmDeleteClass}
+        title={t("delete_class_title")}
+        message={t("delete_class_message", { name: deleteClassModal.className })}
       />
     </View>
   );

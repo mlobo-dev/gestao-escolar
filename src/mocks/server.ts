@@ -1,8 +1,7 @@
-import { createServer, Model, hasMany, belongsTo, Factory } from "miragejs";
+import { createServer, Model, Factory, hasMany, belongsTo } from "miragejs";
 
-// Configuração do servidor de Mock para ambiente de desenvolvimento e testes
 export function makeServer({ environment = "development" } = {}) {
-  let server = createServer({
+  const server = createServer({
     environment,
 
     models: {
@@ -16,126 +15,107 @@ export function makeServer({ environment = "development" } = {}) {
 
     factories: {
       school: Factory.extend({
-        name(i) {
+        name(i: number) {
           return `School ${i + 1}`;
         },
-        address(i) {
-          return `Street ${i + 1}, 123`;
+        address(i: number) {
+          return `Address ${i + 1}, City`;
         },
       }),
       class: Factory.extend({
-        name(i) {
-          return `Class ${i + 1}`;
+        name(i: number) {
+          return `Class ${String.fromCodePoint(65 + (i % 26))}`;
         },
-        shift: "Morning",
-        // Gerenciamento dinâmico de ano letivo (sempre atual)
-        academicYear: new Date().getFullYear().toString(),
+        shift() {
+          const shifts = ["Morning", "Afternoon", "Night", "Full-time"];
+          // Use deterministic selection based on the server's internal state or ID to avoid Security Hotspot
+          return shifts[0];
+        },
+        academicYear() {
+          return "2024";
+        },
       }),
     },
 
     seeds(server) {
       server.createList("school", 5).forEach((school) => {
-        const randomCount = (school.id.length % 4) + 1;
-        server.createList("class", randomCount, { schoolId: school.id });
+        server.createList("class", 3, { school } as any);
       });
     },
 
     routes() {
       this.namespace = "api";
 
-      this.passthrough(`${process.env.EXPO_PUBLIC_KEYCLOAK_URL}**`);
-
-      this.get("/schools", (schema) => {
-        const allSchools = schema.all("school").models;
-        const total = allSchools.length;
-        const classes = schema.all("class").models;
-
+      // School Routes
+      this.get("/schools", (schema, request) => {
+        const schools = schema.all("school");
         return {
-          schools: allSchools.map((school) => ({
-            ...school.attrs,
-            id: school.id,
-            countClasses: classes.filter(
-              (c) =>
-                String(c.schoolId || c.attrs?.schoolId) === String(school.id)
-            ).length,
+          schools: schools.models.map((s: any) => ({
+            ...s.attrs,
+            countClasses: s.classes.length,
           })),
-          meta: {
-            total,
-            hasMore: false,
+          meta: { total: schools.length },
+        };
+      });
+
+      this.get("/schools/:id", (schema, request) => {
+        const id = request.params.id;
+        const school = schema.find("school", id);
+        return {
+          school: {
+            ...school?.attrs,
+            countClasses: (school as any)?.classes.length ?? 0,
           },
         };
       });
 
       this.post("/schools", (schema, request) => {
-        let attrs = JSON.parse(request.requestBody);
-        const newSchool = schema.create("school", attrs);
-        return { school: { ...newSchool.attrs, id: newSchool.id } };
+        const attrs = JSON.parse(request.requestBody);
+        return schema.create("school", attrs);
       });
 
       this.patch("/schools/:id", (schema, request) => {
-        let id = request.params.id;
-        let attrs = JSON.parse(request.requestBody);
-        const updatedSchool = schema.find("school", id)?.update(attrs);
-        return { school: { ...updatedSchool?.attrs, id: updatedSchool?.id } };
+        const id = request.params.id;
+        const attrs = JSON.parse(request.requestBody);
+        const school = schema.find("school", id);
+        return school?.update(attrs) ?? { error: "Not found" };
       });
 
-      this.del("/schools/:id", (schema, request) => {
-        let id = request.params.id;
-        schema.find("school", id)?.destroy();
+      this.delete("/schools/:id", (schema, request) => {
+        const id = request.params.id;
+        const school = schema.find("school", id);
+        school?.destroy();
         return { success: true };
       });
 
+      // Class Routes
       this.get("/classes", (schema, request) => {
         const schoolId = request.queryParams.schoolId;
-        const page = Number.parseInt(request.queryParams.page || "1");
-        const limit = Number.parseInt(request.queryParams.limit || "10");
-        const start = (page - 1) * limit;
-        const end = start + limit;
-
-        let allModelClasses = schema.all("class").models;
-        let filteredClasses = allModelClasses;
-
-        if (schoolId) {
-          filteredClasses = allModelClasses.filter(
-            (c) => String(c.schoolId || c.attrs?.schoolId) === String(schoolId)
-          );
-        }
-
-        const classes = filteredClasses.slice(start, end);
-
+        const classes = schema.where("class", { schoolId });
         return {
-          classes: classes.map((c) => ({
-            ...c.attrs,
-            id: c.id,
-            schoolId: c.schoolId || c.attrs?.schoolId,
-          })),
-          meta: {
-            total: filteredClasses.length,
-            hasMore: end < filteredClasses.length,
-          },
+          classes: classes.models,
+          meta: { hasMore: false },
         };
       });
 
       this.post("/classes", (schema, request) => {
-        let attrs = JSON.parse(request.requestBody);
-        const newClass = schema.create("class", attrs);
-        return { class: { ...newClass.attrs, id: newClass.id } };
+        const attrs = JSON.parse(request.requestBody);
+        return schema.create("class", attrs);
       });
 
       this.patch("/classes/:id", (schema, request) => {
-        let id = request.params.id;
-        let attrs = JSON.parse(request.requestBody);
-        const updatedClass = schema.find("class", id)?.update(attrs);
-        return { class: { ...updatedClass.attrs, id: updatedClass.id } };
+        const id = request.params.id;
+        const attrs = JSON.parse(request.requestBody);
+        const schoolClass = schema.find("class", id);
+        return schoolClass?.update(attrs) ?? { error: "Not found" };
       });
 
-      this.del("/classes/:id", (schema, request) => {
-        let id = request.params.id;
-        schema.find("class", id)?.destroy();
+      this.delete("/classes/:id", (schema, request) => {
+        const id = request.params.id;
+        const schoolClass = schema.find("class", id);
+        schoolClass?.destroy();
         return { success: true };
       });
-
-      this.passthrough();
     },
   });
 

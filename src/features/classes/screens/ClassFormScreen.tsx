@@ -15,11 +15,17 @@ import { Shift } from "../../../types";
 
 const SHIFTS: Shift[] = ["Morning", "Afternoon", "Night", "Full-time"];
 
-const HeaderLeft = ({ onPress }: { onPress: () => void }) => (
-  <TouchableOpacity onPress={onPress} className="mr-4">
-    <ChevronLeft size={24} color="#f8fafc" />
-  </TouchableOpacity>
-);
+const ClassFormHeaderLeft = () => {
+  const router = useRouter();
+  const handleBack = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+  return (
+    <TouchableOpacity onPress={handleBack} className="mr-4">
+      <ChevronLeft size={24} color="#f8fafc" />
+    </TouchableOpacity>
+  );
+};
 
 export const ClassFormScreen = () => {
   const { t } = useTranslation();
@@ -28,7 +34,7 @@ export const ClassFormScreen = () => {
     id: string;
     classId: string;
   }>();
-  const { allClasses, addClass, updateClass } = useClasses(schoolId!);
+  const { allClasses, addClass, updateClass } = useClasses(schoolId || "");
 
   const classData = classId ? allClasses.find((c) => c.id === classId) : null;
   const isEditing = !!classId;
@@ -61,18 +67,16 @@ export const ClassFormScreen = () => {
   };
 
   const addSchoolClass = async () => {
-    await addClass({
-      schoolId: schoolId!,
-      name,
-      shift,
-      academicYear: year,
-    });
+    if (schoolId) {
+      await addClass({
+        schoolId,
+        name,
+        shift,
+        academicYear: year,
+      });
+    }
     setIsSubmitting(false);
     router.back();
-  };
-
-  const handleBack = () => {
-    router.canGoBack() ? router.back() : router.replace("/");
   };
 
   if (isEditing && !classData) return null;
@@ -94,7 +98,7 @@ export const ClassFormScreen = () => {
       <Stack.Screen
         options={{
           title: isEditing ? t("edit_class") : t("add_class"),
-          headerLeft: () => <HeaderLeft onPress={handleBack} />,
+          headerLeft: ClassFormHeaderLeft,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerShadowVisible: false,
@@ -133,27 +137,28 @@ export const ClassFormScreen = () => {
                 {t("shift")}
               </Text>
               <View className="flex-row flex-wrap">
-                {SHIFTS.map((s) => (
-                  <TouchableOpacity
-                    key={s}
-                    onPress={() => setShift(s)}
-                    className={`mr-3 mb-3 px-5 py-3 rounded-2xl border ${
-                      shift === s
-                        ? "bg-primary border-primary"
-                        : `${isDark ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`
-                    }`}
-                  >
-                    <Text
-                      className={`font-bold text-sm tracking-tight ${
-                        shift === s
-                          ? "text-[#020617]"
-                          : `${isDark ? "text-white" : "text-slate-600"}`
-                      }`}
+                {SHIFTS.map((s) => {
+                  const isSelected = shift === s;
+                  const unselectedBg = isDark ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200";
+                  const buttonBg = isSelected ? "bg-primary border-primary" : unselectedBg;
+
+                  const unselectedTextColor = isDark ? "text-white" : "text-slate-600";
+                  const textColor = isSelected ? "text-[#020617]" : unselectedTextColor;
+
+                  return (
+                    <TouchableOpacity
+                      key={s}
+                      onPress={() => setShift(s)}
+                      className={`mr-3 mb-3 px-5 py-3 rounded-2xl border ${buttonBg}`}
                     >
-                      {t(s.toLowerCase().replace("-", "_"))}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        className={`font-bold text-sm tracking-tight ${textColor}`}
+                      >
+                        {t(s.toLowerCase().replace("-", "_"))}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
