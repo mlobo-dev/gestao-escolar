@@ -21,7 +21,7 @@ const STORAGE_KEY = "theme-storage";
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [colorScheme, setColorSchemeState] = useState<"light" | "dark">(
+  const [colorScheme, setColorScheme] = useState<"light" | "dark">(
     "light"
   );
 
@@ -31,7 +31,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         const savedTheme = await AsyncStorage.getItem(STORAGE_KEY);
         if (savedTheme) {
           const { state } = JSON.parse(savedTheme);
-          setColorSchemeState(state.colorScheme || "light");
+          setColorScheme(state.colorScheme || "light");
         }
       } catch (e) {
         console.error("Failed to load theme", e);
@@ -41,7 +41,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const setTheme = useCallback(async (theme: "light" | "dark") => {
-    setColorSchemeState(theme);
+    setColorScheme(theme);
     try {
       await AsyncStorage.setItem(
         STORAGE_KEY,

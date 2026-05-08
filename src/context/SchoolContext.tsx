@@ -98,6 +98,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
         setTotalSchools(data.meta.total);
         setHasMoreSchools(false);
       } catch (err) {
+        console.error("Fetch schools error:", err);
         setError("Failed to fetch schools");
       } finally {
         setIsLoading(false);
@@ -114,6 +115,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
         setSchools((prev) => [...prev, { ...data.school, countClasses: 0 }]);
         setTotalSchools((prev) => prev + 1);
       } catch (err) {
+        console.error("Add school error:", err);
         setError("Failed to add school");
       }
     },
@@ -128,6 +130,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
           prev.map((s) => (s.id === id ? { ...s, ...school } : s))
         );
       } catch (err) {
+        console.error("Update school error:", err);
         setError("Failed to update school");
       }
     },
@@ -141,6 +144,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
       setClasses((prev) => prev.filter((c) => c.schoolId !== id));
       setTotalSchools((prev) => Math.max(0, prev - 1));
     } catch (err) {
+      console.error("Delete school error:", err);
       setError("Failed to delete school");
     }
   }, []);
@@ -207,6 +211,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       );
     } catch (err) {
+      console.error("Add class error:", err);
       setError("Failed to add class");
     }
   }, []);
@@ -219,6 +224,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
           prev.map((c) => (c.id === id ? { ...c, ...schoolClass } : c))
         );
       } catch (err) {
+        console.error("Update class error:", err);
         setError("Failed to update class");
       }
     },
@@ -239,6 +245,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({
           )
         );
       } catch (err) {
+        console.error("Delete class error:", err);
         setError("Failed to delete class");
       }
     },

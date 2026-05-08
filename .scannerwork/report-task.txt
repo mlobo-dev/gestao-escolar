@@ -2,5 +2,5 @@ projectKey=dev4abyss-chalengers-gestao-escolar
 serverUrl=https://sonar.facilitalabs.com.br
 serverVersion=26.4.0.121862
 dashboardUrl=https://sonar.facilitalabs.com.br/dashboard?id=dev4abyss-chalengers-gestao-escolar
-ceTaskId=8ef213b4-3d9d-4c2d-b7c8-6a7996e60ca6
-ceTaskUrl=https://sonar.facilitalabs.com.br/api/ce/task?id=8ef213b4-3d9d-4c2d-b7c8-6a7996e60ca6
+ceTaskId=496a2c2e-72dd-474b-bb95-b1dc516fb21c
+ceTaskUrl=https://sonar.facilitalabs.com.br/api/ce/task?id=496a2c2e-72dd-474b-bb95-b1dc516fb21c

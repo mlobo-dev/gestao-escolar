@@ -27,22 +27,24 @@ const HeaderTitle = () => (
   />
 );
 
-const HeaderRight = ({ onSignOut }: { onSignOut: () => void }) => (
-  <View className="flex-row items-center gap-3 pr-2">
-    <ThemeToggle />
-    <LanguagePicker />
-    <TouchableOpacity
-      onPress={onSignOut}
-      className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
-    >
-      <LogOut size={18} color="#ef4444" />
-    </TouchableOpacity>
-  </View>
-);
+const SchoolListHeaderRight = () => {
+  const { signOut } = useAuth();
+  return (
+    <View className="flex-row items-center gap-3 pr-2">
+      <ThemeToggle />
+      <LanguagePicker />
+      <TouchableOpacity
+        onPress={signOut}
+        className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl items-center justify-center active:bg-white/20"
+      >
+        <LogOut size={18} color="#ef4444" />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export const SchoolListScreen = () => {
   const { t } = useTranslation();
-  const { signOut } = useAuth();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const {
@@ -63,8 +65,8 @@ export const SchoolListScreen = () => {
     <View className={`flex-1 bg-background ${isDark ? "dark" : ""}`}>
       <Stack.Screen
         options={{
-          headerTitle: () => <HeaderTitle />,
-          headerRight: () => <HeaderRight onSignOut={signOut} />,
+          headerTitle: HeaderTitle,
+          headerRight: SchoolListHeaderRight,
           headerStyle: { backgroundColor: "#020617" },
           headerTintColor: "#f8fafc",
           headerShadowVisible: false,
